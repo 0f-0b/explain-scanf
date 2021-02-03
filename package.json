@@ -1,0 +1,47 @@
+{
+  "name": "explain-scanf",
+  "version": "0.0.0",
+  "description": "Explains the scanf family of functions.",
+  "keywords": [
+    "c"
+  ],
+  "private": true,
+  "homepage": "https://github.com/sjx233/explain-scanf#readme",
+  "bugs": "https://github.com/sjx233/explain-scanf/issues",
+  "license": "MIT",
+  "author": "sjx233",
+  "main": "build/main.js",
+  "repository": "github:sjx233/explain-scanf",
+  "scripts": {
+    "lint": "eslint './src/**/*'",
+    "check": "tsc",
+    "build": "node scripts/build.js",
+    "build:prod": "cross-env NODE_ENV=production npm run build"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^0.17.4",
+    "@codemirror/commands": "^0.17.2",
+    "@codemirror/gutter": "^0.17.2",
+    "@codemirror/history": "^0.17.2",
+    "@codemirror/state": "^0.17.1",
+    "@codemirror/view": "^0.17.7",
+    "@webassemblyjs/floating-point-hex-parser": "^1.11.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "use-location-state": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.1",
+    "@types/react-dom": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "cross-env": "^7.0.3",
+    "csso": "^4.2.0",
+    "esbuild": "^0.8.39",
+    "eslint": "^7.19.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "html-minifier": "^4.0.0",
+    "typescript": "^4.1.3"
+  }
+}
