@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Fragment, PropsWithChildren, ReactNode } from "react";
 import { BasicType, basicTypes, Declaration, DeclarationSpecifier, Declarator, Expression, FloatingConstant, InitDeclarator, TypedefName, typedefs } from "./c-ast";
+import { escapeChar, escapeString } from "./escape";
 import { HlBasicType, HlFunction, HlKeyword, HlMacro, HlNumeric, HlOperator, HlString, HlType, HlVariable } from "./highlight";
 
 function Parentheses({ children }: PropsWithChildren<unknown>): JSX.Element {
@@ -52,28 +53,6 @@ export function DeclaratorNode({ ast }: { ast: Declarator; }): JSX.Element {
     }
   }
   return <>{result}</>;
-}
-
-function escapeChar(s: string): string {
-  return `'${s
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/\t/g, "\\t")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r")
-    .replace(/\v/g, "\\v")
-    .replace(/\f/g, "\\f")}'`;
-}
-
-function escapeString(s: string): string {
-  return `"${s
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, "\\\"")
-    .replace(/\t/g, "\\t")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r")
-    .replace(/\v/g, "\\v")
-    .replace(/\f/g, "\\f")}"`;
 }
 
 function uint(value: bigint): JSX.Element {

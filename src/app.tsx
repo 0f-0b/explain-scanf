@@ -1,9 +1,8 @@
-import { completionKeymap } from "@codemirror/autocomplete";
-import { defaultKeymap, defaultTabBinding } from "@codemirror/commands";
+import { copyLineDown, copyLineUp, deleteLine, moveLineDown, moveLineUp, selectLine, simplifySelection, standardKeymap } from "@codemirror/commands";
 import { lineNumbers } from "@codemirror/gutter";
 import { history, historyKeymap } from "@codemirror/history";
 import { indentUnit } from "@codemirror/language";
-import { ChangeSpec, EditorState } from "@codemirror/state";
+import { EditorState, Transaction } from "@codemirror/state";
 import { Decoration, drawSelection, EditorView, highlightActiveLine, highlightSpecialChars, keymap } from "@codemirror/view";
 import * as React from "react";
 import { Fragment, useEffect, useMemo } from "react";
@@ -11,35 +10,39 @@ import * as ReactDOM from "react-dom";
 import { useQueryState } from "use-location-state";
 import { DeclarationNode } from "./c-rst";
 import { useCodeMirror } from "./codemirror";
+import { enforceSingleLine } from "./codemirror/enforce-single-line";
+import { escapeString } from "./codemirror/escape-string";
 import { HlComment, HlFunction, HlOperator, HlString, HlVariable } from "./highlight";
 import { parseFormat, sscanf, unimplemented } from "./scanf";
 import { filterMap } from "./util";
 
-const base = [
-  highlightSpecialChars(),
-  history(),
-  drawSelection(),
+const baseExtension = [
   EditorState.allowMultipleSelections.of(true),
-  EditorState.tabSize.of(8),
-  EditorState.lineSeparator.of("\n"),
   indentUnit.of(" "),
   keymap.of([
-    ...defaultKeymap,
-    defaultTabBinding,
+    ...standardKeymap.filter(binding => binding.key !== "Enter"),
     ...historyKeymap,
-    ...completionKeymap
-  ])
+    {
+      key: "Tab",
+      run({ state, dispatch }) {
+        dispatch(state.update(state.replaceSelection("\t"), { scrollIntoView: true, annotations: Transaction.userEvent.of("input") }));
+        return true;
+      }
+    },
+    { key: "Alt-ArrowUp", run: moveLineUp, shift: copyLineUp },
+    { key: "Alt-ArrowDown", run: moveLineDown, shift: copyLineDown },
+    { key: "Escape", run: simplifySelection },
+    { key: "Mod-l", run: selectLine },
+    { key: "Shift-Mod-k", run: deleteLine }
+  ]),
+  history(),
+  drawSelection()
 ];
-const enforceSingleLine = EditorState.transactionFilter.of(tr => {
-  if (!tr.docChanged)
-    return tr;
-  const doc = Array.from(tr.newDoc).join("");
-  const changes: ChangeSpec[] = [];
-  const re = /[\n\r]/g;
-  for (let match: RegExpExecArray | null; (match = re.exec(doc));)
-    changes.push({ from: match.index, to: match.index + 1 });
-  return [tr, { changes, sequential: true }];
-});
+
+function name(index: number): string {
+  return `var_${index + 1}`;
+}
+
 const colors: Decoration[] = [
   Decoration.mark({ class: "color-0" }),
   Decoration.mark({ class: "color-1" }),
@@ -53,17 +56,29 @@ function color(index: number): Decoration {
   return colors[index % colors.length];
 }
 
-function name(index: number): string {
-  return `var_${index + 1}`;
-}
-
 function App(): JSX.Element {
   const [format, setFormat] = useQueryState("format", "%d%f%s");
   const [formatRef, formatState, setFormatState] = useCodeMirror<HTMLSpanElement>(() => EditorState.create({
     doc: format,
     extensions: [
-      ...base,
-      enforceSingleLine
+      EditorState.tabSize.of(1),
+      EditorState.lineSeparator.of("\0"),
+      keymap.of([
+        {
+          key: "Enter",
+          run({ state, dispatch }) {
+            dispatch(state.update(state.replaceSelection("\n"), { scrollIntoView: true }));
+            return true;
+          }
+        },
+      ]),
+      escapeString(),
+      enforceSingleLine(),
+      highlightSpecialChars({
+        // eslint-disable-next-line no-control-regex
+        specialChars: /[\0-\x08\x0e-\x1f\x7f-\x9f\xad\u061c\u200b-\u200c\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g
+      }),
+      baseExtension
     ]
   }));
   useEffect(() => setFormat(Array.from(formatState.doc).join("")), [formatState.doc, setFormat]);
@@ -71,9 +86,12 @@ function App(): JSX.Element {
   const [inputRef, inputState, setInputState] = useCodeMirror<HTMLDivElement>(() => EditorState.create({
     doc: input,
     extensions: [
-      ...base,
+      EditorState.tabSize.of(8),
+      EditorState.lineSeparator.of("\n"),
       lineNumbers(),
-      highlightActiveLine()
+      highlightActiveLine(),
+      highlightSpecialChars(),
+      baseExtension
     ]
   }));
   useEffect(() => setInput(Array.from(inputState.doc).join("")), [inputState.doc, setInput]);
@@ -96,9 +114,9 @@ function App(): JSX.Element {
     }
   }).state), [convs, setInputState]);
   return <div>
-    <div>
+    <pre>
       <code><HlFunction>scanf</HlFunction>(<HlString>&quot;<span className="format" ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefined ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
-    </div>
+    </pre>
     <div ref={inputRef} />
     <pre className="variables">
       <code>{args.map((arg, index) => <Fragment key={index}><DeclarationNode ast={{
@@ -112,7 +130,7 @@ function App(): JSX.Element {
             initializer: arg.initializer
           }
         ]
-      }} /><br /></Fragment>)}</code>
+      }} />{"\n"}</Fragment>)}</code>
     </pre>
   </div>;
 }

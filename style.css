@@ -3,6 +3,10 @@ body {
   font-size: 16px;
 }
 
+pre {
+  margin: 0;
+}
+
 .format {
   display: inline-block;
 }
@@ -12,8 +16,9 @@ body {
 }
 
 .variables {
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
+  margin-top: 4px;
+  white-space: break-spaces;
+  overflow-wrap: anywhere;
 }
 
 .color-0 {
