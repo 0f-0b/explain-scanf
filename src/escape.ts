@@ -14,7 +14,7 @@ export function escapeCharMatch(c: string): string {
 }
 
 export function escapeChar(s: string): string {
-  return `"${s.replace(charEscapeRE, escapeCharMatch)}"`;
+  return `'${s.replace(charEscapeRE, escapeCharMatch)}'`;
 }
 
 export const stringEscapeRE = /[\\"\t\n\r\v\f]/g;
