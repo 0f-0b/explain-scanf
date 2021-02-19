@@ -76,7 +76,7 @@ function App(): JSX.Element {
       enforceSingleLine(),
       highlightSpecialChars({
         // eslint-disable-next-line no-control-regex
-        specialChars: /[\0-\x08\x0e-\x1f\x7f-\x9f\xad\u061c\u200b-\u200c\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g
+        specialChars: /[\0-\x08\x0e-\x1f\x7f-\x9f\xad\u061c\u200b\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g
       }),
       baseExtension
     ]
