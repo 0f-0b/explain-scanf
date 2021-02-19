@@ -7,6 +7,10 @@ pre {
   margin: 0;
 }
 
+.hl-function>a {
+  color: inherit;
+}
+
 .format {
   display: inline-block;
 }
