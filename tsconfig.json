@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "jsx": "react",
     "noEmit": true,
     "strict": true,
     "baseUrl": "./src",
+    "types": [
+      "vite/client"
+    ],
     "skipLibCheck": true,
+    "isolatedModules": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [

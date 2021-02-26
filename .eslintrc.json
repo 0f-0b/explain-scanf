@@ -4,21 +4,26 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
+    "import",
     "react",
     "react-hooks"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
+      "impliedStrict": true,
       "jsx": true
     },
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   },
   "settings": {
     "react": {

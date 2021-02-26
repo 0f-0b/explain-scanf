@@ -1,3 +1,3 @@
 # explain-scanf
 
-Explains the magic behind [`fscanf`](https://en.cppreference.com/w/c/io/fscanf).
+Explains the magic behind [`fscanf`](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html).

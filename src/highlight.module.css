@@ -1,0 +1,43 @@
+.hl-keyword {
+  color: #0000ff;
+}
+
+.hl-numeric {
+  color: #098658;
+}
+
+.hl-string {
+  color: #a31515;
+}
+
+.hl-operator {
+  color: #000000;
+}
+
+.hl-basic-type {
+  color: #0000ff;
+}
+
+.hl-type {
+  color: #267f99;
+}
+
+.hl-function {
+  color: #795e26;
+}
+
+.hl-function>a {
+  color: inherit;
+}
+
+.hl-variable {
+  color: #001080;
+}
+
+.hl-macro {
+  color: #0000ff;
+}
+
+.hl-comment {
+  color: #008000;
+}

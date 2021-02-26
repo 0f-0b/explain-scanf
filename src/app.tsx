@@ -6,8 +6,8 @@ import { EditorState, Transaction } from "@codemirror/state";
 import { Decoration, drawSelection, EditorView, highlightActiveLine, highlightSpecialChars, keymap } from "@codemirror/view";
 import * as React from "react";
 import { Fragment, useEffect, useMemo } from "react";
-import * as ReactDOM from "react-dom";
 import { useQueryState } from "use-location-state";
+import classes from "./app.module.css";
 import { DeclarationNode } from "./c-rst";
 import { useCodeMirror } from "./codemirror";
 import { enforceSingleLine } from "./codemirror/enforce-single-line";
@@ -44,19 +44,19 @@ function name(index: number): string {
 }
 
 const colors: Decoration[] = [
-  Decoration.mark({ class: "color-0" }),
-  Decoration.mark({ class: "color-1" }),
-  Decoration.mark({ class: "color-2" }),
-  Decoration.mark({ class: "color-3" }),
-  Decoration.mark({ class: "color-4" }),
-  Decoration.mark({ class: "color-5" })
+  Decoration.mark({ class: classes.color0 }),
+  Decoration.mark({ class: classes.color1 }),
+  Decoration.mark({ class: classes.color2 }),
+  Decoration.mark({ class: classes.color3 }),
+  Decoration.mark({ class: classes.color4 }),
+  Decoration.mark({ class: classes.color5 })
 ];
 
 function color(index: number): Decoration {
   return colors[index % colors.length];
 }
 
-function App(): JSX.Element {
+export function App(): JSX.Element {
   const [format, setFormat] = useQueryState("format", "%d%f%s");
   const [formatRef, formatState, setFormatState] = useCodeMirror<HTMLSpanElement>(() => EditorState.create({
     doc: format,
@@ -115,10 +115,10 @@ function App(): JSX.Element {
   }).state), [convs, setInputState]);
   return <div>
     <pre>
-      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer">scanf</a></HlFunction>(<HlString>&quot;<span className="format" ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefined ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
+      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer">scanf</a></HlFunction>(<HlString>&quot;<span className={classes.format} ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefined ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
     </pre>
     <div ref={inputRef} />
-    <pre className="variables">
+    <pre className={classes.variables}>
       <code>{args.map((arg, index) => <Fragment key={index}><DeclarationNode ast={{
         specifiers: arg.specifiers,
         declarators: [
@@ -134,5 +134,3 @@ function App(): JSX.Element {
     </pre>
   </div>;
 }
-
-ReactDOM.render(<App />, document.getElementById("root"));
