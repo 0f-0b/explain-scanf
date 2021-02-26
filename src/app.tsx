@@ -13,7 +13,7 @@ import { useCodeMirror } from "./codemirror";
 import { enforceSingleLine } from "./codemirror/enforce-single-line";
 import { escapeString } from "./codemirror/escape-string";
 import { HlComment, HlFunction, HlOperator, HlString, HlVariable } from "./highlight";
-import { parseFormat, sscanf, unimplemented } from "./scanf";
+import { parseFormat, sscanf, undefinedBehavior, unimplemented } from "./scanf";
 import { filterMap } from "./util";
 
 const baseExtension = [
@@ -96,7 +96,7 @@ export function App(): JSX.Element {
   }));
   useEffect(() => setInput(Array.from(inputState.doc).join("")), [inputState.doc, setInput]);
   const directives = useMemo(() => parseFormat(format), [format]);
-  const result = useMemo(() => directives ? sscanf(input, directives) : undefined, [input, directives]);
+  const result = useMemo(() => directives === undefinedBehavior ? undefinedBehavior : sscanf(input, directives), [input, directives]);
   const convs = useMemo(() => typeof result === "object" ? result.convs : [], [result]);
   const args = useMemo(() => typeof result === "object" ? result.args : [], [result]);
   useEffect(() => setFormatState(state => state.update({
@@ -115,7 +115,7 @@ export function App(): JSX.Element {
   }).state), [convs, setInputState]);
   return <div>
     <pre>
-      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer">scanf</a></HlFunction>(<HlString>&quot;<span className={classes.format} ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefined ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
+      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer">scanf</a></HlFunction>(<HlString>&quot;<span className={classes.format} ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefinedBehavior ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
     </pre>
     <div ref={inputRef} />
     <pre className={classes.variables}>

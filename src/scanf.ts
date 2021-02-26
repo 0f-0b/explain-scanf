@@ -109,6 +109,40 @@ export type FormatDirective =
   | LiteralDirective
   | ConversionDirective;
 
+export interface Range {
+  start: number;
+  end: number;
+}
+
+export interface Conversion {
+  index: Range;
+  match: Range | null;
+}
+
+export interface Argument {
+  specifiers: DeclarationSpecifier[];
+  type: Layer[];
+  initializer?: Expression;
+  ref: boolean;
+}
+
+export interface ParseResult {
+  value: Expression;
+  length: number;
+}
+
+export interface ScanfResult {
+  ret: number;
+  length: number;
+  convs: Conversion[];
+  args: Argument[];
+}
+
+const matchingFailure: unique symbol = Symbol("matchingFailure");
+const inputFailure: unique symbol = Symbol("inputFailure");
+export const unimplemented: unique symbol = Symbol("unimplemented");
+export const undefinedBehavior: unique symbol = Symbol("undefinedBehavior");
+
 function getConvSpec(spec: string, length: string, malloc: boolean): ConvSpec {
   switch (spec) {
     case "d":
@@ -159,7 +193,7 @@ function getConvSpec(spec: string, length: string, malloc: boolean): ConvSpec {
   }
 }
 
-export function parseFormat(format: string): FormatDirective[] | undefined {
+export function parseFormat(format: string): FormatDirective[] | typeof undefinedBehavior {
   const length = format.length;
   const result: FormatDirective[] = [];
   let nextPos = 0;
@@ -179,19 +213,19 @@ export function parseFormat(format: string): FormatDirective[] | undefined {
         switch (pos) {
           case "":
             if (nextPos === -1)
-              return undefined;
+              return undefinedBehavior;
             return nextPos++;
           case "*":
             return -1;
           default:
             if (nextPos > 0)
-              return undefined;
+              return undefinedBehavior;
             nextPos = -1;
             return parseInt(pos, 10) - 1;
         }
       })(conversionMatch[1]);
-      if (position === undefined)
-        return undefined;
+      if (position === undefinedBehavior)
+        return undefinedBehavior;
       const spec = conversionMatch[5];
       const length = conversionMatch[4];
       const malloc = Boolean(conversionMatch[3]);
@@ -205,49 +239,99 @@ export function parseFormat(format: string): FormatDirective[] | undefined {
     }
     const ch = format[index++];
     if (ch === "%" && format[index++] !== "%")
-      return undefined;
+      return undefinedBehavior;
     result.push({ type: "whitespace", implicit: true }, { type: "literal", ch });
   }
   return result;
 }
 
-export interface Range {
-  start: number;
-  end: number;
+function getArg(spec: ConvSpec): Argument | typeof unimplemented {
+  switch (spec.type) {
+    case "integer":
+    case "float":
+      return {
+        specifiers: spec.dataType,
+        type: [],
+        ref: true
+      };
+    case "string":
+      return {
+        specifiers: spec.wide ? ["wchar_t"] : ["char"],
+        type: spec.malloc ? [{ type: "pointer" }] : spec.terminate ? [{ type: "array", size: 1 }] : [],
+        ref: !spec.terminate
+      };
+    case "pointer":
+      return unimplemented;
+    case "bytecount":
+      return {
+        specifiers: spec.dataType,
+        type: [],
+        ref: true
+      };
+  }
 }
 
-export interface Conversion {
-  index: Range;
-  match: Range | null;
-  position: number;
+function parse(spec: ConvSpec, arg: Argument | undefined, str: string, offset: number): number | typeof matchingFailure | typeof inputFailure | typeof unimplemented {
+  const failure = str ? matchingFailure : inputFailure;
+  switch (spec.type) {
+    case "integer": {
+      const result = parseIntSeq(str, spec.base);
+      if (!result)
+        return failure;
+      if (arg)
+        arg.initializer = { type: "integer_constant", value: result.value };
+      return result.length;
+    }
+    case "float": {
+      const result = parseFloatSeq(str);
+      if (!result)
+        return failure;
+      if (arg)
+        arg.initializer = { type: "floating_constant", value: result.value };
+      return result.length;
+    }
+    case "string": {
+      const length = findIndex(str, c => spec.scanset.has(c) === spec.negated);
+      if (!length)
+        return failure;
+      const result = str.substring(0, length);
+      const size = (spec.wide ? length : new TextEncoder().encode(result).length) + (spec.terminate ? 1 : 0);
+      if (arg) {
+        arg.type = spec.malloc ? [{ type: "pointer" }] : size === 1 ? [] : [{ type: "array", size }];
+        arg.initializer = spec.malloc ? { type: "function_call", name: spec.wide ? "wcsdup" : "strdup", args: [{ type: "string_literal", prefix: spec.wide ? "L" : "", value: result }] } : { type: size === 1 ? "character_constant" : "string_literal", prefix: spec.wide ? "L" : "", value: result };
+        arg.ref = spec.malloc || size === 1;
+      }
+      return length;
+    }
+    case "pointer":
+      return unimplemented;
+    case "bytecount":
+      if (arg)
+        arg.initializer = { type: "integer_constant", value: BigInt(offset) };
+      return 0;
+  }
 }
 
-export interface Argument {
-  specifiers: DeclarationSpecifier[];
-  type: Layer[];
-  initializer: Expression;
-  ref: boolean;
-}
-
-export interface ScanfResult {
-  ret: number;
-  length: number;
-  convs: Conversion[];
-  args: Argument[];
-}
-
-const matchingFailure: unique symbol = Symbol("matchingFailure");
-const inputFailure: unique symbol = Symbol("inputFailure");
-export const unimplemented: unique symbol = Symbol("unimplemented");
-
-export function sscanf(buf: string, format: FormatDirective[]): ScanfResult | typeof unimplemented | undefined {
+export function sscanf(buf: string, format: FormatDirective[]): ScanfResult | typeof unimplemented {
   const convs: Conversion[] = [];
   const args: Argument[] = [];
+  const count = format.length;
+  for (const directive of format)
+    if (directive.type === "conversion") {
+      const { position, spec } = directive;
+      if (position !== -1) {
+        if (args[position])
+          return unimplemented;
+        const arg = getArg(spec);
+        if (arg === unimplemented)
+          return unimplemented;
+        args[position] = arg;
+      }
+    }
   let ret = 0;
   let lastOffset = 0;
   let offset = 0;
   let i = 0;
-  const count = format.length;
   scan: while (i < count) {
     const directive = format[i];
     switch (directive.type) {
@@ -272,79 +356,22 @@ export function sscanf(buf: string, format: FormatDirective[]): ScanfResult | ty
       }
       case "conversion": {
         const { start, end, position, width, spec } = directive;
-        const arg = ((): Argument | typeof matchingFailure | typeof inputFailure | typeof unimplemented => {
-          const str = truncate(buf.substring(offset), width);
-          const failure = str ? matchingFailure : inputFailure;
-          switch (spec.type) {
-            case "integer": {
-              const result = parseIntSeq(str, spec.base);
-              if (!result)
-                return failure;
-              offset += result.length;
-              return {
-                specifiers: spec.dataType,
-                type: [],
-                initializer: { type: "integer_constant", value: result.value },
-                ref: true
-              };
-            }
-            case "float": {
-              const result = parseFloatSeq(str);
-              if (!result)
-                return failure;
-              offset += result.length;
-              return {
-                specifiers: spec.dataType,
-                type: [],
-                initializer: { type: "floating_constant", value: result.value },
-                ref: true
-              };
-            }
-            case "string": {
-              const length = findIndex(str, c => spec.scanset.has(c) === spec.negated);
-              if (!length)
-                return failure;
-              offset += length;
-              const result = str.substring(0, length);
-              const size = (spec.wide ? length : new TextEncoder().encode(result).length) + (spec.terminate ? 1 : 0);
-              return {
-                specifiers: spec.wide ? ["wchar_t"] : ["char"],
-                type: spec.malloc ? [{ type: "pointer" }] : size === 1 ? [] : [{ type: "array", size }],
-                initializer: spec.malloc ? { type: "function_call", name: spec.wide ? "wcsdup" : "strdup", args: [{ type: "string_literal", prefix: spec.wide ? "L" : "", value: result }] } : { type: size === 1 ? "character_constant" : "string_literal", prefix: spec.wide ? "L" : "", value: result },
-                ref: spec.malloc || size === 1
-              };
-            }
-            case "pointer":
-              return unimplemented;
-            case "bytecount":
-              return {
-                specifiers: spec.dataType,
-                type: [],
-                initializer: { type: "integer_constant", value: BigInt(offset) },
-                ref: true
-              };
-          }
-        })();
-        if (arg === inputFailure) {
+        const length = parse(spec, args[position], truncate(buf.substring(offset), width), offset);
+        if (length === inputFailure) {
           if (ret === 0)
             ret = -1;
           break scan;
         }
-        if (arg === matchingFailure)
+        if (length === matchingFailure)
           break scan;
-        if (arg === unimplemented)
+        if (length === unimplemented)
           return unimplemented;
-        if (position !== -1) {
-          if (spec.type !== "bytecount")
-            ret++;
-          if (args[position])
-            return unimplemented;
-          args[position] = arg;
-        }
+        if (position !== -1 && spec.type !== "bytecount")
+          ret++;
+        offset += length;
         convs.push({
           index: { start, end },
-          match: { start: lastOffset, end: offset },
-          position
+          match: { start: lastOffset, end: offset }
         });
         lastOffset = offset;
         break;
@@ -354,12 +381,13 @@ export function sscanf(buf: string, format: FormatDirective[]): ScanfResult | ty
   }
   while (i < count) {
     const directive = format[i];
-    if (directive.type === "conversion")
+    if (directive.type === "conversion") {
+      const { start, end } = directive;
       convs.push({
-        index: { start: directive.start, end: directive.end },
-        match: null,
-        position: directive.position
+        index: { start, end },
+        match: null
       });
+    }
     i++;
   }
   return { ret, length: offset, convs, args };
