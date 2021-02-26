@@ -2,7 +2,7 @@
   display: inline-block;
 }
 
-.format .cm-line {
+.format :global .cm-line {
   padding: 0 1px;
 }
 

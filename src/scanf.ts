@@ -206,7 +206,7 @@ export function parseFormat(format: string): FormatDirective[] | undefined {
     const ch = format[index++];
     if (ch === "%" && format[index++] !== "%")
       return undefined;
-    result.push({ type: "literal", ch });
+    result.push({ type: "whitespace", implicit: true }, { type: "literal", ch });
   }
   return result;
 }
@@ -335,7 +335,8 @@ export function sscanf(buf: string, format: FormatDirective[]): ScanfResult | ty
         if (arg === unimplemented)
           return unimplemented;
         if (position !== -1) {
-          ret++;
+          if (spec.type !== "bytecount")
+            ret++;
           if (args[position])
             return unimplemented;
           args[position] = arg;
@@ -439,7 +440,7 @@ interface FloatSeq {
   length: number;
 }
 
-const floatSeqRE = /^([+-]?)(0[xX](?:[0-9a-fA-F]+(?:\.[0-9a-fA-F]*)?|\.[0-9a-fA-F]+)(?:[pP][+-]?\d*)?|(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d*)?|[iI][nN][fF](?:[iI][nN][iI][tT][yY])?|[nN][aN][nN](?:\([0-9A-Za-z_]*\))?)/;
+const floatSeqRE = /^([+-]?)(0[xX](?:[0-9a-fA-F]+(?:\.[0-9a-fA-F]*)?|\.[0-9a-fA-F]+)(?![0-9a-fA-F])(?:[pP][+-]?\d+|(?![pP]))|(?:\d+(?:\.\d*)?|\.\d+)(?!\d)(?:[eE][+-]?\d+|(?![eE]))|[iI][nN][fF](?:[iI][nN][iI][tT][yY])?|[nN][aN][nN](?:\([0-9A-Za-z_]*\))?)/;
 
 function parseFloatSeq(str: string): FloatSeq | undefined {
   const match = floatSeqRE.exec(str);
