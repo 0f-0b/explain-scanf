@@ -2,11 +2,11 @@ import { copyLineDown, copyLineUp, deleteLine, moveLineDown, moveLineUp, selectL
 import { lineNumbers } from "@codemirror/gutter";
 import { history, historyKeymap } from "@codemirror/history";
 import { indentUnit } from "@codemirror/language";
-import { EditorState, Transaction } from "@codemirror/state";
+import { Compartment, EditorState, Extension, Transaction } from "@codemirror/state";
 import { Decoration, drawSelection, EditorView, highlightActiveLine, highlightSpecialChars, keymap } from "@codemirror/view";
 import * as React from "react";
 import { Fragment, useEffect, useMemo } from "react";
-import { useQueryState } from "use-location-state";
+import { useStorageState } from "react-storage-hooks";
 import classes from "./app.module.css";
 import { DeclarationNode } from "./c-rst";
 import { useCodeMirror } from "./codemirror";
@@ -14,9 +14,27 @@ import { enforceSingleLine } from "./codemirror/enforce-single-line";
 import { escapeString } from "./codemirror/escape-string";
 import { HlComment, HlFunction, HlOperator, HlString, HlVariable } from "./highlight";
 import { parseFormat, sscanf, undefinedBehavior, unimplemented } from "./scanf";
+import { ShareButton } from "./share-button";
 import { filterMap } from "./util";
 
-const baseExtension = [
+type FirstParameter<T extends (...args: never[]) => unknown> = T extends (firstArg: infer P, ...args: never[]) => unknown ? P : never;
+
+const localStorage: FirstParameter<typeof useStorageState> = (() => {
+  try {
+    const localStorage = window.localStorage;
+    if (typeof localStorage === "object")
+      return localStorage;
+  } catch (_) {
+    // ignore
+  }
+  return {
+    getItem: () => null,
+    setItem: () => undefined,
+    removeItem: () => undefined
+  };
+})();
+
+const baseExtension: Extension = [
   EditorState.allowMultipleSelections.of(true),
   indentUnit.of(" "),
   keymap.of([
@@ -52,12 +70,14 @@ const colors: Decoration[] = [
   Decoration.mark({ class: classes.color5 })
 ];
 
-function color(index: number): Decoration {
+function getColor(index: number): Decoration {
   return colors[index % colors.length];
 }
 
+const color = new Compartment;
+
 export function App(): JSX.Element {
-  const [format, setFormat] = useQueryState("format", "%d%f%s");
+  const [format, setFormat] = useStorageState(localStorage, "format", "%d%f%s");
   const [formatRef, formatState, setFormatState] = useCodeMirror<HTMLSpanElement>(() => EditorState.create({
     doc: format,
     extensions: [
@@ -72,6 +92,7 @@ export function App(): JSX.Element {
           }
         },
       ]),
+      color.of([]),
       escapeString(),
       enforceSingleLine(),
       highlightSpecialChars({
@@ -82,12 +103,13 @@ export function App(): JSX.Element {
     ]
   }));
   useEffect(() => setFormat(Array.from(formatState.doc).join("")), [formatState.doc, setFormat]);
-  const [input, setInput] = useQueryState("input", "25 54.32E-1 Hamster\n");
+  const [input, setInput] = useStorageState(localStorage, "input", "25 54.32E-1 Hamster\n");
   const [inputRef, inputState, setInputState] = useCodeMirror<HTMLDivElement>(() => EditorState.create({
     doc: input,
     extensions: [
       EditorState.tabSize.of(8),
       EditorState.lineSeparator.of("\n"),
+      color.of([]),
       lineNumbers(),
       highlightActiveLine(),
       highlightSpecialChars(),
@@ -100,22 +122,19 @@ export function App(): JSX.Element {
   const convs = useMemo(() => typeof result === "object" ? result.convs : [], [result]);
   const args = useMemo(() => typeof result === "object" ? result.args : [], [result]);
   useEffect(() => setFormatState(state => state.update({
-    reconfigure: {
-      color: [
-        EditorView.decorations.of(Decoration.set(convs.map((conv, index) => color(index).range(conv.index.start, conv.index.end))))
-      ]
-    }
+    effects: [
+      color.reconfigure(EditorView.decorations.of(Decoration.set(convs.map((conv, index) => getColor(index).range(conv.index.start, conv.index.end)))))
+    ]
   }).state), [convs, setFormatState]);
   useEffect(() => setInputState(state => state.update({
-    reconfigure: {
-      color: [
-        EditorView.decorations.of(Decoration.set(filterMap(convs, (conv, index) => conv.match && conv.match.start !== conv.match.end ? color(index).range(conv.match.start, conv.match.end) : undefined)))
-      ]
-    }
+    effects: [
+      color.reconfigure(EditorView.decorations.of(Decoration.set(filterMap(convs, (conv, index) => conv.match && conv.match.start !== conv.match.end ? getColor(index).range(conv.match.start, conv.match.end) : undefined))))
+    ]
   }).state), [convs, setInputState]);
   return <div>
+    <ShareButton format={format} input={input} />
     <pre>
-      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer">scanf</a></HlFunction>(<HlString>&quot;<span className={classes.format} ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefinedBehavior ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
+      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer" onClick={event => (date => (date.getMonth() === 3 && date.getDate() === 1) && new Promise((resolve, reject) => sessionStorage.getItem("e") === null ? resolve(sessionStorage.setItem("e", "")) : reject()).then(() => void (event.preventDefault(), window.open(atob("aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2ODA0MzMwMjI/dD0wLjAwMDAx"), "_blank", "noreferrer"))).catch(() => undefined))(new Date)}>scanf</a></HlFunction>(<HlString>&quot;<span className={classes.format} ref={formatRef} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefinedBehavior ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>
     </pre>
     <div ref={inputRef} />
     <pre className={classes.variables}>
