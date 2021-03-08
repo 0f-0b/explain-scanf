@@ -8,7 +8,6 @@ function preprocessor(plugin: Plugin): Plugin {
 }
 
 export default defineConfig(({ command }) => ({
-  base: "./",
   plugins: [
     command === "build" ? preprocessor(eslint({ include: ["./src/**/*.ts", "./src/**/*.tsx"] })) : [],
     reactRefresh(),
