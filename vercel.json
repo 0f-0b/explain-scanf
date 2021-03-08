@@ -4,6 +4,9 @@
       "runtime": "vercel-deno@0.7.7"
     }
   },
+  "github": {
+    "silent": true
+  },
   "rewrites": [
     {
       "destination": "/internal/redirect.html",
