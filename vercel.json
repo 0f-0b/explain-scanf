@@ -11,6 +11,10 @@
     {
       "destination": "/api/code",
       "source": "/api/code/:id"
+    },
+    {
+      "destination": "/",
+      "source": "/(.*)"
     }
   ]
 }
