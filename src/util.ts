@@ -1,3 +1,5 @@
+export type FirstParameter<T extends (...args: never[]) => unknown> = T extends (firstArg: infer P, ...args: never[]) => unknown ? P : never;
+
 export function findIndex<A extends ArrayLike<T>, T = A[number]>(arr: A, pred: (value: T, index: number, arr: A) => unknown, thisArg?: unknown): number {
   const length = arr.length;
   for (let i = 0; i < length; i++)

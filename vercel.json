@@ -9,10 +9,6 @@
   },
   "rewrites": [
     {
-      "destination": "/internal/redirect.html",
-      "source": "/c/:id"
-    },
-    {
       "destination": "/api/code",
       "source": "/api/code/:id"
     }

@@ -21,9 +21,6 @@ export default defineConfig(({ command }) => ({
   build: {
     target: "es2020",
     sourcemap: true,
-    rollupOptions: {
-      input: ["index.html", "internal/redirect.html"]
-    },
     brotliSize: false
   }
 }));
