@@ -1,14 +1,14 @@
-import { getRedis } from "./redis.ts";
-import { lua } from "./script.ts";
+import { connect } from "./deps.ts";
+import { requireEnv } from "./env.ts";
+import { lua, redisUrlToOptions } from "./redis.ts";
 
-let getCodeScript: string;
-let putCodeScript: string;
+const redisOptions = redisUrlToOptions(requireEnv("REDIS_URL"));
 
 export async function getCode(id: string): Promise<{ format: string; input: string; } | undefined> {
   if (!/^[a-z0-9]{8}$/.test(id))
     return undefined;
-  const redis = await getRedis();
-  const code = await redis.evalsha(getCodeScript ?? (getCodeScript = await redis.scriptLoad(lua`
+  const redis = await connect(redisOptions);
+  const code = await redis.eval(lua`
     local id = ARGV[1]
     local key = "code:" .. id
     local code = redis.call("hmget", key, "format", "input")
@@ -17,7 +17,7 @@ export async function getCode(id: string): Promise<{ format: string; input: stri
     end
     redis.call("expire", key, 604800)
     return code
-  `)), [], [id]);
+  `, [], [id]);
   if (code === undefined)
     return undefined;
   if (!Array.isArray(code) || typeof code[0] !== "string" || typeof code[1] !== "string")
@@ -27,8 +27,8 @@ export async function getCode(id: string): Promise<{ format: string; input: stri
 }
 
 export async function putCode(format: string, input: string): Promise<string> {
-  const redis = await getRedis();
-  const id = await redis.evalsha(putCodeScript ?? (putCodeScript = await redis.scriptLoad(lua`
+  const redis = await connect(redisOptions);
+  const id = await redis.eval(lua`
     local function random_string(length, charset)
       local result = ""
       for i = 1, length do
@@ -48,7 +48,7 @@ export async function putCode(format: string, input: string): Promise<string> {
     redis.call("hset", key, "format", ARGV[1], "input", ARGV[2])
     redis.call("expire", key, 604800)
     return id
-  `)), [], [format, input, Math.trunc(Math.random() * 0x100000000).toString()]);
+  `, [], [format, input, Math.trunc(Math.random() * 0x100000000).toString()]);
   if (typeof id !== "string")
     throw new TypeError("Invalid result from putCode script");
   return id;
