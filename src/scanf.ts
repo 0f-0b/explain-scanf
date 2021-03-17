@@ -5,8 +5,8 @@ import { findIndex } from "./util";
 const emptySet = new Set<string>();
 const whitespace = new Set(" \t\n\r\v\f");
 const whitespaceRE = /^[ \t\n\r\v\f]+/;
-const convValidateRE = /^%(?:(?:\d+\$)?(?:|hh|h|l|ll|j|z|t)n|(?:\d+\$|\*?)(?:[1-9]\d*)?(?:(?:|hh|h|l|ll|j|z|t)[diouxX]|(?:|l|L)[aAeEfFgG]|m?(?:l?(?:[cs]|\[(?:\^|(?!\^))[^\]]+\])|[CS])|p))/;
-const convParseRE = /^%(\d+\$|\*?)(\d*)(m?)(|hh|h|l|ll|j|z|t|L)([diouxXaAeEfFgGcsCSpn]|\[(?:\^|(?!\^))[^\]]+\])/;
+const convValidateRE = /^%(?:(?:\d+\$)?(?:|hh|h|l|ll|j|z|t)n|(?:\d+\$|\*?)(?:[1-9]\d*)?(?:(?:|hh|h|l|ll|j|z|t)[diouxX]|(?:|l|L)[aAeEfFgG]|m?(?:l?(?:[cs]|\[(?:\^|(?!\^))[^][^\]]*\])|[CS])|p))/;
+const convParseRE = /^%(\d+\$|\*?)(\d*)(m?)(|hh|h|l|ll|j|z|t|L)([diouxXaAeEfFgGcsCSpn]|\[(?:\^|(?!\^))[^][^\]]*\])/;
 const scanlistRE = /^\[(\^?)([^][^\]]*)\]$/;
 const intBases = new Map<string, number>([
   ["o", 8],
