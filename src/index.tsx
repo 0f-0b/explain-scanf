@@ -78,8 +78,12 @@ const formatExtension: Extension = [
       run({ state, dispatch }) {
         dispatch(state.update(state.replaceSelection("\n"), { scrollIntoView: true }));
         return true;
+      },
+      shift({ state, dispatch }) {
+        dispatch(state.update(state.replaceSelection("\r"), { scrollIntoView: true }));
+        return true;
       }
-    },
+    }
   ]),
   highlight.of([]),
   escapeString(),

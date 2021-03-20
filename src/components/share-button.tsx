@@ -1,16 +1,15 @@
 import { ShareIcon } from "@primer/octicons-react";
 import * as React from "react";
-import { ComponentPropsWithoutRef, useEffect, useState } from "react";
-import { mergeClass } from "../util";
+import { useEffect, useState } from "react";
 import { ErrorMessage } from "./error-message";
 import classes from "./share-button.module.css";
 
-export interface ShareButtonProps extends Omit<ComponentPropsWithoutRef<"button">, "children" | "onClick"> {
+export interface ShareButtonProps {
   format: string;
   input: string;
 }
 
-export function ShareButton({ format, input, className, ...props }: ShareButtonProps): JSX.Element {
+export function ShareButton({ format, input }: ShareButtonProps): JSX.Element {
   const [shared, setShared] = useState<{ format: string; input: string; } | undefined>();
   const [result, setResult] = useState<{ type: "success"; id: string; } | { type: "error"; reason: unknown; } | undefined>();
   useEffect(() => {
@@ -40,7 +39,7 @@ export function ShareButton({ format, input, className, ...props }: ShareButtonP
       }
     })();
   }, [shared?.format, shared?.input]);
-  return <><button className={mergeClass(classes.shareButton, className)} onClick={() => setShared({ format, input })} {...props}><ShareIcon aria-label="Share" /></button> {result ? (() => {
+  return <><button className={classes.shareButton} onClick={() => setShared({ format, input })}><ShareIcon aria-label="Share" /></button> {result ? (() => {
     switch (result.type) {
       case "success": {
         const url = new URL(`/c/${result.id}`, location.href).toString();
