@@ -1,4 +1,5 @@
-import { navigate, RouteComponentProps } from "@reach/router";
+import type { RouteComponentProps } from "@reach/router";
+import { navigate } from "@reach/router";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { ErrorMessage } from "./components/error-message";

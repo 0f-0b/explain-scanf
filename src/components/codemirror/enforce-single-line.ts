@@ -1,4 +1,5 @@
-import { ChangeSpec, EditorState, Extension } from "@codemirror/state";
+import type { ChangeSpec, Extension } from "@codemirror/state";
+import { EditorState } from "@codemirror/state";
 
 const enforceSingleLineExtension = EditorState.transactionFilter.of(tr => {
   if (!tr.docChanged)

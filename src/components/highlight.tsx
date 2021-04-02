@@ -1,5 +1,5 @@
+import type { PropsWithChildren } from "react";
 import * as React from "react";
-import { PropsWithChildren } from "react";
 import classes from "./highlight.module.css";
 
 export function HlKeyword({ children }: PropsWithChildren<unknown>): JSX.Element {

@@ -1,5 +1,6 @@
-import { Extension } from "@codemirror/state";
-import { Decoration, DecorationSet, EditorView, MatchDecorator, ViewPlugin, ViewUpdate, WidgetType } from "@codemirror/view";
+import type { Extension } from "@codemirror/state";
+import type { DecorationSet, EditorView, ViewUpdate } from "@codemirror/view";
+import { Decoration, MatchDecorator, ViewPlugin, WidgetType } from "@codemirror/view";
 import { stringEscapeRE, stringEscapes } from "../../escape";
 
 class EscapeWidget extends WidgetType {

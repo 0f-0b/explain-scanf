@@ -1,6 +1,7 @@
 import eslint from "@rollup/plugin-eslint";
 import reactRefresh from "@vitejs/plugin-react-refresh";
-import { defineConfig, Plugin } from "vite";
+import type { Plugin } from "vite";
+import { defineConfig } from "vite";
 import { minifyHtml } from "vite-plugin-html";
 
 function preprocessor(plugin: Plugin): Plugin {

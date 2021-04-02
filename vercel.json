@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/**/*.ts": {
-      "runtime": "vercel-deno@0.7.7"
+      "runtime": "vercel-deno@0.7.9"
     }
   },
   "github": {
@@ -14,7 +14,7 @@
     },
     {
       "destination": "/",
-      "source": "/(.*)"
+      "source": "/((?!@|src/|node_modules/).*)"
     }
   ]
 }

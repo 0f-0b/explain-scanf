@@ -1,5 +1,5 @@
 import parseHexFloat from "@webassemblyjs/floating-point-hex-parser";
-import { DeclarationSpecifier, Expression, FloatingConstant, Layer, TypeSpecifier } from "./c-ast";
+import type { DeclarationSpecifier, Expression, FloatingConstant, Layer, TypeSpecifier } from "./c-ast";
 import { findIndex } from "./util";
 
 const emptySet = new Set<string>();

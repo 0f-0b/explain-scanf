@@ -2,9 +2,10 @@ import { copyLineDown, copyLineUp, deleteLine, moveLineDown, moveLineUp, selectL
 import { lineNumbers } from "@codemirror/gutter";
 import { history, historyKeymap } from "@codemirror/history";
 import { indentUnit } from "@codemirror/language";
-import { Compartment, EditorState, Extension, Transaction } from "@codemirror/state";
+import type { Extension } from "@codemirror/state";
+import { Compartment, EditorState, Transaction } from "@codemirror/state";
 import { Decoration, drawSelection, EditorView, highlightActiveLine, highlightSpecialChars, keymap } from "@codemirror/view";
-import { RouteComponentProps } from "@reach/router";
+import type { RouteComponentProps } from "@reach/router";
 import * as React from "react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useStorageState } from "react-storage-hooks";
@@ -16,7 +17,8 @@ import { HlComment, HlFunction, HlOperator, HlString, HlVariable } from "./compo
 import { ShareButton } from "./components/share-button";
 import classes from "./index.module.css";
 import { parseFormat, sscanf, undefinedBehavior, unimplemented } from "./scanf";
-import { filterMap, FirstParameter } from "./util";
+import type { FirstParameter } from "./util";
+import { filterMap } from "./util";
 
 const localStorage: FirstParameter<typeof useStorageState> = (() => {
   try {

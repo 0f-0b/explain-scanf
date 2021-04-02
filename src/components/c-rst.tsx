@@ -1,6 +1,8 @@
+import type { PropsWithChildren, ReactNode } from "react";
 import * as React from "react";
-import { Fragment, PropsWithChildren, ReactNode } from "react";
-import { BasicType, basicTypes, Declaration, DeclarationSpecifier, Declarator, Expression, FloatingConstant, InitDeclarator, TypedefName, typedefs } from "../c-ast";
+import { Fragment } from "react";
+import type { BasicType, Declaration, DeclarationSpecifier, Declarator, Expression, FloatingConstant, InitDeclarator, TypedefName } from "../c-ast";
+import { basicTypes, typedefs } from "../c-ast";
 import { escapeChar, escapeString } from "../escape";
 import { HlBasicType, HlFunction, HlKeyword, HlMacro, HlNumeric, HlOperator, HlString, HlType, HlVariable } from "./highlight";
 
