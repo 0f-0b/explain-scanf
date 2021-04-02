@@ -468,7 +468,7 @@ interface FloatSeq {
   length: number;
 }
 
-const floatSeqRE = /^([+-]?)(0[xX](?:[0-9a-fA-F]+(?:\.[0-9a-fA-F]*)?|\.[0-9a-fA-F]+)(?![0-9a-fA-F])(?:[pP][+-]?\d+|(?![pP]))|(?:\d+(?:\.\d*)?|\.\d+)(?!\d)(?:[eE][+-]?\d+|(?![eE]))|[iI][nN][fF](?:[iI][nN][iI][tT][yY])?|[nN][aN][nN](?:\([0-9A-Za-z_]*\))?)/;
+const floatSeqRE = /^([+-]?)(0[xX](?:[0-9a-fA-F]+(?:\.[0-9a-fA-F]*|(?!\.))|\.[0-9a-fA-F]+)(?![0-9a-fA-F])(?:[pP][+-]?\d+|(?![pP]))|(?!0[xX])(?:\d+(?:\.\d*|(?!\.))|\.\d+)(?!\d)(?:[eE][+-]?\d+|(?![eE]))|[iI][nN][fF](?:[iI][nN][iI][tT][yY])?|[nN][aN][nN](?:\([0-9A-Za-z_]*\))?)/;
 
 function parseFloatSeq(str: string): FloatSeq | undefined {
   const match = floatSeqRE.exec(str);
@@ -482,5 +482,5 @@ function parseFloatSeq(str: string): FloatSeq | undefined {
     return { value: { sign, magnitude: NaN, payload: magnitude.length === 3 ? undefined : magnitude.slice(4, -1) }, length };
   if (l.startsWith("inf"))
     return { value: { sign, magnitude: Infinity }, length };
-  return { value: { sign, magnitude: l.startsWith("0x") ? parseHexFloat(l) : parseFloat(l) }, length };
+  return { value: { sign, magnitude: l.startsWith("0x") ? parseHexFloat("0x0" + l.substring(2)) : parseFloat(l) }, length };
 }
