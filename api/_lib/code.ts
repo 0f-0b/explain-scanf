@@ -5,6 +5,7 @@ import { lua, redisUrlToOptions } from "./redis.ts";
 const redisOptions = redisUrlToOptions(requireEnv("REDIS_URL"));
 
 export async function getCode(id: string): Promise<{ format: string; input: string; } | undefined> {
+  console.log("getCode", [id]);
   if (!/^[a-z0-9]{8}$/.test(id))
     return undefined;
   const redis = await connect(redisOptions);
@@ -31,6 +32,7 @@ export async function getCode(id: string): Promise<{ format: string; input: stri
 }
 
 export async function putCode(format: string, input: string): Promise<string> {
+  console.log("putCode", [format, input]);
   const redis = await connect(redisOptions);
   try {
     const id = await redis.eval(lua`
