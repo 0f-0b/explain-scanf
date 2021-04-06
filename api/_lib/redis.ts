@@ -1,4 +1,6 @@
-import type { RedisConnectOptions } from "./deps.ts";
+import type { Redis, RedisConnectOptions } from "./deps.ts";
+import { connect } from "./deps.ts";
+import { requireEnv } from "./env.ts";
 
 export function redisUrlToOptions(url: string): RedisConnectOptions {
   const { protocol, username, password, hostname, port, pathname } = new URL(url);
@@ -15,6 +17,15 @@ export function redisUrlToOptions(url: string): RedisConnectOptions {
     password: password || undefined,
     name: username || undefined
   };
+}
+
+const options = redisUrlToOptions(requireEnv("REDIS_URL"));
+let redis: Redis;
+
+export async function getRedis(): Promise<Redis> {
+  if (!redis)
+    redis = await connect(options);
+  return redis;
 }
 
 export function lua(template: TemplateStringsArray, ...substitutions: unknown[]): string {
