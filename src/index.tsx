@@ -106,8 +106,10 @@ const inputExtension = [
   baseExtension
 ];
 
-function name(index: number): string {
-  return `var_${index + 1}`;
+const shortNames = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
+function name(index: number, count: number): string {
+  return count > shortNames.length ? `var_${index + 1}` : shortNames[index];
 }
 
 export interface IndexLocationState {
@@ -164,16 +166,16 @@ export function Index(props: RouteComponentProps): JSX.Element {
   return <div>
     <ShareButton format={format} input={input} />
     <pre>
-      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer" onClick={event => (date => date.getMonth() === 3 && date.getDate() === 1)(new Date) && void new Promise((resolve, reject) => sessionStorage.getItem("e") === null ? resolve(sessionStorage.setItem("e", "")) : reject()).then(() => (event.preventDefault(), window.open(atob("aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2ODA0MzMwMjI/dD0wLjAwMDAx"), "_blank", "noreferrer")), () => undefined)}>scanf</a></HlFunction>(<HlString>&quot;<CodeMirror className={classes.format} state={formatState} onChange={setFormatState} />&quot;</HlString><span>{Array.from(args, (arg, index) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefinedBehavior ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>{/* help */}
+      <code><HlFunction><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html" target="_blank" rel="noreferrer" onClick={event => (date => date.getMonth() === 3 && date.getDate() === 1)(new Date) && void new Promise((resolve, reject) => sessionStorage.getItem("e") === null ? resolve(sessionStorage.setItem("e", "")) : reject()).then(() => (event.preventDefault(), window.open(atob("aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2ODA0MzMwMjI/dD0wLjAwMDAx"), "_blank", "noreferrer")), () => undefined)}>scanf</a></HlFunction>(<HlString>&quot;<CodeMirror className={classes.format} state={formatState} onChange={setFormatState} />&quot;</HlString><span>{args.map((arg, index, arr) => <Fragment key={index}>, {arg ? <>{arg.ref && <HlOperator>&amp;</HlOperator>}<HlVariable>{name(index, arr.length)}</HlVariable></> : <HlVariable>NULL</HlVariable>}</Fragment>)}</span>); <HlComment>{"// => "}<span>{result === undefinedBehavior ? "UB" : result === unimplemented ? "unimplemented" : result.ret === -1 ? "EOF" : result.ret}</span></HlComment></code>{/* help */}
     </pre>
     <CodeMirror state={inputState} onChange={setInputState} />
     <pre className={classes.variables}>
-      <code>{args.map((arg, index) => <Fragment key={index}><DeclarationNode ast={{
+      <code>{args.map((arg, index, arr) => <Fragment key={index}><DeclarationNode ast={{
         specifiers: arg.specifiers,
         declarators: [
           {
             declarator: {
-              name: name(index),
+              name: name(index, arr.length),
               type: arg.type
             },
             initializer: arg.initializer
