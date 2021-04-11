@@ -1,7 +1,7 @@
 import { ShareIcon } from "@primer/octicons-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { ErrorMessage } from "./error-message";
+import ErrorMessage from "./error-message";
 import classes from "./share-button.module.css";
 
 export interface ShareButtonProps {
@@ -9,7 +9,7 @@ export interface ShareButtonProps {
   input: string;
 }
 
-export function ShareButton({ format, input }: ShareButtonProps): JSX.Element {
+export default function ShareButton({ format, input }: ShareButtonProps): JSX.Element {
   const [shared, setShared] = useState<{ format: string; input: string; } | undefined>();
   const [result, setResult] = useState<{ type: "success"; id: string; } | { type: "error"; reason: unknown; } | undefined>();
   useEffect(() => {

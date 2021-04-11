@@ -1,14 +1,15 @@
 import type { RouteComponentProps } from "@reach/router";
-import { navigate } from "@reach/router";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { ErrorMessage } from "./components/error-message";
+import { IndexLocationState } from ".";
+import ErrorMessage from "./components/error-message";
+import { navigate } from "./navigate";
 
 export interface CodeParams {
   id: string;
 }
 
-export function Code(props: RouteComponentProps<CodeParams>): JSX.Element {
+export default function Code(props: RouteComponentProps<CodeParams>): JSX.Element {
   const { id } = props as CodeParams;
   const [error, setError] = useState<unknown>();
   useEffect(() => {
@@ -23,7 +24,7 @@ export function Code(props: RouteComponentProps<CodeParams>): JSX.Element {
         if (res.status !== 200)
           throw await res.text();
         const { format, input } = await res.json() as { format: string; input: string; };
-        await navigate("/", {
+        await navigate<IndexLocationState>("/", {
           state: { format, input },
           replace: true
         });

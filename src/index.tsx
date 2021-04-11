@@ -10,12 +10,13 @@ import * as React from "react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useStorageState } from "react-storage-hooks";
 import { DeclarationNode } from "./components/c-rst";
-import { CodeMirror } from "./components/codemirror";
+import CodeMirror from "./components/codemirror";
 import { enforceSingleLine } from "./components/codemirror/enforce-single-line";
 import { escapeString } from "./components/codemirror/escape-string";
 import { HlComment, HlFunction, HlOperator, HlString, HlVariable } from "./components/highlight";
-import { ShareButton } from "./components/share-button";
+import ShareButton from "./components/share-button";
 import classes from "./index.module.css";
+import { locationState, navigate } from "./navigate";
 import { parseFormat, sscanf, undefinedBehavior, unimplemented } from "./scanf";
 import type { FirstParameter } from "./util";
 import { filterMap } from "./util";
@@ -117,7 +118,7 @@ export interface IndexLocationState {
   input: string;
 }
 
-export function Index(props: RouteComponentProps): JSX.Element {
+export default function Index(props: RouteComponentProps): JSX.Element {
   const [formatStorage, setFormatStorage] = useStorageState(localStorage, "format", "%d%f%s");
   const [inputStorage, setInputStorage] = useStorageState(localStorage, "input", "25 54.32E-1 Hamster\n");
   const [formatState, setFormatState] = useState(() => EditorState.create({
@@ -132,17 +133,20 @@ export function Index(props: RouteComponentProps): JSX.Element {
   const input = Array.from(inputState.doc).join("");
   useEffect(() => setFormatStorage(format), [format, setFormatStorage]);
   useEffect(() => setInputStorage(input), [input, setInputStorage]);
-  const locationState = (props.location as { state: IndexLocationState & { key: string; } | null; }).state;
+  const locState = locationState<IndexLocationState>(props.location);
   useEffect(() => {
-    if (locationState === null)
+    if (!locState)
       return;
     setFormatState(state => state.update({
-      changes: { from: 0, to: state.doc.length, insert: locationState.format }
+      changes: { from: 0, to: state.doc.length, insert: locState.format }
     }).state);
     setInputState(state => state.update({
-      changes: { from: 0, to: state.doc.length, insert: locationState.input }
+      changes: { from: 0, to: state.doc.length, insert: locState.input }
     }).state);
-  }, [locationState]);
+    void navigate<IndexLocationState>("/", {
+      replace: true
+    });
+  }, [locState]);
   const directives = useMemo(() => parseFormat(format), [format]);
   const result = useMemo(() => directives === undefinedBehavior ? undefinedBehavior : sscanf(input, directives), [input, directives]);
   const convs = useMemo(() => typeof result === "object" ? result.convs : [], [result]);

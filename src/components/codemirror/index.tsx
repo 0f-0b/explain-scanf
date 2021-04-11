@@ -10,7 +10,7 @@ export interface CodeMirrorProps extends Omit<ComponentPropsWithoutRef<"div">, "
   onChange: (state: EditorState) => void;
 }
 
-export function CodeMirror({ state, onChange, ...props }: CodeMirrorProps): JSX.Element {
+export default function CodeMirror({ state, onChange, ...props }: CodeMirrorProps): JSX.Element {
   const ref = useRef<HTMLDivElement | null>(null);
   const view = useRef<EditorView | null>(null);
   const cbRef = useLatest(onChange);

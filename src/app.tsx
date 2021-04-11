@@ -1,14 +1,18 @@
 import { Router } from "@reach/router";
 import * as React from "react";
-import { Index } from ".";
+import { lazy, Suspense } from "react";
 import "./app.css";
-import { Code } from "./code";
-import { NotFound } from "./not-found";
 
-export function App(): JSX.Element {
-  return <Router>
-    <Index path="/" />
-    <Code path="/c/:id" />
-    <NotFound default />
-  </Router>;
+const Index = lazy(() => import("."));
+const Code = lazy(() => import("./code"));
+const NotFound = lazy(() => import("./not-found"));
+
+export default function App(): JSX.Element {
+  return <Suspense fallback="Loading…">
+    <Router>
+      <Index path="/" />
+      <Code path="/c/:id" />
+      <NotFound default />
+    </Router>
+  </Suspense>;
 }
