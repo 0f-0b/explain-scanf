@@ -28,9 +28,10 @@ export default function ShareButton({ format, input }: ShareButtonProps): JSX.El
           method: "POST",
           signal: controller.signal
         });
-        if (res.status !== 201)
-          throw await res.text();
-        setResult({ type: "success", id: await res.text() });
+        const obj = await res.json() as { id: string; } | { error: string; };
+        if ("error" in obj)
+          throw new Error(obj.error);
+        setResult({ type: "success", id: obj.id });
       } catch (e) {
         setShared(undefined);
         setResult({ type: "error", reason: e });

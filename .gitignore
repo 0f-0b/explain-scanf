@@ -1,7 +1,3 @@
 .DS_Store
-node_modules/
-/dist/
-/.vercel/
-/.vscode/
+.vercel/
 *.local
-dump.rdb

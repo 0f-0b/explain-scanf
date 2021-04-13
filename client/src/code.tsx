@@ -21,9 +21,10 @@ export default function Code(props: RouteComponentProps<CodeParams>): JSX.Elemen
         const res = await fetch(`/api/code/${id}`, {
           signal: controller.signal
         });
-        if (res.status !== 200)
-          throw await res.text();
-        const { format, input } = await res.json() as { format: string; input: string; };
+        const obj = await res.json() as { format: string; input: string; } | { error: string; };
+        if ("error" in obj)
+          throw new Error(obj.error);
+        const { format, input } = obj;
         await navigate<IndexLocationState>("/", {
           state: { format, input },
           replace: true

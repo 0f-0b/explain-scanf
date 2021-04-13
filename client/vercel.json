@@ -1,16 +1,11 @@
 {
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "vercel-deno@0.7.9"
-    }
-  },
   "github": {
     "silent": true
   },
   "rewrites": [
     {
-      "destination": "/api/code",
-      "source": "/api/code/:id"
+      "destination": "https://explain-scanf.deno.dev/:match*",
+      "source": "/api/:match*"
     },
     {
       "destination": "/",
