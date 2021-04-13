@@ -13,7 +13,7 @@ serve({
       return json({ error: error.message }, { status: error.status });
     const { format, input } = body as { format: string; input: string; };
     if (typeof format !== "string" || typeof input !== "string")
-      return json({ error: "expected { format: string; input: string; }" }, { status: 400 });
+      return json({ error: "invalid code" }, { status: 400 });
     return json({ id: await putCode(format, input) }, { status: 201 });
   },
   async ["/code/:id"](req, params) {
@@ -29,7 +29,5 @@ serve({
     const { format, input } = code;
     return json({ format, input }, { status: 200 });
   },
-  404() {
-    return notFound();
-  }
+  404: notFound
 });

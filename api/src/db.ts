@@ -25,5 +25,5 @@ export async function queryDatabase<T, R = unknown>(query: string, variables: T)
 }
 
 export function gql(template: TemplateStringsArray, ...substitutions: unknown[]): string {
-  return String.raw(template, ...substitutions).replace(/\s+/g, " ").trim();
+  return String.raw(template, ...substitutions).replace(/(?:\s|\\n)+/g, " ").trim();
 }
