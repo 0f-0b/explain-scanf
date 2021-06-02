@@ -1,3 +1,5 @@
+#!/usr/bin/env deployctl run --libs=ns,fetchevent
+
 import { getCode, putCode } from "./code.ts";
 import { json, serve, validateRequest } from "./deps/sift.ts";
 import { notFound } from "./util.ts";
