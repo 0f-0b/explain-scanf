@@ -26,7 +26,7 @@ const localStorage: FirstParameter<typeof useStorageState> = (() => {
     const localStorage = window.localStorage;
     if (typeof localStorage === "object")
       return localStorage;
-  } catch (_) {
+  } catch (_: unknown) {
     // ignore
   }
   return {

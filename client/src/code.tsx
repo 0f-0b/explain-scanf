@@ -29,7 +29,7 @@ export default function Code(props: RouteComponentProps<CodeParams>): JSX.Elemen
           state: { format, input },
           replace: true
         });
-      } catch (e) {
+      } catch (e: unknown) {
         setError(e);
       } finally {
         clearTimeout(timeout);

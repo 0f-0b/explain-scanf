@@ -32,7 +32,7 @@ export default function ShareButton({ format, input }: ShareButtonProps): JSX.El
         if ("error" in obj)
           throw new Error(obj.error);
         setResult({ type: "success", id: obj.id });
-      } catch (e) {
+      } catch (e: unknown) {
         setShared(undefined);
         setResult({ type: "error", reason: e });
       } finally {
