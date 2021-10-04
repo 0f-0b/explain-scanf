@@ -1,5 +1,4 @@
 import { ShareIcon } from "@primer/octicons-react";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import ErrorMessage from "./error-message";
 import classes from "./share-button.module.css";

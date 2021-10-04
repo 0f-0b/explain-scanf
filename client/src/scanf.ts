@@ -292,7 +292,7 @@ function parse(spec: ConvSpec, arg: Argument | undefined, str: string, offset: n
     }
     case "string": {
       const length = findIndex(str, c => spec.scanset.has(c) === spec.negated);
-      if (!length)
+      if (length === 0)
         return failure;
       const result = str.substring(0, length);
       const size = (spec.wide ? length : new TextEncoder().encode(result).length) + (spec.terminate ? 1 : 0);

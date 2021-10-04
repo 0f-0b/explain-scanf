@@ -1,20 +1,21 @@
-export type FirstParameter<T extends (...args: never[]) => unknown> = T extends (firstArg: infer P, ...args: never[]) => unknown ? P : never;
-
-export function findIndex<A extends ArrayLike<T>, T = A[number]>(arr: A, pred: (value: T, index: number, arr: A) => unknown, thisArg?: unknown): number {
-  const length = arr.length;
-  for (let i = 0; i < length; i++)
-    if (pred.call(thisArg, arr[i], i, arr))
-      return i;
+export function findIndex<T>(it: Iterable<T>, pred: (value: T, index: number) => unknown): number {
+  let count = 0;
+  for (const elem of it) {
+    if (pred(elem, count))
+      return count;
+    count++;
+  }
   return length;
 }
 
-export function filterMap<U, A extends ArrayLike<T>, T = A[number]>(arr: A, cb: (value: T, index: number, arr: A) => U | undefined, thisArg?: unknown): U[] {
+export function mapNotNullish<T, U>(it: Iterable<T>, transformer: (value: T, index: number) => U | undefined | null): U[] {
   const result: U[] = [];
-  const length = arr.length;
-  for (let i = 0; i < length; i++) {
-    const mapped = cb.call(thisArg, arr[i], i, arr);
-    if (mapped !== undefined)
-      result.push(mapped);
+  let count = 0;
+  for (const elem of it) {
+    const value = transformer(elem, count);
+    if (value !== undefined && value !== null)
+      result.push(value);
+    count++;
   }
   return result;
 }

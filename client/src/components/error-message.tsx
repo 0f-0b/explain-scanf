@@ -1,5 +1,4 @@
 import type { ComponentPropsWithoutRef } from "react";
-import * as React from "react";
 import { mergeClass } from "../util";
 import classes from "./error-message.module.css";
 

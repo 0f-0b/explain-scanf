@@ -1,5 +1,4 @@
 import type { RouteComponentProps } from "@reach/router";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { IndexLocationState } from ".";
 import ErrorMessage from "./components/error-message";

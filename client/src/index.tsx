@@ -6,7 +6,6 @@ import type { Extension } from "@codemirror/state";
 import { Compartment, EditorState, Transaction } from "@codemirror/state";
 import { Decoration, drawSelection, EditorView, highlightActiveLine, highlightSpecialChars, keymap } from "@codemirror/view";
 import type { RouteComponentProps } from "@reach/router";
-import * as React from "react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useStorageState } from "react-storage-hooks";
 import { DeclarationNode } from "./components/c-rst";
@@ -18,10 +17,9 @@ import ShareButton from "./components/share-button";
 import classes from "./index.module.css";
 import { locationState, navigate } from "./navigate";
 import { parseFormat, sscanf, undefinedBehavior, unimplemented } from "./scanf";
-import type { FirstParameter } from "./util";
-import { filterMap } from "./util";
+import { mapNotNullish } from "./util";
 
-const localStorage: FirstParameter<typeof useStorageState> = (() => {
+const localStorage: Parameters<typeof useStorageState>[0] = (() => {
   try {
     const localStorage = window.localStorage;
     if (typeof localStorage === "object")
@@ -162,7 +160,7 @@ export default function Index(props: RouteComponentProps): JSX.Element {
     setInputState(state => state.update({
       effects: [
         highlight.reconfigure([
-          EditorView.decorations.of(Decoration.set(filterMap(convs, (conv, index) => conv.match && conv.match.start !== conv.match.end ? color(index).range(conv.match.start, conv.match.end) : undefined)))
+          EditorView.decorations.of(Decoration.set(mapNotNullish(convs, (conv, index) => conv.match && conv.match.start !== conv.match.end ? color(index).range(conv.match.start, conv.match.end) : null)))
         ])
       ]
     }).state);

@@ -1,5 +1,4 @@
 import { Router } from "@reach/router";
-import * as React from "react";
 import { lazy, Suspense } from "react";
 import "./app.css";
 

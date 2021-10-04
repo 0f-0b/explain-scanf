@@ -1,5 +1,4 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import * as React from "react";
 import { Fragment } from "react";
 import type { BasicType, Declaration, DeclarationSpecifier, Declarator, Expression, FloatingConstant, InitDeclarator, TypedefName } from "../c-ast";
 import { basicTypes, typedefs } from "../c-ast";

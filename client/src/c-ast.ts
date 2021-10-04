@@ -1,13 +1,9 @@
 export const basicTypes = ["void", "char", "short", "int", "long", "float", "double", "signed", "unsigned"] as const;
-export type BasicType = typeof basicTypes[number];
 export const typedefs = ["wchar_t", "intmax_t", "uintmax_t", "size_t", "ptrdiff_t"] as const;
+export type BasicType = typeof basicTypes[number];
 export type TypedefName = typeof typedefs[number];
-export type TypeSpecifier =
-  | BasicType
-  | TypedefName;
-export type DeclarationSpecifier =
-  | TypeSpecifier
-  | "typedef";
+export type TypeSpecifier = BasicType | TypedefName;
+export type DeclarationSpecifier = TypeSpecifier | "typedef";
 
 export interface Declaration {
   specifiers: DeclarationSpecifier[];
