@@ -5,7 +5,7 @@ export function findIndex<T>(it: Iterable<T>, pred: (value: T, index: number) =>
       return count;
     count++;
   }
-  return length;
+  return count;
 }
 
 export function mapNotNullish<T, U>(it: Iterable<T>, transformer: (value: T, index: number) => U | undefined | null): U[] {
