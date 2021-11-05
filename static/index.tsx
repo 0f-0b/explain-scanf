@@ -43,7 +43,6 @@ import {
   undefinedBehavior,
   unimplemented,
 } from "./scanf.ts";
-import { safeLocalStorage } from "./storage.ts";
 import { mapNotNullish } from "./util.ts";
 
 const colors: Decoration[] = [
@@ -127,38 +126,23 @@ const inputExtension: Extension = [
   baseExtension,
 ];
 
-const shortNames = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
+const shortNames = "abcdefghijklmnopqrstuvwxyz";
 
 function name(index: number, count: number): string {
   return count > shortNames.length ? `var_${index + 1}` : shortNames[index];
 }
+
+const safeLocalStorage: Parameters<typeof useStorageState>[0] = {
+  getItem(key) {
+    return localStorage.getItem(key);
+  },
+  setItem(key, value) {
+    return localStorage.setItem(key, value);
+  },
+  removeItem(key) {
+    return localStorage.removeItem(key);
+  },
+};
 
 export interface IndexLocationState {
   format: string;

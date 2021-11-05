@@ -67,6 +67,7 @@ export default function ShareButton(
                   value={url}
                   size={url.length}
                   readOnly
+                  onFocus={(event) => event.target.select()}
                 />
               );
             }
