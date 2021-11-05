@@ -30,11 +30,6 @@ export async function queryDatabase<T, R = unknown>(
   return obj.data;
 }
 
-export function gql(
-  template: TemplateStringsArray,
-  ...substitutions: unknown[]
-): string {
-  return String.raw(template, ...substitutions)
-    .replace(/(?:\s|\\n)+/g, " ")
-    .trim();
+export function gql(template: TemplateStringsArray): string {
+  return String.raw(template).replace(/\s+/g, " ").trim();
 }

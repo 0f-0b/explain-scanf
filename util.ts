@@ -1,3 +1,5 @@
+export type Awaitable<T> = T | PromiseLike<T>;
+
 export function requireEnv(key: string): string {
   const val = Deno.env.get(key);
   if (val === undefined) {

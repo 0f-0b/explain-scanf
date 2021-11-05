@@ -1,11 +1,14 @@
 import { gql, queryDatabase } from "./db.ts";
 import { randomString } from "./util.ts";
 
-export async function getCode(
-  id: string,
-): Promise<{ format: string; input: string } | undefined> {
+export interface Code {
+  format: string;
+  input: string;
+}
+
+export async function getCode(id: string): Promise<Code | null> {
   if (!/^[a-z0-9]{8}$/.test(id)) {
-    return undefined;
+    return null;
   }
   try {
     const { code: { format, input } } = await queryDatabase<{ id: string }, {
@@ -26,11 +29,11 @@ export async function getCode(
     );
     return { format, input };
   } catch {
-    return undefined;
+    return null;
   }
 }
 
-export async function putCode(format: string, input: string): Promise<string> {
+export async function putCode({ format, input }: Code): Promise<string> {
   for (;;) {
     try {
       const { createCode: { id } } = await queryDatabase<

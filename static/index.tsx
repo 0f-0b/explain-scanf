@@ -43,23 +43,8 @@ import {
   undefinedBehavior,
   unimplemented,
 } from "./scanf.ts";
+import { safeLocalStorage } from "./storage.ts";
 import { mapNotNullish } from "./util.ts";
-
-const localStorage: Parameters<typeof useStorageState>[0] = (() => {
-  try {
-    const localStorage = window.localStorage;
-    if (typeof localStorage === "object") {
-      return localStorage;
-    }
-  } catch {
-    // ignored
-  }
-  return {
-    getItem: () => null,
-    setItem: () => {},
-    removeItem: () => {},
-  };
-})();
 
 const colors: Decoration[] = [
   Decoration.mark({ class: "color-0" }),
@@ -183,12 +168,12 @@ export interface IndexLocationState {
 // deno-lint-ignore no-explicit-any
 export default function Index(props: any): JSX.Element {
   const [formatStorage, setFormatStorage] = useStorageState(
-    localStorage,
+    safeLocalStorage,
     "format",
     "%d%f%s",
   );
   const [inputStorage, setInputStorage] = useStorageState(
-    localStorage,
+    safeLocalStorage,
     "input",
     "25 54.32E-1 Hamster\n",
   );
