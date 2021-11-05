@@ -13,6 +13,8 @@ import {
 import { getCode, putCode } from "./code.ts";
 import { transformModules } from "./transform-modules.ts";
 
+const baseUrl = `file://${Deno.cwd()}/`;
+
 const defaultHandler: Handler = async () =>
   new Response(await Deno.readFile("index.html"), {
     headers: [
@@ -66,10 +68,10 @@ serve({
     return json({ format, input }, { status: 200 });
   },
   "/esm.sh/:filename+": staticHandler("static/esm.sh", {
-    baseUrl: import.meta.url,
+    baseUrl,
   }),
   "/:filename+": staticHandler("static", {
-    baseUrl: import.meta.url,
+    baseUrl,
     intervene: transformModules,
   }),
   404: defaultHandler,
