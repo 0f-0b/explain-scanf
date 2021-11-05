@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2020",
+      "deno.ns",
+      "dom"
+    ]
+  },
+  "fmt": {
+    "files": {
+      "exclude": [
+        "static/esm.sh"
+      ]
+    }
+  },
+  "lint": {
+    "files": {
+      "exclude": [
+        "static/esm.sh"
+      ]
+    }
+  }
+}
