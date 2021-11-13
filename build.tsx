@@ -1,9 +1,9 @@
 #!/usr/bin/env deno run -A
 
-import { encode as encodeHex } from "https://deno.land/std@0.114.0/encoding/hex.ts";
-import { join } from "https://deno.land/std@0.114.0/path/mod.ts";
-import { renderToStaticMarkup } from "https://esm.sh/react-dom@17.0.2/server";
-import React from "https://esm.sh/react@17.0.2";
+import { encode as encodeHex } from "./deps/std/encoding/hex.ts";
+import { join } from "./deps/std/path.ts";
+import { renderToStaticMarkup } from "./deps/react-dom/server.ts";
+import React from "./deps/react.ts";
 
 async function withHash(path: string): Promise<string> {
   const data = await Deno.readFile(join("static", path));
@@ -53,6 +53,7 @@ const html = renderToStaticMarkup(
         name="viewport"
         content="width=device-width,initial-scale=1,shrink-to-fit=no"
       />
+      <meta name="description" content="Explains the magic behind fscanf." />
       <title>Explain scanf</title>
       <link rel="stylesheet" href={await withHash("/style.css")} />
       <script src={esmShims} async />
@@ -65,7 +66,7 @@ const html = renderToStaticMarkup(
       />
       <script
         type="module-shim"
-        dangerouslySetInnerHTML={{ __html: 'import "/main.tsx"' }}
+        dangerouslySetInnerHTML={{ __html: `import${JSON.stringify(root)}` }}
       />
     </body>
   </html>,

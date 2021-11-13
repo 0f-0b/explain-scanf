@@ -1,14 +1,18 @@
 #!/usr/bin/env deno run --allow-read --allow-net --allow-env
 
-import { extname, join } from "https://deno.land/std@0.114.0/path/mod.ts";
-import { contentType } from "https://deno.land/x/media_types@v2.10.2/mod.ts";
+import { contentType } from "./deps/media_types.ts";
+import { serve } from "./deps/std/http/server.ts";
+import { extname, join } from "./deps/std/path.ts";
+import { transform } from "./deps/swc.ts";
+import { Code, getCode, putCode } from "./code.ts";
 import {
+  catchError,
   json,
-  serve,
-  validateRequest,
-} from "https://deno.land/x/sift@0.4.2/mod.ts";
-import { transform } from "https://deno.land/x/swc@0.1.4/mod.ts";
-import { getCode, putCode } from "./code.ts";
+  logTime,
+  methods,
+  route,
+  toStdHandler,
+} from "./handler.ts";
 
 const scriptTypes = Object.freeze<Record<string, unknown>>({
   js: { syntax: "ecmascript" },
@@ -17,87 +21,87 @@ const scriptTypes = Object.freeze<Record<string, unknown>>({
   tsx: { syntax: "typescript", tsx: true },
 });
 
-serve({
-  async "/api/code"(req) {
-    const { error, body } = await validateRequest(req, {
-      POST: {
-        body: ["format", "input"],
-      },
-    });
-    if (error) {
-      return json({ error: error.message }, { status: error.status });
-    }
-    const { format, input } = body!;
-    if (typeof format !== "string" || typeof input !== "string") {
-      return json({ error: "Invalid code" }, { status: 400 });
-    }
-    return json({ id: await putCode({ format, input }) }, { status: 201 });
-  },
-  async "/api/code/:id"(req, params) {
-    const { error } = await validateRequest(req, {
-      GET: {},
-    });
-    if (error) {
-      return json({ error: error.message }, { status: error.status });
-    }
-    const { id } = params as { id: string };
-    const code = await getCode(id);
-    if (!code) {
-      return json({ error: "Code not found" }, { status: 404 });
-    }
-    const { format, input } = code;
-    return json({ format, input }, { status: 200 });
-  },
-  "/favicon.ico"() {
-    return new Response(null, { status: 404 });
-  },
-  async 404(req) {
-    try {
-      const url = new URL(req.url);
-      const path = url.pathname;
-      const data = await Deno.readFile(join("static", path));
-      if (path.startsWith("/esm.sh/")) {
-        return new Response(data, {
-          headers: [
-            ["content-type", "text/javascript; charset=utf-8"],
-            ["cache-control", "max-age=2592000, immutable"],
-          ],
-        });
-      }
-      const ext = extname(path);
-      const parser = scriptTypes[ext.substring(1)];
-      if (!parser) {
+async function html(status?: number): Promise<Response> {
+  return new Response(await Deno.readTextFile("index.html"), {
+    status,
+    headers: [
+      ["content-type", "text/html; charset=utf-8"],
+      ["cache-control", "no-cache"],
+    ],
+  });
+}
+
+await serve(toStdHandler(logTime(catchError(
+  route(
+    {
+      "/": () => html(),
+      "/c/:id": () => html(),
+      "/api/code": methods({
+        POST: async (req) => {
+          let code: Code;
+          try {
+            code = Code.create(await req.json());
+          } catch (e: unknown) {
+            if (!(e instanceof Error)) {
+              throw e;
+            }
+            return json({ error: e.message }, { status: 400 });
+          }
+          return json({ id: await putCode(code) }, { status: 201 });
+        },
+      }),
+      "/api/code/:id": methods({
+        GET: async (_, { params: { id } }) => {
+          const code = await getCode(id);
+          if (!code) {
+            return json({ error: "Code not found" }, { status: 404 });
+          }
+          return json(code, { status: 200 });
+        },
+      }),
+    },
+    async (req) => {
+      try {
+        const path = new URL(req.url).pathname;
+        const data = await Deno.readFile(join("static", path));
+        if (path.startsWith("/esm.sh/")) {
+          return new Response(data, {
+            headers: [
+              ["content-type", "text/javascript; charset=utf-8"],
+              ["cache-control", "max-age=2592000, immutable"],
+            ],
+          });
+        }
+        const ext = extname(path);
+        const parser = scriptTypes[ext.substring(1)];
+        if (parser) {
+          const { code } = transform(new TextDecoder().decode(data), {
+            jsc: {
+              parser,
+              target: "es2020",
+              minify: {
+                compress: { toplevel: true },
+                mangle: { toplevel: true },
+              },
+            },
+            minify: true,
+          } as never);
+          return new Response(code + "\n", {
+            headers: [
+              ["content-type", "text/javascript; charset=utf-8"],
+              ["cache-control", "max-age=2592000, immutable"],
+            ],
+          });
+        }
         return new Response(data, {
           headers: [
             ["content-type", contentType(ext) ?? "application/octet-stream"],
             ["cache-control", "max-age=2592000, immutable"],
           ],
         });
+      } catch {
+        return await html(404);
       }
-      const { code } = transform(new TextDecoder().decode(data), {
-        jsc: {
-          parser,
-          target: "es2020",
-          minify: {
-            compress: { toplevel: true },
-            mangle: { toplevel: true },
-          },
-        },
-        minify: true,
-      } as never);
-      return new Response(code, {
-        headers: [
-          ["content-type", "text/javascript; charset=utf-8"],
-          ["cache-control", "max-age=2592000, immutable"],
-        ],
-      });
-    } catch {
-      return new Response(await Deno.readTextFile("index.html"), {
-        headers: [
-          ["content-type", "text/html; charset=utf-8"],
-          ["cache-control", "no-cache"],
-        ],
-      });
-    }
-  },
-});
+    },
+  ),
+))));

@@ -1,3 +1,4 @@
+import { object, string } from "./deps/superstruct.ts";
 import { gql, queryDatabase } from "./db.ts";
 import { randomString } from "./util.ts";
 
@@ -5,6 +6,11 @@ export interface Code {
   format: string;
   input: string;
 }
+
+export const Code = object({
+  format: string,
+  input: string,
+});
 
 export async function getCode(id: string): Promise<Code | null> {
   if (!/^[a-z0-9]{8}$/.test(id)) {
