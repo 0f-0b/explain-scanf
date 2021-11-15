@@ -40,6 +40,6 @@ export default function Code(props: any): JSX.Element {
     })();
   }, [id]);
   return error !== undefined
-    ? <ErrorMessage>{String(error)}</ErrorMessage>
+    ? <ErrorMessage>{error}</ErrorMessage>
     : <>Redirecting…</>;
 }

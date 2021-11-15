@@ -1,4 +1,9 @@
 /// <reference lib="deno.url" />
+import { compress as brotli } from "./deps/brotli.ts";
+import { MRUCache } from "./deps/cache/mru.ts";
+import { deflate, gzip } from "./deps/denoflate.ts";
+import { Cache, CachedResponse } from "./deps/httpcache.ts";
+import { preferredEncodings } from "./deps/negotiator/encoding.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
@@ -44,6 +49,60 @@ export function catchError<T>(handler: Handler<T>): Handler<T> {
       console.error(e);
       return json({ error: String(e) }, { status: 500 });
     }
+  };
+}
+
+export function compress<T>(handler: Handler<T>): Handler<T> {
+  const encodings: Record<string, (buf: Uint8Array) => Uint8Array> = {
+    br: brotli,
+    gzip: gzip as never,
+    deflate: deflate as never,
+    identity: (x) => x,
+  };
+  const provided = Object.keys(encodings);
+  return async (req, ctx) => {
+    const res = await handler(req, ctx);
+    const body = await res.arrayBuffer();
+    const accept = req.headers.get("accept-encoding");
+    const [encoding] = preferredEncodings(accept, provided);
+    const compressed = encodings[encoding](new Uint8Array(body));
+    res.headers.append("content-encoding", encoding);
+    res.headers.append("vary", "accept-encoding");
+    return new Response(compressed, res);
+  };
+}
+
+export function cache<T>(maxSize: number, handler: Handler<T>): Handler<T> {
+  const storage = new MRUCache<string, CachedResponse>(undefined, {
+    ksize: (url) => url.length * 2,
+    vsize: (res) => res.body.length,
+    maxsize: maxSize,
+  });
+  const cache = new Cache({
+    get(url) {
+      return Promise.resolve(storage.get(url));
+    },
+    set(url, res) {
+      storage.set(url, res);
+      return Promise.resolve();
+    },
+    delete(url) {
+      storage.delete(url);
+      return Promise.resolve();
+    },
+    close() {
+      storage.release();
+    },
+  });
+  return async (req, ctx) => {
+    const cached = await cache.match(req);
+    if (cached) {
+      cached.headers.append("x-function-cache-hit", "true");
+      return cached;
+    }
+    const res = await handler(req, ctx);
+    await cache.put(req, res);
+    return res;
   };
 }
 

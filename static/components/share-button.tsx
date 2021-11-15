@@ -72,7 +72,7 @@ export default function ShareButton(
               );
             }
             case "error":
-              return <ErrorMessage>{String(result.reason)}</ErrorMessage>;
+              return <ErrorMessage>{result.reason}</ErrorMessage>;
           }
         })()
         : shared

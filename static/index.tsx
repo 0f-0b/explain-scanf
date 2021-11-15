@@ -89,6 +89,9 @@ const baseExtension: Extension = [
 const formatExtension: Extension = [
   EditorState.tabSize.of(1),
   EditorState.lineSeparator.of("\0"),
+  EditorView.contentAttributes.of({
+    "aria-label": "Format",
+  }),
   keymap.of([
     {
       key: "Enter",
@@ -119,6 +122,9 @@ const formatExtension: Extension = [
 const inputExtension: Extension = [
   EditorState.tabSize.of(8),
   EditorState.lineSeparator.of("\n"),
+  EditorView.contentAttributes.of({
+    "aria-label": "Input",
+  }),
   highlight.of([]),
   lineNumbers(),
   highlightActiveLine(),

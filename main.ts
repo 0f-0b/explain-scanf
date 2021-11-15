@@ -6,7 +6,9 @@ import { extname, join } from "./deps/std/path.ts";
 import { transform } from "./deps/swc.ts";
 import { Code, getCode, putCode } from "./code.ts";
 import {
+  cache,
   catchError,
+  compress,
   json,
   logTime,
   methods,
@@ -31,8 +33,9 @@ async function html(status?: number): Promise<Response> {
   });
 }
 
-await serve(toStdHandler(logTime(catchError(
-  route(
+await serve(toStdHandler(logTime(catchError(cache(
+  0x100000,
+  compress(route(
     {
       "/": () => html(),
       "/c/:id": () => html(),
@@ -103,5 +106,5 @@ await serve(toStdHandler(logTime(catchError(
         return await html(404);
       }
     },
-  ),
-))));
+  )),
+)))));
