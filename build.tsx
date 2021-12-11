@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run -A
+#!/usr/bin/env -S deno run -A
 
 import { encode as encodeHex } from "./deps/std/encoding/hex.ts";
 import { join } from "./deps/std/path.ts";

@@ -7,8 +7,5 @@
   },
   "deno.config": "deno.json",
   "deno.enable": true,
-  "deno.lint": true,
-  "search.exclude": {
-    "static/esm.sh": true
-  }
+  "deno.lint": true
 }

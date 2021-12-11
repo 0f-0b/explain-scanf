@@ -31,10 +31,10 @@ export function toStdHandler(handler: Handler<{ conn: ConnInfo }>): StdHandler {
 
 export function logTime<T>(handler: Handler<T>): Handler<T> {
   return async (req, ctx) => {
-    const start = Date.now();
+    const start = performance.now();
     const res = await handler(req, ctx);
-    const end = Date.now();
-    const rt = `${end - start}ms`;
+    const end = performance.now();
+    const rt = `${(end - start).toFixed(1)}ms`;
     res.headers.append("x-response-time", rt);
     console.log(`${req.method} ${req.url} ${rt} ${res.status}`);
     return res;

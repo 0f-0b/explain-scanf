@@ -317,10 +317,7 @@ export function parseFormat(
     if (ch === "%" && format[index++] !== "%") {
       return undefinedBehavior;
     }
-    result.push({ type: "whitespace", implicit: true }, {
-      type: "literal",
-      ch,
-    });
+    result.push({ type: "literal", ch });
   }
   return result;
 }

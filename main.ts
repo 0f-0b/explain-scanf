@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run --allow-read --allow-net --allow-env
+#!/usr/bin/env -S deno run --allow-read --allow-net --allow-env
 
 import { contentType } from "./deps/media_types.ts";
 import { serve } from "./deps/std/http/server.ts";
