@@ -1,6 +1,6 @@
 import { object, string } from "./deps/superstruct.ts";
 import { gql, queryDatabase } from "./db.ts";
-import { randomString } from "./util.ts";
+import { randomString } from "./random.ts";
 
 export interface Code {
   format: string;

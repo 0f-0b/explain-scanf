@@ -1,1 +1,1 @@
-export * from "https://esm.sh/react-dom@17.0.2/server";
+export * from "https://esm.sh/react-dom@18.0.0/server?pin=v76";

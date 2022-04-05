@@ -1,14 +1,10 @@
-/// <reference lib="deno.url" />
-import { compress as brotli } from "./deps/brotli.ts";
 import { MRUCache } from "./deps/cache/mru.ts";
-import { deflate, gzip } from "./deps/denoflate.ts";
 import { Cache, CachedResponse } from "./deps/httpcache.ts";
-import { preferredEncodings } from "./deps/negotiator/encoding.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
 } from "./deps/std/http/server.ts";
-import type { Awaitable } from "./util.ts";
+import type { Awaitable } from "./async.ts";
 
 export function json(obj: unknown, init?: ResponseInit): Response {
   const headers = new Headers(init?.headers);
@@ -25,8 +21,7 @@ export type ContextConsumer<T, R> = (req: Request, ctx: T) => R;
 export type Handler<T> = ContextConsumer<T, Awaitable<Response>>;
 
 export function toStdHandler(handler: Handler<{ conn: ConnInfo }>): StdHandler {
-  return (req, conn) =>
-    new Promise((resolve) => resolve(handler(req, { conn })));
+  return async (req, conn) => await handler(req, { conn });
 }
 
 export function logTime<T>(handler: Handler<T>): Handler<T> {
@@ -49,26 +44,6 @@ export function catchError<T>(handler: Handler<T>): Handler<T> {
       console.error(e);
       return json({ error: String(e) }, { status: 500 });
     }
-  };
-}
-
-export function compress<T>(handler: Handler<T>): Handler<T> {
-  const encodings: Record<string, (buf: Uint8Array) => Uint8Array> = {
-    br: brotli,
-    gzip: gzip as never,
-    deflate: deflate as never,
-    identity: (x) => x,
-  };
-  const provided = Object.keys(encodings);
-  return async (req, ctx) => {
-    const res = await handler(req, ctx);
-    const body = await res.arrayBuffer();
-    const accept = req.headers.get("accept-encoding");
-    const [encoding] = preferredEncodings(accept, provided);
-    const compressed = encodings[encoding](new Uint8Array(body));
-    res.headers.append("content-encoding", encoding);
-    res.headers.append("vary", "accept-encoding");
-    return new Response(compressed, res);
   };
 }
 

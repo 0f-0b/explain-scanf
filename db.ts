@@ -1,4 +1,4 @@
-import { requireEnv } from "./util.ts";
+import { requireEnv } from "./env.ts";
 
 interface DatabaseError {
   message: string;

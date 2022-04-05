@@ -1,2 +1,4 @@
 .DS_Store
 .env
+/index.html
+/dist/

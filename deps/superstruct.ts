@@ -1,14 +1,32 @@
+export * from "https://esm.sh/superstruct@0.15.4?pin=v76";
+
 import {
+  any as _any,
+  bigint as _bigint,
+  boolean as _boolean,
+  date as _date,
+  func as _func,
+  integer as _integer,
+  never as _never,
+  number as _number,
+  regexp as _regexp,
   string as _string,
   StructError,
-} from "https://esm.sh/superstruct@0.15.3";
+  unknown as _unknown,
+} from "https://esm.sh/superstruct@0.15.4?pin=v76";
 
 Object.defineProperty(StructError, "name", {
   value: "StructError",
   configurable: true,
 });
+export const any = _any();
+export const bigint = _bigint();
+export const boolean = _boolean();
+export const date = _date();
+export const func = _func();
+export const integer = _integer();
+export const never = _never();
+export const number = _number();
+export const regexp = _regexp();
 export const string = _string();
-
-export { StructError };
-export { object } from "https://esm.sh/superstruct@0.15.3";
-export type { Struct } from "https://esm.sh/superstruct@0.15.3";
+export const unknown = _unknown();

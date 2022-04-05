@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
     "lib": [
-      "es2020",
       "deno.ns",
-      "dom"
+      "dom",
+      "dom.asynciterable",
+      "dom.iterable"
     ]
   },
   "fmt": {
     "files": {
       "exclude": [
-        "static/esm.sh"
+        "static/esm.sh",
+        "dist"
       ]
     }
   },
   "lint": {
-    "rules": {
-      "tags": ["recommended"]
-    },
     "files": {
       "exclude": [
-        "static/esm.sh"
+        "static/esm.sh",
+        "dist"
       ]
     }
   }
