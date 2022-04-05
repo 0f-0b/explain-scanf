@@ -1,2 +1,1 @@
-// @deno-types="../esm.sh/@primer/octicons-react@16.1.1/dist/index.d.ts"
-export * from "../esm.sh/@primer/octicons-react@16.1.1/es2021/octicons-react.js";
+export * from "https://cdn.esm.sh/@primer/octicons-react@17.0.0?deps=react@18.0.0&target=es2020&pin=v76";

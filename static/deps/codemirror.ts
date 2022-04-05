@@ -1,12 +1,12 @@
-// @deno-types="../esm.sh/@codemirror/commands@0.19.5/dist/index.d.ts"
-export * from "../esm.sh/@codemirror/commands@0.19.5/es2021/commands.js";
-// @deno-types="../esm.sh/@codemirror/gutter@0.19.4/dist/index.d.ts";
-export * from "../esm.sh/@codemirror/gutter@0.19.4/es2021/gutter.js";
-// @deno-types="../esm.sh/@codemirror/history@0.19.0/dist/index.d.ts";
-export * from "../esm.sh/@codemirror/history@0.19.0/es2021/history.js";
-// @deno-types="../esm.sh/@codemirror/language@0.19.3/dist/index.d.ts";
-export * from "../esm.sh/@codemirror/language@0.19.3/es2021/language.js";
-// @deno-types="../esm.sh/@codemirror/state@0.19.3/dist/index.d.ts";
-export * from "../esm.sh/@codemirror/state@0.19.3/es2021/state.js";
-// @deno-types="../esm.sh/@codemirror/view@0.19.12/dist/index.d.ts";
-export * from "../esm.sh/@codemirror/view@0.19.12/es2021/view.js";
+// export * from "https://cdn.esm.sh/@codemirror/commands@0.19.8?deps=@codemirror/language@0.19.10,@codemirror/rangeset@0.19.9,@codemirror/state@0.19.9,@codemirror/text@0.19.6,@codemirror/view@0.19.48,@lezer/common@0.15.12&target=es2020&pin=v76";
+// export * from "https://cdn.esm.sh/@codemirror/gutter@0.19.9?deps=@codemirror/rangeset@0.19.9,@codemirror/state@0.19.9,@codemirror/text@0.19.6,@codemirror/view@0.19.48&target=es2020&pin=v76";
+// export * from "https://cdn.esm.sh/@codemirror/history@0.19.2?deps=@codemirror/rangeset@0.19.9,@codemirror/state@0.19.9,@codemirror/text@0.19.6,@codemirror/view@0.19.48&target=es2020&pin=v76";
+// export * from "https://cdn.esm.sh/@codemirror/language@0.19.10?deps=@codemirror/rangeset@0.19.9,@codemirror/state@0.19.9,@codemirror/text@0.19.6,@codemirror/view@0.19.48,@lezer/common@0.15.12&target=es2020&pin=v76";
+// export * from "https://cdn.esm.sh/@codemirror/state@0.19.9?deps=@codemirror/text@0.19.6&target=es2020&pin=v76";
+// export * from "https://cdn.esm.sh/@codemirror/view@0.19.48?deps=@codemirror/rangeset@0.19.9,@codemirror/text@0.19.6&target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/commands@0.19.8?target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/gutter@0.19.9?target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/history@0.19.2?target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/language@0.19.10?target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/state@0.19.9?target=es2020&pin=v76";
+export * from "https://cdn.esm.sh/@codemirror/view@0.19.48?target=es2020&pin=v76";

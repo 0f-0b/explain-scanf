@@ -1,8 +1,5 @@
-// @deno-types="../esm.sh/@types/react@17.0.34/index.d.ts"
-import React from "../esm.sh/react@17.0.2/es2021/react.js";
-
-export default React;
-export const {
+export {
+  default,
   useCallback,
   useContext,
   useDebugValue,
@@ -13,4 +10,4 @@ export const {
   useReducer,
   useRef,
   useState,
-} = React;
+} from "https://cdn.esm.sh/react@18.0.0?target=es2020&pin=v76";

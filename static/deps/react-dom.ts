@@ -1,2 +1,1 @@
-// @deno-types="../esm.sh/@types/react-dom@17.0.11/index.d.ts"
-export { default } from "../esm.sh/react-dom@17.0.2/es2021/react-dom.js";
+export { default } from "https://cdn.esm.sh/react-dom@18.0.0?deps=react@18.0.0&target=es2020&pin=v76";

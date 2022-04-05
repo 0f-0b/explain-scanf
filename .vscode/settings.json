@@ -5,7 +5,6 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
-  "deno.config": "deno.json",
   "deno.enable": true,
   "deno.lint": true
 }
