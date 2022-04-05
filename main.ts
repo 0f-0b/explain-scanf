@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 
 import type {} from "./types.ts";
-import { contentType } from "./deps/media_types.ts";
+import { contentType as _contentType } from "./deps/media_types.ts";
 import { serve } from "./deps/std/http/server.ts";
 import { extname, join } from "./deps/std/path.ts";
 import { Code, getCode, putCode } from "./code.ts";
@@ -15,6 +15,10 @@ import {
   toStdHandler,
 } from "./handler.ts";
 
+function contentType(path: string): string {
+  return _contentType(extname(path)) ?? "application/octet-stream";
+}
+
 async function html(status?: number): Promise<Response> {
   return new Response(await Deno.readTextFile("index.html"), {
     status,
@@ -25,12 +29,31 @@ async function html(status?: number): Promise<Response> {
   });
 }
 
+async function robots(): Promise<Response> {
+  return new Response(await Deno.readTextFile("robots.txt"), {
+    headers: [
+      ["content-type", "text/plain; charset=utf-8"],
+      ["cache-control", "no-cache"],
+    ],
+  });
+}
+
+async function staticFile(path: string): Promise<Response> {
+  return new Response(await Deno.readFile(path), {
+    headers: [
+      ["content-type", contentType(path)],
+      ["cache-control", "max-age=2592000, immutable"],
+    ],
+  });
+}
+
 await serve(toStdHandler(logTime(catchError(cache(
   0x100000,
   route(
     {
       "/": () => html(),
       "/c/:id": () => html(),
+      "/robots.txt": () => robots(),
       "/api/code": methods({
         POST: async (req) => {
           let code: Code;
@@ -57,15 +80,7 @@ await serve(toStdHandler(logTime(catchError(cache(
     },
     async (req) => {
       try {
-        const path = new URL(req.url).pathname;
-        const data = await Deno.readFile(join("dist", path));
-        const ext = extname(path);
-        return new Response(data, {
-          headers: [
-            ["content-type", contentType(ext) ?? "application/octet-stream"],
-            ["cache-control", "max-age=2592000, immutable"],
-          ],
-        });
+        return await staticFile(join("dist", new URL(req.url).pathname));
       } catch {
         return await html(404);
       }
