@@ -1,6 +1,6 @@
-import { ShareIcon } from "../deps/octicons-react.ts";
+import { ShareIcon } from "../deps/octicons_react.ts";
 import React, { useEffect, useState } from "../deps/react.ts";
-import ErrorMessage from "./error-message.tsx";
+import ErrorMessage from "./error_message.tsx";
 
 export interface ShareButtonProps {
   format: string;

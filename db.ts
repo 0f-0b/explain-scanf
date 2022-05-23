@@ -13,10 +13,10 @@ export async function queryDatabase<T, R = unknown>(
 ): Promise<R> {
   const token = requireEnv("FAUNA_SECRET");
   const res = await fetch("https://graphql.fauna.com/graphql", {
-    headers: {
-      "authorization": `Bearer ${token}`,
-      "content-type": "application/json",
-    },
+    headers: [
+      ["authorization", `Bearer ${token}`],
+      ["content-type", "application/json"],
+    ],
     body: JSON.stringify({ query, variables }),
     method: "POST",
   });

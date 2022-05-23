@@ -1,6 +1,6 @@
-import { navigate } from "./deps/reach-router.ts";
+import { navigate } from "./deps/reach_router.ts";
 import React, { useEffect, useState } from "./deps/react.ts";
-import ErrorMessage from "./components/error-message.tsx";
+import ErrorMessage from "./components/error_message.tsx";
 
 export interface CodeParams {
   id: string;

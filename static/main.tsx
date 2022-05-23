@@ -1,5 +1,5 @@
 import React from "./deps/react.ts";
-import ReactDOM from "./deps/react-dom.ts";
+import ReactDOM from "./deps/react_dom.ts";
 import App from "./app.tsx";
 
 ReactDOM.render(

@@ -6,17 +6,6 @@ import type {
 } from "./deps/std/http/server.ts";
 import type { Awaitable } from "./async.ts";
 
-export function json(obj: unknown, init?: ResponseInit): Response {
-  const headers = new Headers(init?.headers);
-  if (!headers.has("content-type")) {
-    headers.append("content-type", "application/json; charset=utf-8");
-  }
-  return new Response(JSON.stringify(obj) + "\n", {
-    ...init,
-    headers,
-  });
-}
-
 export type ContextConsumer<T, R> = (req: Request, ctx: T) => R;
 export type Handler<T> = ContextConsumer<T, Awaitable<Response>>;
 
@@ -42,7 +31,7 @@ export function catchError<T>(handler: Handler<T>): Handler<T> {
       return await handler(req, ctx);
     } catch (e: unknown) {
       console.error(e);
-      return json({ error: String(e) }, { status: 500 });
+      return Response.json({ error: String(e) }, { status: 500 });
     }
   };
 }
@@ -118,7 +107,7 @@ export function methods<T>(methods: Record<string, Handler<T>>): Handler<T> {
   return (req, ctx) => {
     const handler = methodMap.get(req.method);
     if (!handler) {
-      return json(
+      return Response.json(
         { error: `Method ${req.method} is not allowed for the URL` },
         { status: 405 },
       );

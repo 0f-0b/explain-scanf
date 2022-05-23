@@ -22,12 +22,12 @@ import {
   Transaction,
 } from "./deps/codemirror.ts";
 import type { Extension } from "./deps/codemirror.ts";
-import { navigate } from "./deps/reach-router.ts";
+import { navigate } from "./deps/reach_router.ts";
 import React, { useEffect, useMemo, useState } from "./deps/react.ts";
-import { useStorageState } from "./deps/react-storage-hooks.ts";
-import { DeclarationNode } from "./components/c-ast-nodes.tsx";
-import { enforceSingleLine } from "./components/codemirror/enforce-single-line.ts";
-import { escapeString } from "./components/codemirror/escape-string.ts";
+import { useStorageState } from "./deps/react_storage_hooks.ts";
+import { DeclarationNode } from "./components/c_ast_nodes.tsx";
+import { enforceSingleLine } from "./components/codemirror/enforce_single_line.ts";
+import { escapeString } from "./components/codemirror/escape_string.ts";
 import CodeMirror from "./components/codemirror/mod.tsx";
 import {
   HlComment,
@@ -36,7 +36,7 @@ import {
   HlString,
   HlVariable,
 } from "./components/highlight.tsx";
-import ShareButton from "./components/share-button.tsx";
+import ShareButton from "./components/share_button.tsx";
 import {
   parseFormat,
   sscanf,

@@ -8,8 +8,8 @@ import type {
   FloatingConstant,
   InitDeclarator,
   TypedefName,
-} from "../c-ast.ts";
-import { basicTypes, typedefs } from "../c-ast.ts";
+} from "../c_ast.ts";
+import { basicTypes, typedefs } from "../c_ast.ts";
 import { escapeChar, escapeString } from "../escape.ts";
 import {
   HlBasicType,

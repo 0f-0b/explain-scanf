@@ -3,11 +3,16 @@ export {
   useCallback,
   useContext,
   useDebugValue,
+  useDeferredValue,
   useEffect,
+  useId,
   useImperativeHandle,
+  useInsertionEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
-} from "https://cdn.esm.sh/react@18.0.0?target=es2020&pin=v76";
+  useSyncExternalStore,
+  useTransition,
+} from "https://esm.sh/react@18.1.0?target=es2020&pin=v82";

@@ -1,11 +1,11 @@
-import { parseHexFloat } from "./deps/floating-point-hex-parser.ts";
+import { parseHexFloat } from "./deps/floating_point_hex_parser.ts";
 import type {
   DeclarationSpecifier,
   Expression,
   FloatingConstant,
   Layer,
   TypeSpecifier,
-} from "./c-ast.ts";
+} from "./c_ast.ts";
 import { findIndex } from "./util.ts";
 
 const emptySet = new Set<string>();

@@ -1,7 +1,7 @@
 import type { EditorState } from "../../deps/codemirror.ts";
 import { EditorView } from "../../deps/codemirror.ts";
 import React, { useEffect, useRef } from "../../deps/react.ts";
-import { useLatest } from "../../deps/use-latest.ts";
+import { useLatest } from "../../deps/use_latest.ts";
 
 export interface CodeMirrorProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children" | "onChange"> {

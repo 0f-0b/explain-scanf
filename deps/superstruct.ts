@@ -1,4 +1,4 @@
-export * from "https://esm.sh/superstruct@0.15.4?pin=v76";
+export * from "https://esm.sh/superstruct@0.15.4?pin=v82";
 
 import {
   any as _any,
@@ -13,7 +13,7 @@ import {
   string as _string,
   StructError,
   unknown as _unknown,
-} from "https://esm.sh/superstruct@0.15.4?pin=v76";
+} from "https://esm.sh/superstruct@0.15.4?pin=v82";
 
 Object.defineProperty(StructError, "name", {
   value: "StructError",

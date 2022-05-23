@@ -1,9 +1,9 @@
-import { Router } from "./deps/reach-router.ts";
+import { Router } from "./deps/reach_router.ts";
 import React from "./deps/react.ts";
 
 const Index = React.lazy(() => import("./index.tsx"));
 const Code = React.lazy(() => import("./code.tsx"));
-const NotFound = React.lazy(() => import("./not-found.tsx"));
+const NotFound = React.lazy(() => import("./not_found.tsx"));
 
 export default function App(): JSX.Element {
   return (

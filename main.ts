@@ -1,6 +1,5 @@
 #!/usr/bin/env -S deno run -A
 
-import type {} from "./types.ts";
 import { contentType as _contentType } from "./deps/media_types.ts";
 import { serve } from "./deps/std/http/server.ts";
 import { extname, join } from "./deps/std/path.ts";
@@ -8,7 +7,6 @@ import { Code, getCode, putCode } from "./code.ts";
 import {
   cache,
   catchError,
-  json,
   logTime,
   methods,
   route,
@@ -63,18 +61,18 @@ await serve(toStdHandler(logTime(catchError(cache(
             if (!(e instanceof Error)) {
               throw e;
             }
-            return json({ error: e.message }, { status: 400 });
+            return Response.json({ error: e.message }, { status: 400 });
           }
-          return json({ id: await putCode(code) }, { status: 201 });
+          return Response.json({ id: await putCode(code) }, { status: 201 });
         },
       }),
       "/api/code/:id": methods({
         GET: async (_, { params: { id } }) => {
           const code = await getCode(id);
           if (!code) {
-            return json({ error: "Code not found" }, { status: 404 });
+            return Response.json({ error: "Code not found" }, { status: 404 });
           }
-          return json(code, { status: 200 });
+          return Response.json(code, { status: 200 });
         },
       }),
     },
