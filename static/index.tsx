@@ -11,6 +11,7 @@ import {
   highlightSpecialChars,
   history,
   historyKeymap,
+  hoverTooltip,
   indentUnit,
   keymap,
   lineNumbers,
@@ -38,6 +39,8 @@ import {
 } from "./components/highlight.tsx";
 import ShareButton from "./components/share_button.tsx";
 import {
+  type ConversionDirective,
+  explain,
   parseFormat,
   sscanf,
   undefinedBehavior,
@@ -59,6 +62,7 @@ export function color(index: number): Decoration {
 }
 
 const highlight = new Compartment();
+const tooltip = new Compartment();
 const baseExtension: Extension = [
   EditorState.allowMultipleSelections.of(true),
   indentUnit.of(" "),
@@ -110,6 +114,7 @@ const formatExtension: Extension = [
     },
   ]),
   highlight.of([]),
+  tooltip.of([]),
   escapeString(),
   enforceSingleLine(),
   highlightSpecialChars({
@@ -203,6 +208,43 @@ export default function Index(props: any): JSX.Element {
     });
   }, [locState]);
   const directives = useMemo(() => parseFormat(format), [format]);
+  useEffect(() => {
+    const convs = directives === undefinedBehavior
+      ? []
+      : directives.filter((directive): directive is ConversionDirective =>
+        directive.type === "conversion"
+      );
+    setFormatState((state) =>
+      state.update({
+        effects: [
+          highlight.reconfigure([
+            EditorView.decorations.of(Decoration.set(convs.map((conv, index) =>
+              color(index).range(conv.start, conv.end)
+            ))),
+          ]),
+          tooltip.reconfigure([
+            hoverTooltip((_, pos, side) => {
+              const conv = convs.find(({ start, end }) =>
+                (start < pos || (side > 0 && start === pos)) &&
+                (end > pos || (side < 0 && end === pos))
+              );
+              return conv === undefined ? null : {
+                pos: conv.start + 1,
+                create() {
+                  return {
+                    dom: Object.assign(document.createElement("div"), {
+                      textContent: explain(conv),
+                    }),
+                  };
+                },
+                arrow: true,
+              };
+            }),
+          ]),
+        ],
+      }).state
+    );
+  }, [directives]);
   const result = useMemo(
     () =>
       directives === undefinedBehavior
@@ -210,41 +252,24 @@ export default function Index(props: any): JSX.Element {
         : sscanf(input, directives),
     [input, directives],
   );
-  const convs = useMemo(
-    () => typeof result === "object" ? result.convs : [],
-    [result],
-  );
-  const args = useMemo(
-    () => typeof result === "object" ? result.args : [],
-    [result],
-  );
   useEffect(() => {
-    setFormatState((state) =>
-      state.update({
-        effects: [
-          highlight.reconfigure([
-            EditorView.decorations.of(Decoration.set(convs.map((conv, index) =>
-              color(index).range(conv.index.start, conv.index.end)
-            ))),
-          ]),
-        ],
-      }).state
-    );
+    const matches = typeof result === "object" ? result.matches : [];
     setInputState((state) =>
       state.update({
         effects: [
           highlight.reconfigure([
             EditorView.decorations.of(
-              Decoration.set(mapNotNullish(convs, (conv, index) =>
-                conv.match && conv.match.start !== conv.match.end
-                  ? color(index).range(conv.match.start, conv.match.end)
+              Decoration.set(mapNotNullish(matches, (match, index) =>
+                match.start !== match.end
+                  ? color(index).range(match.start, match.end)
                   : null)),
             ),
           ]),
         ],
       }).state
     );
-  }, [convs]);
+  }, [result]);
+  const args = typeof result === "object" ? result.args : [];
   return (
     <div>
       <ShareButton format={format} input={input} />

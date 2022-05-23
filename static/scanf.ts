@@ -6,11 +6,13 @@ import type {
   Layer,
   TypeSpecifier,
 } from "./c_ast.ts";
+import { escapeChar, escapeString } from "./escape.ts";
 import { findIndex } from "./util.ts";
 
 const emptySet = new Set<string>();
 const whitespace = new Set(" \t\n\r\v\f");
 const whitespaceRE = /^[ \t\n\r\v\f]+/;
+const nonAsciiRE = /[^\x00-\x7f]/;
 const convValidateRE =
   /^%(?:(?:\d+\$)?(?:|hh|h|l|ll|j|z|t)n|(?:\d+\$|\*?)(?:[1-9]\d*)?(?:(?:|hh|h|l|ll|j|z|t)[diouxX]|(?:|l|L)[aAeEfFgG]|m?(?:l?(?:[cs]|\[(?:\^|(?!\^))[^][^\]]*\])|[CS])|p))/;
 const convParseRE =
@@ -65,10 +67,6 @@ const floatTypes = new Map<string, TypeSpecifier[]>([
   ["l", ["double"]],
   ["L", ["long", "double"]],
 ]);
-
-function truncate(s: string, length: number): string {
-  return length ? s.substring(0, length) : s;
-}
 
 function intType(length: string, unsigned: boolean): TypeSpecifier[] {
   const type = intTypes.get(length);
@@ -171,7 +169,7 @@ export interface ParseResult {
 export interface ScanfResult {
   ret: number;
   length: number;
-  convs: Conversion[];
+  matches: Range[];
   args: Argument[];
 }
 
@@ -393,9 +391,7 @@ function parse(
         return failure;
       }
       const result = str.substring(0, length);
-      const size =
-        (spec.wide ? length : new TextEncoder().encode(result).length) +
-        (spec.terminate ? 1 : 0);
+      const size = length + (spec.terminate ? 1 : 0);
       if (arg) {
         arg.type = spec.malloc
           ? [{ type: "pointer" }]
@@ -431,11 +427,62 @@ function parse(
   }
 }
 
+export function explain(directive: ConversionDirective): string {
+  const { position, width, spec } = directive;
+  let result: string;
+  if (spec.type === "bytecount") {
+    result = `Store the number of bytes read so far into the ${
+      spec.dataType.join(" ")
+    } `;
+  } else {
+    result = `Read ${
+      width === 0
+        ? "any number of bytes"
+        : `at most ${width} ${width === 1 ? "byte" : "bytes"}`
+    } `;
+    switch (spec.type) {
+      case "integer":
+        result += `as an integer value${
+          spec.base === 0 ? "" : ` in base ${spec.base}`
+        } into the ${spec.dataType.join(" ")} `;
+        break;
+      case "float":
+        result += `as a floating-point value into the ${
+          spec.dataType.join(" ")
+        } `;
+        break;
+      case "string":
+        result += `${
+          spec.scanset.size === 0 && spec.negated
+            ? ""
+            : `${spec.negated ? "not " : ""}equal to ${
+              spec.scanset.size === 1
+                ? escapeChar(spec.scanset[Symbol.iterator]().next().value)
+                : `any of ${escapeString(Array.from(spec.scanset).join(""))}`
+            } `
+        }into ${spec.malloc ? "a newly-allocated" : "the"} ${
+          spec.wide ? "wide " : ""
+        }${spec.terminate ? "string" : "character array"}${
+          spec.malloc ? ", the pointer to which is stored into the pointer" : ""
+        } `;
+        break;
+      case "pointer":
+        result += `as a pointer value into the pointer `;
+        break;
+    }
+  }
+  result += `pointed by argument ${position + 1}.`;
+  return result;
+}
+
 export function sscanf(
   buf: string,
   format: FormatDirective[],
 ): ScanfResult | typeof unimplemented {
-  const convs: Conversion[] = [];
+  if (nonAsciiRE.test(buf)) {
+    return unimplemented;
+  }
+  const matches: Range[] = [];
   const args: Argument[] = [];
   const count = format.length;
   for (const directive of format) {
@@ -485,11 +532,12 @@ export function sscanf(
         break;
       }
       case "conversion": {
-        const { start, end, position, width, spec } = directive;
+        const { position, width, spec } = directive;
+        const remaining = buf.substring(offset);
         const length = parse(
           spec,
           args[position],
-          truncate(buf.substring(offset), width),
+          width === 0 ? remaining : remaining.substring(0, width),
           offset,
         );
         if (length === inputFailure) {
@@ -508,28 +556,14 @@ export function sscanf(
           ret++;
         }
         offset += length;
-        convs.push({
-          index: { start, end },
-          match: { start: lastOffset, end: offset },
-        });
+        matches.push({ start: lastOffset, end: offset });
         lastOffset = offset;
         break;
       }
     }
     i++;
   }
-  while (i < count) {
-    const directive = format[i];
-    if (directive.type === "conversion") {
-      const { start, end } = directive;
-      convs.push({
-        index: { start, end },
-        match: null,
-      });
-    }
-    i++;
-  }
-  return { ret, length: offset, convs, args };
+  return { ret, length: offset, matches, args };
 }
 
 interface IntSeq {

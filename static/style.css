@@ -29,6 +29,12 @@ pre {
   padding: 0 1px;
 }
 
+.cm-tooltip-section {
+  font-size: 15px;
+  white-space: pre-line;
+  padding: 2px;
+}
+
 .variables {
   margin-top: 4px;
   white-space: break-spaces;
