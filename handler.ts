@@ -1,5 +1,3 @@
-import { MRUCache } from "./deps/cache/mru.ts";
-import { Cache, CachedResponse } from "./deps/httpcache.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
@@ -33,40 +31,6 @@ export function catchError<T>(handler: Handler<T>): Handler<T> {
       console.error(e);
       return Response.json({ error: String(e) }, { status: 500 });
     }
-  };
-}
-
-export function cache<T>(maxSize: number, handler: Handler<T>): Handler<T> {
-  const storage = new MRUCache<string, CachedResponse>(undefined, {
-    ksize: (url) => url.length * 2,
-    vsize: (res) => res.body.length,
-    maxsize: maxSize,
-  });
-  const cache = new Cache({
-    get(url) {
-      return Promise.resolve(storage.get(url));
-    },
-    set(url, res) {
-      storage.set(url, res);
-      return Promise.resolve();
-    },
-    delete(url) {
-      storage.delete(url);
-      return Promise.resolve();
-    },
-    close() {
-      storage.release();
-    },
-  });
-  return async (req, ctx) => {
-    const cached = await cache.match(req);
-    if (cached) {
-      cached.headers.append("x-function-cache-hit", "true");
-      return cached;
-    }
-    const res = await handler(req, ctx);
-    await cache.put(req, res);
-    return res;
   };
 }
 
