@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 
-import { contentType } from "./deps/media_types.ts";
 import { serve } from "./deps/std/http/server.ts";
+import { contentType } from "./deps/std/media_types.ts";
 import { extname, join } from "./deps/std/path.ts";
 import { Code, getCode, putCode } from "./code.ts";
 import {
@@ -21,11 +21,11 @@ async function staticFile(
   path: string,
   { status, cacheControl = "no-cache" }: StaticFileOptions = {},
 ): Promise<Response> {
-  const mimeType = contentType(extname(path)) ?? "application/octet-stream";
+  const type = contentType(extname(path)) ?? "application/octet-stream";
   return new Response(await Deno.readFile(path), {
     status,
     headers: [
-      ["content-type", mimeType],
+      ["content-type", type],
       ["cache-control", cacheControl],
     ],
   });

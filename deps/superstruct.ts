@@ -1,4 +1,4 @@
-export * from "https://esm.sh/superstruct@0.15.4?pin=v82";
+export * from "https://esm.sh/superstruct@0.15.4?pin=v85";
 
 import {
   any as _any,
@@ -13,12 +13,8 @@ import {
   string as _string,
   StructError,
   unknown as _unknown,
-} from "https://esm.sh/superstruct@0.15.4?pin=v82";
+} from "https://esm.sh/superstruct@0.15.4?pin=v85";
 
-Object.defineProperty(StructError, "name", {
-  value: "StructError",
-  configurable: true,
-});
 export const any = _any();
 export const bigint = _bigint();
 export const boolean = _boolean();
