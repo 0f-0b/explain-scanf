@@ -1,6 +1,6 @@
 import { AsyncMutex } from "../deps/@esfx/async_mutex.ts";
 import { DenoDir, FetchCacher, FileFetcher } from "../deps/deno_cache.ts";
-import { createGraph, MediaType } from "../deps/deno_graph.ts";
+import { MediaType, parseModule } from "../deps/deno_graph.ts";
 import type { Loader, Plugin } from "../deps/esbuild.ts";
 
 export const httpImports: Plugin = (() => {
@@ -20,7 +20,7 @@ export const httpImports: Plugin = (() => {
     [MediaType.Json, "json"],
   ]);
   const denoDir = new DenoDir();
-  const { cacheInfo, load: loadUnsafe } = new FetchCacher(
+  const { load: loadUnsafe } = new FetchCacher(
     denoDir.gen,
     denoDir.deps,
     new FileFetcher(denoDir.deps),
@@ -29,13 +29,15 @@ export const httpImports: Plugin = (() => {
   const load = async (specifier: string) => {
     const key = denoDir.deps.getCacheFilename(new URL(specifier));
     const mutex = mutexes.get(key) ?? new AsyncMutex();
-    const handle = await mutex.lock();
+    if (!mutex.tryLock()) {
+      await mutex.lock();
+    }
     mutexes.set(key, mutex);
     try {
       return await loadUnsafe(specifier);
     } finally {
       mutexes.delete(key);
-      handle.unlock();
+      mutex.unlock();
     }
   };
   return {
@@ -55,10 +57,14 @@ export const httpImports: Plugin = (() => {
       build.onLoad(
         { filter: /(?:)/, namespace: name },
         async ({ path }) => {
-          const graph = await createGraph(path, { cacheInfo, load });
-          const [root] = graph.roots;
-          const mod = graph.modules.find(({ specifier }) => specifier === root);
-          return mod && {
+          const res = await load(path);
+          if (res?.kind !== "module") {
+            return null;
+          }
+          const mod = parseModule(res.specifier, res.content, {
+            headers: res.headers,
+          });
+          return {
             contents: mod.source,
             loader: loaders.get(mod.mediaType),
           };
