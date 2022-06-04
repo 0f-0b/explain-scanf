@@ -1,5 +1,5 @@
 import { AsyncMutex } from "../deps/@esfx/async_mutex.ts";
-import { DenoDir, FetchCacher, FileFetcher } from "../deps/deno_cache.ts";
+import { DenoDir, FileFetcher } from "../deps/deno_cache.ts";
 import { MediaType, parseModule } from "../deps/deno_graph.ts";
 import type { Loader, Plugin } from "../deps/esbuild.ts";
 
@@ -19,22 +19,19 @@ export const httpImports: Plugin = (() => {
     [MediaType.Tsx, "tsx"],
     [MediaType.Json, "json"],
   ]);
-  const denoDir = new DenoDir();
-  const { load: loadUnsafe } = new FetchCacher(
-    denoDir.gen,
-    denoDir.deps,
-    new FileFetcher(denoDir.deps),
-  );
+  const { deps } = new DenoDir();
+  const fetcher = new FileFetcher(deps);
   const mutexes = new Map<string, AsyncMutex>();
   const load = async (specifier: string) => {
-    const key = denoDir.deps.getCacheFilename(new URL(specifier));
+    const url = new URL(specifier);
+    const key = deps.getCacheFilename(url);
     const mutex = mutexes.get(key) ?? new AsyncMutex();
     if (!mutex.tryLock()) {
       await mutex.lock();
     }
     mutexes.set(key, mutex);
     try {
-      return await loadUnsafe(specifier);
+      return await fetcher.fetch(url);
     } finally {
       mutexes.delete(key);
       mutex.unlock();
