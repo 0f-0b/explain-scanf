@@ -12,7 +12,7 @@ import { findIndex } from "./util.ts";
 const emptySet = new Set<string>();
 const whitespace = new Set(" \t\n\r\v\f");
 const whitespaceRE = /^[ \t\n\r\v\f]+/;
-const nonAsciiRE = /[^\x00-\x7f]/;
+const nonAsciiRE = /[^\0-\x7f]/;
 const convValidateRE =
   /^%(?:(?:\d+\$)?(?:|hh|h|l|ll|j|z|t)n|(?:\d+\$|\*?)(?:[1-9]\d*)?(?:(?:|hh|h|l|ll|j|z|t)[diouxX]|(?:|l|L)[aAeEfFgG]|m?(?:l?(?:[cs]|\[(?:\^|(?!\^))[^][^\]]*\])|[CS])|p))/;
 const convParseRE =

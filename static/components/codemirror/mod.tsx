@@ -9,9 +9,11 @@ export interface CodeMirrorProps
   onChange: (state: EditorState) => void;
 }
 
-export default function CodeMirror(
-  { state, onChange, ...props }: CodeMirrorProps,
-): JSX.Element {
+export const CodeMirror: React.FC<CodeMirrorProps> = ({
+  state,
+  onChange,
+  ...props
+}) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const view = useRef<EditorView | null>(null);
   const cbRef = useLatest(onChange);
@@ -33,4 +35,4 @@ export default function CodeMirror(
     return () => view.current?.destroy();
   }, []);
   return <div ref={ref} {...props} />;
-}
+};

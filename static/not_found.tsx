@@ -1,7 +1,9 @@
+import type { MatchingProps, RouteProps } from "./deps/@reach/router.ts";
 import React from "./deps/react.ts";
-import ErrorMessage from "./components/error_message.tsx";
+import { ErrorMessage } from "./components/error_message.tsx";
 
-// deno-lint-ignore no-explicit-any
-export default function NotFound(_: any): JSX.Element {
-  return <ErrorMessage>Not Found</ErrorMessage>;
-}
+export const NotFound: React.FC<RouteProps> = () => (
+  <ErrorMessage>Not Found</ErrorMessage>
+);
+
+export default NotFound as React.FC<MatchingProps>;

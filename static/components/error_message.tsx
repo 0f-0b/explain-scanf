@@ -6,12 +6,12 @@ export interface ErrorMessageProps
   children: unknown;
 }
 
-export default function ErrorMessage(
-  { className, children: error, ...props }: ErrorMessageProps,
-): JSX.Element {
-  return (
-    <span className={mergeClass("error", className)} {...props}>
-      {error instanceof Error ? error.message : String(error)}
-    </span>
-  );
-}
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({
+  className,
+  children,
+  ...props
+}) => (
+  <span className={mergeClass("error", className)} {...props}>
+    {children instanceof Error ? children.message : String(children)}
+  </span>
+);

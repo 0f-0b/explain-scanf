@@ -1,13 +1,11 @@
 import React from "../deps/react.ts";
 import type {
-  BasicType,
   Declaration,
   DeclarationSpecifier,
   Declarator,
   Expression,
   FloatingConstant,
   InitDeclarator,
-  TypedefName,
 } from "../c_ast.ts";
 import { basicTypes, typedefs } from "../c_ast.ts";
 import { escapeChar, escapeString } from "../escape.ts";
@@ -23,105 +21,23 @@ import {
   HlVariable,
 } from "./highlight.tsx";
 
-function Parentheses(
-  { children }: React.PropsWithChildren<unknown>,
-): JSX.Element {
-  return <>({children})</>;
-}
-
-function PointerNode(
-  { children }: React.PropsWithChildren<unknown>,
-): JSX.Element {
-  return (
-    <>
-      <HlOperator>*</HlOperator>
-      {children}
-    </>
-  );
-}
-
-function ArrayNode(
-  { children, size }: React.PropsWithChildren<{ size: number }>,
-): JSX.Element {
-  return (
-    <>
-      {children}[<HlNumeric>{size}</HlNumeric>]
-    </>
-  );
-}
-
-export function DeclarationNode({ ast }: { ast: Declaration }): JSX.Element {
-  return (
-    <>
-      {ast.specifiers.map((specifier, index, arr) => (
-        <React.Fragment key={index}>
-          <DeclarationSpecifierNode ast={specifier} />
-          {index !== arr.length - 1 || ast.declarators.length
-            ? " "
-            : ""}
-        </React.Fragment>
-      ))}
-      {ast.declarators.map((declarator, index): React.ReactNode =>
-        index
-          ? (
-            <React.Fragment key={index}>
-              , <InitDeclaratorNode ast={declarator} />
-            </React.Fragment>
-          )
-          : <InitDeclaratorNode key={index} ast={declarator} />
-      )};
-    </>
-  );
-}
-
-export function DeclarationSpecifierNode(
-  { ast }: { ast: DeclarationSpecifier },
-): JSX.Element {
-  if (basicTypes.includes(ast as BasicType)) {
-    return <HlBasicType>{ast}</HlBasicType>;
-  }
-  if (typedefs.includes(ast as TypedefName)) {
-    return <HlType>{ast}</HlType>;
-  }
-  return <HlKeyword>{ast}</HlKeyword>;
-}
-
-export function InitDeclaratorNode(
-  { ast }: { ast: InitDeclarator },
-): JSX.Element {
-  return ast.initializer
-    ? (
-      <>
-        <DeclaratorNode ast={ast.declarator} /> <HlOperator>=</HlOperator>{" "}
-        <ExpressionNode ast={ast.initializer} />
-      </>
-    )
-    : <DeclaratorNode ast={ast.declarator} />;
-}
-
-export function DeclaratorNode({ ast }: { ast: Declarator }): JSX.Element {
-  let result: React.ReactNode = <HlVariable>{ast.name}</HlVariable>;
-  let wasPointer = false;
-  for (const layer of ast.type) {
-    if (layer.type === "pointer") {
-      wasPointer = true;
-    } else {
-      if (wasPointer) {
-        result = <Parentheses>{result}</Parentheses>;
-      }
-      wasPointer = false;
-    }
-    switch (layer.type) {
-      case "pointer":
-        result = <PointerNode>{result}</PointerNode>;
-        break;
-      case "array":
-        result = <ArrayNode size={layer.size}>{result}</ArrayNode>;
-        break;
-    }
-  }
-  return <>{result}</>;
-}
+const Parentheses: React.FC<React.PropsWithChildren> = ({ children }) => (
+  <>({children})</>
+);
+const PointerNode: React.FC<React.PropsWithChildren> = ({ children }) => (
+  <>
+    <HlOperator>*</HlOperator>
+    {children}
+  </>
+);
+const ArrayNode: React.FC<React.PropsWithChildren<{ size: number }>> = ({
+  children,
+  size,
+}) => (
+  <>
+    {children}[<HlNumeric>{size}</HlNumeric>]
+  </>
+);
 
 function uint(value: bigint): JSX.Element {
   return <HlNumeric>{value.toString()}</HlNumeric>;
@@ -151,7 +67,67 @@ function ufloat(value: FloatingConstant["value"]): JSX.Element {
   return <HlNumeric>{value.magnitude}</HlNumeric>;
 }
 
-export function ExpressionNode({ ast }: { ast: Expression }): JSX.Element {
+type NC<T> = React.FC<{ ast: T }>;
+export const DeclarationNode: NC<Declaration> = ({ ast }) => (
+  <>
+    {ast.specifiers.map((specifier, index, arr) => (
+      <React.Fragment key={index}>
+        <DeclarationSpecifierNode ast={specifier} />
+        {index !== arr.length - 1 || ast.declarators.length ? " " : ""}
+      </React.Fragment>
+    ))}
+    {ast.declarators.map((declarator, index) =>
+      index
+        ? (
+          <React.Fragment key={index}>
+            , <InitDeclaratorNode ast={declarator} />
+          </React.Fragment>
+        )
+        : <InitDeclaratorNode key={index} ast={declarator} />
+    )};
+  </>
+);
+export const DeclarationSpecifierNode: NC<DeclarationSpecifier> = ({ ast }) =>
+  (basicTypes as readonly DeclarationSpecifier[]).includes(ast)
+    ? <HlBasicType>{ast}</HlBasicType>
+    : (typedefs as readonly DeclarationSpecifier[]).includes(ast)
+    ? <HlType>{ast}</HlType>
+    : <HlKeyword>{ast}</HlKeyword>;
+export const InitDeclaratorNode: NC<InitDeclarator> = ({ ast }) => (
+  <>
+    <DeclaratorNode ast={ast.declarator} />
+    {ast.initializer && (
+      <>
+        {" "}
+        <HlOperator>=</HlOperator> <ExpressionNode ast={ast.initializer} />
+      </>
+    )}
+  </>
+);
+export const DeclaratorNode: NC<Declarator> = ({ ast }) => {
+  let result = <HlVariable>{ast.name}</HlVariable>;
+  let wasPointer = false;
+  for (const layer of ast.type) {
+    if (layer.type === "pointer") {
+      wasPointer = true;
+    } else {
+      if (wasPointer) {
+        result = <Parentheses>{result}</Parentheses>;
+      }
+      wasPointer = false;
+    }
+    switch (layer.type) {
+      case "pointer":
+        result = <PointerNode>{result}</PointerNode>;
+        break;
+      case "array":
+        result = <ArrayNode size={layer.size}>{result}</ArrayNode>;
+        break;
+    }
+  }
+  return result;
+};
+export const ExpressionNode: NC<Expression> = ({ ast }) => {
   switch (ast.type) {
     case "integer_constant":
       return ast.value < 0n
@@ -192,4 +168,4 @@ export function ExpressionNode({ ast }: { ast: Expression }): JSX.Element {
         </>
       );
   }
-}
+};

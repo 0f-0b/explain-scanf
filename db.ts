@@ -1,35 +1,38 @@
+import { dedent } from "./deps/string_dedent.ts";
 import { requireEnv } from "./env.ts";
 
-interface DatabaseError {
-  message: string;
-  extensions: {
-    code: string;
+export function gql<T>(
+  template: { readonly raw: ArrayLike<string> },
+): (variables: T) => Promise<unknown> {
+  const query = dedent(String.raw(template));
+  return async (variables: T) => {
+    const token = requireEnv("FAUNA_SECRET");
+    const res = await fetch("https://graphql.fauna.com/graphql", {
+      headers: [
+        ["authorization", `Bearer ${token}`],
+        ["content-type", "application/json"],
+      ],
+      body: JSON.stringify({ query, variables }),
+      method: "POST",
+    });
+    const obj = await res.json() as
+      | { data: unknown }
+      | { errors: { message: string; extensions?: { code: string } }[] };
+    if ("errors" in obj) {
+      const [error] = obj.errors;
+      throw new DBError(error.message, error.extensions?.code);
+    }
+    return obj.data;
   };
 }
 
-export async function queryDatabase<T, R = unknown>(
-  query: string,
-  variables: T,
-): Promise<R> {
-  const token = requireEnv("FAUNA_SECRET");
-  const res = await fetch("https://graphql.fauna.com/graphql", {
-    headers: [
-      ["authorization", `Bearer ${token}`],
-      ["content-type", "application/json"],
-    ],
-    body: JSON.stringify({ query, variables }),
-    method: "POST",
-  });
-  const obj = await res.json() as { data: R } | { errors: DatabaseError[] };
-  if ("errors" in obj) {
-    const [firstError] = obj.errors;
-    throw Object.assign(new Error(firstError.message), {
-      code: firstError.extensions.code,
-    });
-  }
-  return obj.data;
-}
+export class DBError extends Error {
+  code?: string;
 
-export function gql(template: TemplateStringsArray): string {
-  return String.raw(template).replace(/\s+/g, " ").trim();
+  constructor(message: string, code?: string) {
+    super(message);
+    this.name = "DBError";
+    this.code = code;
+    Error.captureStackTrace?.(this, DBError);
+  }
 }

@@ -1,23 +1,21 @@
-import { navigate } from "./deps/reach_router.ts";
+import type { MatchingProps, RouteProps } from "./deps/@reach/router.ts";
 import React, { useEffect, useState } from "./deps/react.ts";
-import ErrorMessage from "./components/error_message.tsx";
+import { ErrorMessage } from "./components/error_message.tsx";
+import type { IndexLocationState } from "./index.tsx";
+import { timeout } from "./timeout.ts";
 
-export interface CodeParams {
+export interface CodeProps extends RouteProps {
   id: string;
 }
 
-// deno-lint-ignore no-explicit-any
-export default function Code(props: any): JSX.Element {
-  const { id }: CodeParams = props;
+export const Code: React.FC<CodeProps> = ({ navigate, id }) => {
   const [error, setError] = useState<unknown>();
   useEffect(() => {
     setError(undefined);
     (async () => {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000);
       try {
         const res = await fetch(`/api/code/${id}`, {
-          signal: controller.signal,
+          signal: timeout(30000),
         });
         const obj = await res.json() as
           | { format: string; input: string }
@@ -26,7 +24,7 @@ export default function Code(props: any): JSX.Element {
           throw new Error(obj.error);
         }
         const { format, input } = obj;
-        await navigate("/", {
+        await navigate<IndexLocationState>("/", {
           state: {
             value: { format, input },
           },
@@ -34,12 +32,12 @@ export default function Code(props: any): JSX.Element {
         });
       } catch (e: unknown) {
         setError(e);
-      } finally {
-        clearTimeout(timeout);
       }
     })();
   }, [id]);
   return error !== undefined
     ? <ErrorMessage>{error}</ErrorMessage>
     : <>Redirecting…</>;
-}
+};
+
+export default Code as React.FC<MatchingProps>;

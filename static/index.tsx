@@ -23,13 +23,13 @@ import {
   Transaction,
 } from "./deps/codemirror.ts";
 import type { Extension } from "./deps/codemirror.ts";
-import { navigate } from "./deps/reach_router.ts";
+import type { MatchingProps, RouteProps } from "./deps/@reach/router.ts";
 import React, { useEffect, useMemo, useState } from "./deps/react.ts";
 import { useStorageState } from "./deps/react_storage_hooks.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
 import { enforceSingleLine } from "./components/codemirror/enforce_single_line.ts";
 import { escapeString } from "./components/codemirror/escape_string.ts";
-import CodeMirror from "./components/codemirror/mod.tsx";
+import { CodeMirror } from "./components/codemirror/mod.tsx";
 import {
   HlComment,
   HlFunction,
@@ -37,7 +37,7 @@ import {
   HlString,
   HlVariable,
 } from "./components/highlight.tsx";
-import ShareButton from "./components/share_button.tsx";
+import { ShareButton } from "./components/share_button.tsx";
 import {
   type ConversionDirective,
   explain,
@@ -156,12 +156,16 @@ const safeLocalStorage: Parameters<typeof useStorageState>[0] = {
 };
 
 export interface IndexLocationState {
-  format: string;
-  input: string;
+  value: {
+    format: string;
+    input: string;
+  };
 }
 
-// deno-lint-ignore no-explicit-any
-export default function Index(props: any): JSX.Element {
+export const Index: React.FC<RouteProps<IndexLocationState>> = ({
+  location,
+  navigate,
+}) => {
   const [formatStorage, setFormatStorage] = useStorageState(
     safeLocalStorage,
     "format",
@@ -188,25 +192,26 @@ export default function Index(props: any): JSX.Element {
   const input = Array.from(inputState.doc).join("");
   useEffect(() => setFormatStorage(format), [format, setFormatStorage]);
   useEffect(() => setInputStorage(input), [input, setInputStorage]);
-  const locState: IndexLocationState = props.location.state?.value;
+  const locationState = location.state?.value;
   useEffect(() => {
-    if (!locState) {
+    if (!locationState) {
       return;
     }
+    const { format, input } = locationState;
     setFormatState((state) =>
       state.update({
-        changes: { from: 0, to: state.doc.length, insert: locState.format },
+        changes: { from: 0, to: state.doc.length, insert: format },
       }).state
     );
     setInputState((state) =>
       state.update({
-        changes: { from: 0, to: state.doc.length, insert: locState.input },
+        changes: { from: 0, to: state.doc.length, insert: input },
       }).state
     );
     navigate("/", {
       replace: true,
     });
-  }, [locState]);
+  }, [locationState]);
   const directives = useMemo(() => parseFormat(format), [format]);
   useEffect(() => {
     const convs = directives === undefinedBehavior
@@ -364,4 +369,6 @@ export default function Index(props: any): JSX.Element {
       </pre>
     </div>
   );
-}
+};
+
+export default Index as React.FC<MatchingProps>;

@@ -1,15 +1,17 @@
-import { ShareIcon } from "../deps/octicons_react.ts";
+import { ShareIcon } from "../deps/@primer/octicons_react.ts";
 import React, { useEffect, useState } from "../deps/react.ts";
-import ErrorMessage from "./error_message.tsx";
+import { timeout } from "../timeout.ts";
+import { ErrorMessage } from "./error_message.tsx";
 
 export interface ShareButtonProps {
   format: string;
   input: string;
 }
 
-export default function ShareButton(
-  { format, input }: ShareButtonProps,
-): JSX.Element {
+export const ShareButton: React.FC<ShareButtonProps> = ({
+  format,
+  input,
+}) => {
   const [shared, setShared] = useState<
     { format: string; input: string } | undefined
   >();
@@ -24,8 +26,6 @@ export default function ShareButton(
     }
     setResult(undefined);
     (async () => {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000);
       try {
         const res = await fetch("/api/code", {
           body: JSON.stringify({
@@ -33,7 +33,7 @@ export default function ShareButton(
             input: shared.input,
           }),
           method: "POST",
-          signal: controller.signal,
+          signal: timeout(30000),
         });
         const obj = await res.json() as { id: string } | { error: string };
         if ("error" in obj) {
@@ -43,8 +43,6 @@ export default function ShareButton(
       } catch (e: unknown) {
         setShared(undefined);
         setResult({ type: "error", reason: e });
-      } finally {
-        clearTimeout(timeout);
       }
     })();
   }, [shared?.format, shared?.input]);
@@ -80,4 +78,4 @@ export default function ShareButton(
         : null}
     </>
   );
-}
+};
