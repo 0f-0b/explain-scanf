@@ -23,8 +23,8 @@ import {
   Transaction,
 } from "./deps/codemirror.ts";
 import type { Extension } from "./deps/codemirror.ts";
-import type { MatchingProps, RouteProps } from "./deps/@reach/router.ts";
 import React, { useEffect, useMemo, useState } from "./deps/react.ts";
+import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
 import { useStorageState } from "./deps/react_storage_hooks.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
 import { enforceSingleLine } from "./components/codemirror/enforce_single_line.ts";
@@ -155,17 +155,14 @@ const safeLocalStorage: Parameters<typeof useStorageState>[0] = {
   },
 };
 
-export interface IndexLocationState {
+export interface HomeLocationState {
   value: {
     format: string;
     input: string;
   };
 }
 
-export const Index: React.FC<RouteProps<IndexLocationState>> = ({
-  location,
-  navigate,
-}) => {
+export const Home: React.FC = () => {
   const [formatStorage, setFormatStorage] = useStorageState(
     safeLocalStorage,
     "format",
@@ -192,12 +189,14 @@ export const Index: React.FC<RouteProps<IndexLocationState>> = ({
   const input = Array.from(inputState.doc).join("");
   useEffect(() => setFormatStorage(format), [format, setFormatStorage]);
   useEffect(() => setInputStorage(input), [input, setInputStorage]);
-  const locationState = location.state?.value;
+  const location = useLocation();
+  const locationState = location.state as HomeLocationState | null;
+  const navigate = useNavigate();
   useEffect(() => {
     if (!locationState) {
       return;
     }
-    const { format, input } = locationState;
+    const { format, input } = locationState.value;
     setFormatState((state) =>
       state.update({
         changes: { from: 0, to: state.doc.length, insert: format },
@@ -371,4 +370,4 @@ export const Index: React.FC<RouteProps<IndexLocationState>> = ({
   );
 };
 
-export default Index as React.FC<MatchingProps>;
+export default Home;

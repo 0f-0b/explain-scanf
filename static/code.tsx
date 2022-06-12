@@ -1,20 +1,17 @@
-import type { MatchingProps, RouteProps } from "./deps/@reach/router.ts";
 import React, { useEffect, useState } from "./deps/react.ts";
+import { useNavigate, useParams } from "./deps/react_router_dom.ts";
 import { ErrorMessage } from "./components/error_message.tsx";
-import type { IndexLocationState } from "./index.tsx";
 import { timeout } from "./timeout.ts";
 
-export interface CodeProps extends RouteProps {
-  id: string;
-}
-
-export const Code: React.FC<CodeProps> = ({ navigate, id }) => {
+export const Code: React.FC = () => {
+  const { id } = useParams<"id">();
   const [error, setError] = useState<unknown>();
+  const navigate = useNavigate();
   useEffect(() => {
     setError(undefined);
     (async () => {
       try {
-        const res = await fetch(`/api/code/${id}`, {
+        const res = await fetch(`/api/code/${id!}`, {
           signal: timeout(30000),
         });
         const obj = await res.json() as
@@ -24,7 +21,7 @@ export const Code: React.FC<CodeProps> = ({ navigate, id }) => {
           throw new Error(obj.error);
         }
         const { format, input } = obj;
-        await navigate<IndexLocationState>("/", {
+        navigate("/", {
           state: {
             value: { format, input },
           },
@@ -40,4 +37,4 @@ export const Code: React.FC<CodeProps> = ({ navigate, id }) => {
     : <>Redirecting…</>;
 };
 
-export default Code as React.FC<MatchingProps>;
+export default Code;

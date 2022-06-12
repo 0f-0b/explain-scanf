@@ -6,7 +6,7 @@ import { useLatest } from "../../deps/use_latest.ts";
 export interface CodeMirrorProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children" | "onChange"> {
   state: EditorState;
-  onChange: (state: EditorState) => void;
+  onChange: (state: EditorState) => unknown;
 }
 
 export const CodeMirror: React.FC<CodeMirrorProps> = ({
