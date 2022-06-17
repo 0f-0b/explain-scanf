@@ -15,4 +15,4 @@ export {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "https://esm.sh/react@18.1.0?target=es2020&pin=v86";
+} from "https://esm.sh/react@18.2.0?target=es2020&pin=v86";
