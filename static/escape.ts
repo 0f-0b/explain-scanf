@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-control-regex
 const commonEscapes: [string, string][] = [
   ["\x00", "\\0"],
   ["\x01", "\\x01"],
@@ -34,7 +35,7 @@ const commonEscapes: [string, string][] = [
   ["\\", "\\\\"],
 ];
 
-export const charEscapeRE = /[\x00-\x1f\\']/g;
+export const charEscapeRE = /[\0-\x1f\\']/g;
 export const charEscapes = new Map([
   ...commonEscapes,
   ["'", "\\'"],
@@ -44,7 +45,7 @@ export function escapeChar(s: string): string {
   return `'${s.replace(charEscapeRE, (c) => charEscapes.get(c) ?? c)}'`;
 }
 
-export const stringEscapeRE = /[\x00-\x1f\\"]/g;
+export const stringEscapeRE = /[\0-\x1f\\"]/g;
 export const stringEscapes = new Map([
   ...commonEscapes,
   ['"', '\\"'],

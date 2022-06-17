@@ -7,7 +7,6 @@ import type {
   TypeSpecifier,
 } from "./c_ast.ts";
 import { escapeChar, escapeString } from "./escape.ts";
-import { findIndex } from "./util.ts";
 
 const emptySet = new Set<string>();
 const whitespace = new Set(" \t\n\r\v\f");
@@ -383,10 +382,13 @@ function parse(
       return result.length;
     }
     case "string": {
-      const length = findIndex(
-        str,
-        (c) => spec.scanset.has(c) === spec.negated,
-      );
+      let length = 0;
+      while (length < str.length) {
+        if (spec.scanset.has(str[length]) === spec.negated) {
+          break;
+        }
+        length++;
+      }
       if (length === 0) {
         return failure;
       }

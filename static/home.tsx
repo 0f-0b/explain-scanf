@@ -7,6 +7,7 @@ import {
   drawSelection,
   EditorState,
   EditorView,
+  type Extension,
   highlightActiveLine,
   highlightSpecialChars,
   history,
@@ -22,14 +23,17 @@ import {
   standardKeymap,
   Transaction,
 } from "./deps/codemirror.ts";
-import type { Extension } from "./deps/codemirror.ts";
-import React, { useEffect, useMemo, useState } from "./deps/react.ts";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "./deps/react.ts";
 import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
-import { useStorageState } from "./deps/react_storage_hooks.ts";
+import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
+import { escapeString } from "./codemirror/escape_string.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
-import { enforceSingleLine } from "./components/codemirror/enforce_single_line.ts";
-import { escapeString } from "./components/codemirror/escape_string.ts";
-import { CodeMirror } from "./components/codemirror/mod.tsx";
+import { CodeMirror } from "./components/codemirror.tsx";
 import {
   HlComment,
   HlFunction,
@@ -37,6 +41,7 @@ import {
   HlString,
   HlVariable,
 } from "./components/highlight.tsx";
+import { ScanfLink } from "./components/scanf_link.tsx";
 import { ShareButton } from "./components/share_button.tsx";
 import {
   type ConversionDirective,
@@ -46,9 +51,9 @@ import {
   undefinedBehavior,
   unimplemented,
 } from "./scanf.ts";
-import { mapNotNullish } from "./util.ts";
+import { lazyLocalStorage, useStorageState } from "./storage.ts";
 
-const colors: Decoration[] = [
+const colors = [
   Decoration.mark({ class: "color-0" }),
   Decoration.mark({ class: "color-1" }),
   Decoration.mark({ class: "color-2" }),
@@ -57,8 +62,14 @@ const colors: Decoration[] = [
   Decoration.mark({ class: "color-5" }),
 ];
 
-export function color(index: number): Decoration {
+function color(index: number): Decoration {
   return colors[index % colors.length];
+}
+
+const shortNames = "abcdefghijklmnopqrstuvwxyz";
+
+function name(index: number, count: number): string {
+  return count > shortNames.length ? `var_${index + 1}` : shortNames[index];
 }
 
 const highlight = new Compartment();
@@ -100,15 +111,17 @@ const formatExtension: Extension = [
     {
       key: "Enter",
       run({ state, dispatch }) {
-        dispatch(
-          state.update(state.replaceSelection("\n"), { scrollIntoView: true }),
-        );
+        dispatch(state.update(
+          state.replaceSelection("\n"),
+          { scrollIntoView: true },
+        ));
         return true;
       },
       shift({ state, dispatch }) {
-        dispatch(
-          state.update(state.replaceSelection("\r"), { scrollIntoView: true }),
-        );
+        dispatch(state.update(
+          state.replaceSelection("\r"),
+          { scrollIntoView: true },
+        ));
         return true;
       },
     },
@@ -137,24 +150,6 @@ const inputExtension: Extension = [
   baseExtension,
 ];
 
-const shortNames = "abcdefghijklmnopqrstuvwxyz";
-
-function name(index: number, count: number): string {
-  return count > shortNames.length ? `var_${index + 1}` : shortNames[index];
-}
-
-const safeLocalStorage: Parameters<typeof useStorageState>[0] = {
-  getItem(key) {
-    return localStorage.getItem(key);
-  },
-  setItem(key, value) {
-    return localStorage.setItem(key, value);
-  },
-  removeItem(key) {
-    return localStorage.removeItem(key);
-  },
-};
-
 export interface HomeLocationState {
   value: {
     format: string;
@@ -163,91 +158,72 @@ export interface HomeLocationState {
 }
 
 export const Home: React.FC = () => {
-  const [formatStorage, setFormatStorage] = useStorageState(
-    safeLocalStorage,
+  const [format, setFormat] = useStorageState(
+    lazyLocalStorage,
     "format",
     "%d%f%s",
   );
-  const [inputStorage, setInputStorage] = useStorageState(
-    safeLocalStorage,
+  const [input, setInput] = useStorageState(
+    lazyLocalStorage,
     "input",
     "25 54.32E-1 Hamster\n",
   );
-  const [formatState, setFormatState] = useState(() =>
-    EditorState.create({
-      doc: formatStorage,
-      extensions: formatExtension,
-    })
-  );
-  const [inputState, setInputState] = useState(() =>
-    EditorState.create({
-      doc: inputStorage,
-      extensions: inputExtension,
-    })
-  );
-  const format = Array.from(formatState.doc).join("");
-  const input = Array.from(inputState.doc).join("");
-  useEffect(() => setFormatStorage(format), [format, setFormatStorage]);
-  useEffect(() => setInputStorage(input), [input, setInputStorage]);
+  const formatView = useRef<EditorView>(null);
+  const inputView = useRef<EditorView>(null);
+  const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as HomeLocationState | null;
-  const navigate = useNavigate();
+  useLayoutEffect(() => {
+    if (!locationState) {
+      return;
+    }
+    const { format: newFormat, input: newInput } = locationState.value;
+    formatView.current!.dispatch({
+      changes: { from: 0, to: format.length, insert: newFormat },
+    });
+    inputView.current!.dispatch({
+      changes: { from: 0, to: input.length, insert: newInput },
+    });
+  }, [locationState]);
   useEffect(() => {
     if (!locationState) {
       return;
     }
-    const { format, input } = locationState.value;
-    setFormatState((state) =>
-      state.update({
-        changes: { from: 0, to: state.doc.length, insert: format },
-      }).state
-    );
-    setInputState((state) =>
-      state.update({
-        changes: { from: 0, to: state.doc.length, insert: input },
-      }).state
-    );
     navigate("/", {
       replace: true,
     });
   }, [locationState]);
   const directives = useMemo(() => parseFormat(format), [format]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const convs = directives === undefinedBehavior
       ? []
       : directives.filter((directive): directive is ConversionDirective =>
         directive.type === "conversion"
       );
-    setFormatState((state) =>
-      state.update({
-        effects: [
-          highlight.reconfigure([
-            EditorView.decorations.of(Decoration.set(convs.map((conv, index) =>
-              color(index).range(conv.start, conv.end)
-            ))),
-          ]),
-          tooltip.reconfigure([
-            hoverTooltip((_, pos, side) => {
-              const conv = convs.find(({ start, end }) =>
-                (start < pos || (side > 0 && start === pos)) &&
-                (end > pos || (side < 0 && end === pos))
-              );
-              return conv === undefined ? null : {
-                pos: conv.start + 1,
-                create() {
-                  return {
-                    dom: Object.assign(document.createElement("div"), {
-                      textContent: explain(conv),
-                    }),
-                  };
-                },
-                arrow: true,
+    formatView.current!.dispatch({
+      effects: [
+        highlight.reconfigure(EditorView.decorations.of(Decoration.set(
+          convs.map(({ start, end }, index) => color(index).range(start, end)),
+        ))),
+        tooltip.reconfigure(hoverTooltip((_, pos, side) => {
+          const conv = convs.find(({ start, end }) =>
+            (start < pos || (side > 0 && start === pos)) &&
+            (end > pos || (side < 0 && end === pos))
+          );
+          return conv === undefined ? null : {
+            pos: conv.start + 1,
+            create() {
+              return {
+                dom: Object.assign(document.createElement("div"), {
+                  textContent: explain(conv),
+                }),
               };
-            }),
-          ]),
-        ],
-      }).state
-    );
+            },
+            arrow: true,
+          };
+        })),
+      ],
+    });
   }, [directives]);
   const result = useMemo(
     () =>
@@ -256,22 +232,17 @@ export const Home: React.FC = () => {
         : sscanf(input, directives),
     [input, directives],
   );
-  useEffect(() => {
+  useLayoutEffect(() => {
     const matches = typeof result === "object" ? result.matches : [];
-    setInputState((state) =>
-      state.update({
-        effects: [
-          highlight.reconfigure([
-            EditorView.decorations.of(
-              Decoration.set(mapNotNullish(matches, (match, index) =>
-                match.start !== match.end
-                  ? color(index).range(match.start, match.end)
-                  : null)),
-            ),
-          ]),
-        ],
-      }).state
-    );
+    inputView.current!.dispatch({
+      effects: [
+        highlight.reconfigure(EditorView.decorations.of(Decoration.set(
+          matches
+            .filter(({ start, end }) => start !== end)
+            .map(({ start, end }, index) => color(index).range(start, end)),
+        ))),
+      ],
+    });
   }, [result]);
   const args = typeof result === "object" ? result.args : [];
   return (
@@ -280,39 +251,21 @@ export const Home: React.FC = () => {
       <pre>
         <code>
           <HlFunction>
-            <a
-              href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(event) => {
-                const date = new Date();
-                if (date.getMonth() === 3 && date.getDate() === 1) {
-                  try {
-                    if (sessionStorage.getItem("e") === null) {
-                      sessionStorage.setItem("e", "");
-                      event.preventDefault();
-                      window.open(
-                        atob(
-                          "aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2ODA0MzMwMjI/dD0wLjAwMDAx",
-                        ),
-                        "_blank",
-                        "noreferrer",
-                      );
-                    }
-                  } catch {
-                    // ignored
-                  }
+            <ScanfLink />
+          </HlFunction>(<HlString>
+            "<CodeMirror
+              ref={formatView}
+              className="format"
+              initialConfig={() => ({
+                doc: format,
+                extensions: formatExtension,
+              })}
+              onUpdate={(update) => {
+                if (update.docChanged) {
+                  setFormat(update.state.doc.toString());
                 }
               }}
-            >
-              scanf
-            </a>
-          </HlFunction>(<HlString>
-            &quot;<CodeMirror
-              className="format"
-              state={formatState}
-              onChange={setFormatState}
-            />&quot;
+            />"
           </HlString>
           <span>
             {args.map((arg, index, arr) => (
@@ -342,7 +295,18 @@ export const Home: React.FC = () => {
           </HlComment>
         </code>
       </pre>
-      <CodeMirror state={inputState} onChange={setInputState} />
+      <CodeMirror
+        ref={inputView}
+        initialConfig={() => ({
+          doc: input,
+          extensions: inputExtension,
+        })}
+        onUpdate={(update) => {
+          if (update.docChanged) {
+            setInput(update.state.doc.toString());
+          }
+        }}
+      />
       <pre className="variables">
         <code>
           {args.map((arg, index, arr) => (

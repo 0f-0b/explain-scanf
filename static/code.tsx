@@ -4,9 +4,9 @@ import { ErrorMessage } from "./components/error_message.tsx";
 import { timeout } from "./timeout.ts";
 
 export const Code: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<"id">();
   const [error, setError] = useState<unknown>();
-  const navigate = useNavigate();
   useEffect(() => {
     setError(undefined);
     (async () => {

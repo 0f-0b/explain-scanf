@@ -1,5 +1,5 @@
+import { clsx } from "../deps/clsx.ts";
 import React from "../deps/react.ts";
-import { mergeClass } from "../util.ts";
 
 export interface ErrorMessageProps
   extends Omit<React.ComponentPropsWithoutRef<"span">, "children"> {
@@ -11,7 +11,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   children,
   ...props
 }) => (
-  <span className={mergeClass("error", className)} {...props}>
+  <span className={clsx("error", className)} {...props}>
     {children instanceof Error ? children.message : String(children)}
   </span>
 );
