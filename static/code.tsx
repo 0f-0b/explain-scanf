@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "./deps/react.ts";
 import { useNavigate, useParams } from "./deps/react_router_dom.ts";
+import { getCode } from "./code.ts";
 import { ErrorMessage } from "./components/error_message.tsx";
-import { timeout } from "./timeout.ts";
 
 export const Code: React.FC = () => {
   const navigate = useNavigate();
@@ -11,20 +11,9 @@ export const Code: React.FC = () => {
     setError(undefined);
     (async () => {
       try {
-        const res = await fetch(`/api/code/${id!}`, {
-          signal: timeout(30000),
-        });
-        const obj = await res.json() as
-          | { format: string; input: string }
-          | { error: string };
-        if ("error" in obj) {
-          throw new Error(obj.error);
-        }
-        const { format, input } = obj;
+        const code = await getCode(id!);
         navigate("/", {
-          state: {
-            value: { format, input },
-          },
+          state: { code },
           replace: true,
         });
       } catch (e: unknown) {

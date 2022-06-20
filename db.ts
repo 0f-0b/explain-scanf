@@ -3,9 +3,9 @@ import { requireEnv } from "./env.ts";
 
 export function gql<T>(
   template: { readonly raw: ArrayLike<string> },
-): (variables: T) => Promise<unknown> {
+): <R>(variables: T) => Promise<R> {
   const query = dedent(String.raw(template));
-  return async (variables: T) => {
+  return async <R>(variables: T) => {
     const token = requireEnv("FAUNA_SECRET");
     const res = await fetch("https://graphql.fauna.com/graphql", {
       headers: [
@@ -16,7 +16,7 @@ export function gql<T>(
       method: "POST",
     });
     const obj = await res.json() as
-      | { data: unknown }
+      | { data: R }
       | { errors: { message: string; extensions?: { code: string } }[] };
     if ("errors" in obj) {
       const [error] = obj.errors;

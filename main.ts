@@ -56,7 +56,7 @@ await serve(toStdHandler(logTime(catchError(route(
         if (!code) {
           return Response.json({ error: "Code not found" }, { status: 404 });
         }
-        return Response.json(code, { status: 200 });
+        return Response.json({ code }, { status: 200 });
       },
     }),
   },

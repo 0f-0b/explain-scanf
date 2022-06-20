@@ -15,20 +15,20 @@ const doGetCode = gql<{ id: string }>`
       input
     }
   }
-`;
+`<{
+  code: {
+    format: string;
+    input: string;
+  };
+}>;
 
 export async function getCode(id: string): Promise<Code | null> {
   if (!/^[a-z0-9]{8}$/.test(id)) {
     return null;
   }
   try {
-    const { code: { format, input } } = await doGetCode({ id }) as {
-      code: {
-        format: string;
-        input: string;
-      };
-    };
-    return { format, input };
+    const { code } = await doGetCode({ id });
+    return code;
   } catch (e: unknown) {
     if (!(e instanceof DBError && e.code === "instance not found")) {
       throw e;
@@ -43,20 +43,17 @@ const doPutCode = gql<{ id: string; format: string; input: string }>`
       id
     }
   }
-`;
+`<{
+  createCode: {
+    id: string;
+  };
+}>;
 
-export async function putCode({ format, input }: Code): Promise<string> {
+export async function putCode(code: Code): Promise<string> {
   for (;;) {
     try {
-      const { createCode: { id } } = await doPutCode({
-        id: randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789"),
-        format,
-        input,
-      }) as {
-        createCode: {
-          id: string;
-        };
-      };
+      const id = randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789");
+      await doPutCode({ id, ...code });
       return id;
     } catch (e: unknown) {
       if (!(e instanceof DBError && e.code === "instance not unique")) {

@@ -30,6 +30,7 @@ import React, {
   useRef,
 } from "./deps/react.ts";
 import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
+import type { Code } from "./code.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
 import { escapeString } from "./codemirror/escape_string.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
@@ -151,10 +152,7 @@ const inputExtension: Extension = [
 ];
 
 export interface HomeLocationState {
-  value: {
-    format: string;
-    input: string;
-  };
+  code: Code;
 }
 
 export const Home: React.FC = () => {
@@ -177,7 +175,7 @@ export const Home: React.FC = () => {
     if (!locationState) {
       return;
     }
-    const { format: newFormat, input: newInput } = locationState.value;
+    const { format: newFormat, input: newInput } = locationState.code;
     formatView.current!.dispatch({
       changes: { from: 0, to: format.length, insert: newFormat },
     });
@@ -247,7 +245,7 @@ export const Home: React.FC = () => {
   const args = typeof result === "object" ? result.args : [];
   return (
     <div>
-      <ShareButton format={format} input={input} />
+      <ShareButton code={{ format, input }} />
       <pre>
         <code>
           <HlFunction>
