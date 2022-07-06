@@ -29,7 +29,7 @@ export async function getCode(id: string): Promise<Code | null> {
   try {
     const { code } = await doGetCode({ id });
     return code;
-  } catch (e: unknown) {
+  } catch (e) {
     if (!(e instanceof DBError && e.code === "instance not found")) {
       throw e;
     }
@@ -55,7 +55,7 @@ export async function putCode(code: Code): Promise<string> {
       const id = randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789");
       await doPutCode({ id, ...code });
       return id;
-    } catch (e: unknown) {
+    } catch (e) {
       if (!(e instanceof DBError && e.code === "instance not unique")) {
         throw e;
       }

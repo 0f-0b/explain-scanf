@@ -1,6 +1,6 @@
 import { ShareIcon } from "../deps/@primer/octicons_react.ts";
 import React, { useEffect, useState } from "../deps/react.ts";
-import { type Code, putCode } from "../code.ts";
+import { type Code, putCode } from "../code_api.ts";
 import { ErrorMessage } from "./error_message.tsx";
 
 export interface ShareButtonProps {
@@ -23,7 +23,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ code }) => {
       try {
         const id = await putCode(shared);
         setResult({ type: "success", id });
-      } catch (e: unknown) {
+      } catch (e) {
         setShared(undefined);
         setResult({ type: "error", reason: e });
       }

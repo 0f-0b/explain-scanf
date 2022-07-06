@@ -5,7 +5,7 @@ export async function settled<T>(promise: T): Promise<
 > {
   try {
     return { status: "fulfilled", value: await promise };
-  } catch (e: unknown) {
+  } catch (e) {
     return { status: "rejected", reason: e };
   }
 }

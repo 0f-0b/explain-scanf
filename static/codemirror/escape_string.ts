@@ -11,27 +11,30 @@ import {
 import { stringEscapeRE, stringEscapes } from "../escape.ts";
 
 class EscapeWidget extends WidgetType {
-  public constructor(private readonly escape: string) {
+  readonly #escape: string;
+
+  constructor(escape: string) {
     super();
+    this.#escape = escape;
   }
 
-  public eq(other: EscapeWidget): boolean {
-    return this.escape == other.escape;
-  }
-
-  public toDOM(): HTMLElement {
+  override toDOM(): HTMLElement {
     return Object.assign(document.createElement("span"), {
-      textContent: this.escape,
+      textContent: this.#escape,
     });
   }
 
-  public ignoreEvent(): boolean {
+  override eq(other: EscapeWidget): boolean {
+    return this.#escape == other.#escape;
+  }
+
+  override ignoreEvent(): boolean {
     return false;
   }
 }
 
 class StringEscaper {
-  private static readonly decorators = new Map(
+  static readonly #decorators = new Map(
     Array.from(
       stringEscapes.entries(),
       ([ch, escape]) => [
@@ -40,10 +43,10 @@ class StringEscaper {
       ],
     ),
   );
-  private readonly decorator = new MatchDecorator({
+  readonly #decorator = new MatchDecorator({
     regexp: stringEscapeRE,
     decoration([match]) {
-      const deco = StringEscaper.decorators.get(match);
+      const deco = StringEscaper.#decorators.get(match);
       if (!deco) {
         throw new Error(`Unexpected match '${match}'`);
       }
@@ -51,14 +54,14 @@ class StringEscaper {
     },
     boundary: /[^]/,
   });
-  public decorations: DecorationSet;
+  decorations: DecorationSet;
 
   constructor(view: EditorView) {
-    this.decorations = this.decorator.createDeco(view);
+    this.decorations = this.#decorator.createDeco(view);
   }
 
   update(update: ViewUpdate) {
-    this.decorations = this.decorator.updateDeco(update, this.decorations);
+    this.decorations = this.#decorator.updateDeco(update, this.decorations);
   }
 }
 

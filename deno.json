@@ -5,7 +5,9 @@
       "dom",
       "dom.asynciterable",
       "dom.iterable"
-    ]
+    ],
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true
   },
   "fmt": {
     "files": {
