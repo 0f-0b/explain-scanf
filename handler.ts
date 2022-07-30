@@ -1,8 +1,9 @@
+import { errors, HttpError } from "./deps/std/http/http_errors.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
 } from "./deps/std/http/server.ts";
-import { errors, HttpError } from "./deps/std/http/http_errors.ts";
+
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
 

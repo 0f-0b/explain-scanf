@@ -1,28 +1,32 @@
 import {
-  Compartment,
   copyLineDown,
   copyLineUp,
-  Decoration,
   deleteLine,
-  drawSelection,
-  EditorState,
-  EditorView,
-  type Extension,
-  highlightActiveLine,
-  highlightSpecialChars,
   history,
   historyKeymap,
-  hoverTooltip,
-  indentUnit,
-  keymap,
-  lineNumbers,
   moveLineDown,
   moveLineUp,
   selectLine,
   simplifySelection,
   standardKeymap,
+} from "./deps/codemirror/commands.ts";
+import { indentUnit } from "./deps/codemirror/language.ts";
+import {
+  Compartment,
+  EditorState,
+  type Extension,
   Transaction,
-} from "./deps/codemirror.ts";
+} from "./deps/codemirror/state.ts";
+import {
+  Decoration,
+  drawSelection,
+  EditorView,
+  highlightActiveLine,
+  highlightSpecialChars,
+  hoverTooltip,
+  keymap,
+  lineNumbers,
+} from "./deps/codemirror/view.ts";
 import React, {
   useEffect,
   useLayoutEffect,
@@ -30,11 +34,12 @@ import React, {
   useRef,
 } from "./deps/react.ts";
 import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
-import type { Code } from "./code_api.ts";
+
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
 import { escapeString } from "./codemirror/escape_string.ts";
-import { DeclarationNode } from "./components/c_ast_nodes.tsx";
+import type { Code } from "./code_api.ts";
 import { CodeMirror } from "./components/codemirror.tsx";
+import { DeclarationNode } from "./components/c_ast_nodes.tsx";
 import {
   HlComment,
   HlFunction,
@@ -331,5 +336,4 @@ export const Home: React.FC = () => {
     </div>
   );
 };
-
 export default Home;

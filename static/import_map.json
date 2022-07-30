@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.0.1?external=@codemirror/language,@codemirror/state,@codemirror/view&target=es2020&pin=v89",
+    "@codemirror/language": "https://esm.sh/@codemirror/language@6.2.0?external=@codemirror/state,@codemirror/view&target=es2020&pin=v89",
+    "@codemirror/state": "https://esm.sh/@codemirror/state@6.1.0?target=es2020&pin=v89",
+    "@codemirror/view": "https://esm.sh/@codemirror/view@6.1.2?external=@codemirror/state&target=es2020&pin=v89",
+    "@primer/octicons-react": "https://esm.sh/@primer/octicons-react@17.3.0?external=react&target=es2020&pin=v89",
+    "@webassemblyjs/floating-point-hex-parser": "https://esm.sh/@webassemblyjs/floating-point-hex-parser@1.11.1?target=es2020&pin=v89",
+    "clsx": "https://esm.sh/clsx@1.2.1?target=es2020&pin=v89",
+    "react": "https://esm.sh/react@18.2.0?target=es2020&pin=v89",
+    "react-dom": "https://esm.sh/react-dom@18.2.0?external=react&target=es2020&pin=v89",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.3.0?external=react,react-dom&target=es2020&pin=v89",
+    "react-storage-hooks": "https://esm.sh/react-storage-hooks@4.0.1?external=react&target=es2020&pin=v89",
+    "use-latest": "https://esm.sh/use-latest@1.2.1?external=react&target=es2020&pin=v89"
+  }
+}

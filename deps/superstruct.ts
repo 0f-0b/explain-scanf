@@ -1,5 +1,3 @@
-export * from "https://esm.sh/superstruct@0.15.4?keep-names&pin=v86";
-
 import {
   any as _any,
   bigint as _bigint,
@@ -12,8 +10,9 @@ import {
   regexp as _regexp,
   string as _string,
   unknown as _unknown,
-} from "https://esm.sh/superstruct@0.15.4?keep-names&pin=v86";
+} from "https://esm.sh/superstruct@0.16.0?keep-names&pin=v89";
 
+export * from "https://esm.sh/superstruct@0.16.0?keep-names&pin=v89";
 export const any = _any();
 export const bigint = _bigint();
 export const boolean = _boolean();

@@ -4,10 +4,15 @@ import { build, stop } from "../deps/esbuild.ts";
 import React from "../deps/react.ts";
 import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
-import { relative } from "../deps/std/path.ts";
+import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
+
 import { httpImports } from "../plugin/http_imports.ts";
 
-async function bundle(outDir: string, inputs: string[]): Promise<string[]> {
+async function bundle(
+  outDir: string,
+  inputs: string[],
+  importMapPath: string,
+): Promise<string[]> {
   const { metafile } = await build({
     bundle: true,
     splitting: true,
@@ -15,7 +20,7 @@ async function bundle(outDir: string, inputs: string[]): Promise<string[]> {
     outdir: outDir,
     entryNames: "[dir]/[name]-[hash]",
     entryPoints: inputs,
-    plugins: [httpImports],
+    plugins: [httpImports(toFileUrl(resolve(importMapPath)))],
     absWorkingDir: Deno.cwd(),
     sourcemap: "linked",
     format: "esm",
@@ -34,7 +39,11 @@ async function bundle(outDir: string, inputs: string[]): Promise<string[]> {
 
 Deno.chdir(new URL("..", import.meta.url));
 await emptyDir("dist");
-const [js, css] = await bundle("dist", ["static/main.tsx", "static/style.css"]);
+const [js, css] = await bundle(
+  "dist",
+  ["static/main.tsx", "static/style.css"],
+  "static/import_map.json",
+);
 stop();
 const html = renderToStaticMarkup(
   <html lang="en">

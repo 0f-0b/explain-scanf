@@ -1,10 +1,11 @@
 #!/usr/bin/env -S deno run -A
 
-import { serve } from "./deps/std/http/server.ts";
 import { errors } from "./deps/std/http/http_errors.ts";
 import { Status } from "./deps/std/http/http_status.ts";
+import { serve } from "./deps/std/http/server.ts";
 import { join } from "./deps/std/path.ts";
 import { StructError } from "./deps/superstruct.ts";
+
 import { Code, getCode, putCode } from "./code.ts";
 import { fail } from "./fail.ts";
 import { logTime, methods, onError, route, toStdHandler } from "./handler.ts";

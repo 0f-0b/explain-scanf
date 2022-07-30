@@ -1,4 +1,5 @@
 import React from "../deps/react.ts";
+
 import type {
   Declaration,
   DeclarationSpecifier,

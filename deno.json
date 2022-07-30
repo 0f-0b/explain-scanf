@@ -9,6 +9,7 @@
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true
   },
+  "importMap": "./static/import_map.json",
   "fmt": {
     "files": {
       "exclude": [

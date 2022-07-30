@@ -4,7 +4,6 @@ import {
 } from "./deps/react_storage_hooks.ts";
 
 export { useStorageReducer, useStorageState };
-
 export type Storage = Parameters<typeof useStorageState>[0];
 
 export function makeLazyStorage(factory: () => Storage): Storage {

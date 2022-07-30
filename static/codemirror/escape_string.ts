@@ -1,13 +1,14 @@
+import type { Extension } from "../deps/codemirror/state.ts";
 import {
   Decoration,
   type DecorationSet,
   type EditorView,
-  type Extension,
   MatchDecorator,
   ViewPlugin,
   type ViewUpdate,
   WidgetType,
-} from "../deps/codemirror.ts";
+} from "../deps/codemirror/view.ts";
+
 import { stringEscapeRE, stringEscapes } from "../escape.ts";
 
 class EscapeWidget extends WidgetType {

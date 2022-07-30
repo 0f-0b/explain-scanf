@@ -2,7 +2,7 @@ import {
   type ChangeSpec,
   EditorState,
   type Extension,
-} from "../deps/codemirror.ts";
+} from "../deps/codemirror/state.ts";
 
 const enforceSingleLineExtension = EditorState.transactionFilter.of((tr) => {
   if (!tr.docChanged) {

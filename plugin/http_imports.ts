@@ -1,58 +1,80 @@
-import { AsyncMutex } from "../deps/@esfx/async_mutex.ts";
 import { DenoDir, FileFetcher } from "../deps/deno_cache.ts";
 import { instantiate, MediaType, parseModule } from "../deps/deno_graph.ts";
 import type { Loader, Plugin } from "../deps/esbuild.ts";
+import { AsyncMutex } from "../deps/esfx/async_mutex.ts";
+import {
+  type ImportMap,
+  resolveImportMap,
+  resolveModuleSpecifier,
+} from "../deps/importmap.ts";
+import { fromFileUrl, toFileUrl } from "../deps/std/path.ts";
 
-export const httpImports: Plugin = (() => {
-  const name = "http-imports";
-  const loaders = new Map<MediaType, Loader>([
-    [MediaType.JavaScript, "js"],
-    [MediaType.Mjs, "js"],
-    [MediaType.Cjs, "js"],
-    [MediaType.Jsx, "jsx"],
-    [MediaType.TypeScript, "ts"],
-    [MediaType.Mts, "ts"],
-    [MediaType.Cts, "ts"],
-    [MediaType.Dts, "ts"],
-    [MediaType.Dmts, "ts"],
-    [MediaType.Dcts, "ts"],
-    [MediaType.Tsx, "tsx"],
-    [MediaType.Json, "json"],
-  ]);
-  const { deps } = new DenoDir();
-  const fetcher = new FileFetcher(deps);
-  const mutexes = new Map<string, AsyncMutex>();
-  const load = async (specifier: string) => {
-    const url = new URL(specifier);
-    const key = deps.getCacheFilename(url);
-    const mutex = mutexes.get(key) ?? new AsyncMutex();
-    if (!mutex.tryLock()) {
-      await mutex.lock();
-    }
-    mutexes.set(key, mutex);
-    try {
-      return await fetcher.fetch(url);
-    } finally {
-      mutexes.delete(key);
-      mutex.unlock();
-    }
-  };
+const { deps } = new DenoDir();
+const fetcher = new FileFetcher(deps);
+const mutexes = new Map<string, AsyncMutex>();
+const load = async (specifier: string) => {
+  const url = new URL(specifier);
+  const key = deps.getCacheFilename(url);
+  const mutex = mutexes.get(key) ?? new AsyncMutex();
+  if (!mutex.tryLock()) {
+    await mutex.lock();
+  }
+  mutexes.set(key, mutex);
+  try {
+    return await fetcher.fetch(url);
+  } finally {
+    mutexes.delete(key);
+    mutex.unlock();
+  }
+};
+const mediaTypes = new Map<MediaType, Loader>([
+  [MediaType.JavaScript, "js"],
+  [MediaType.Mjs, "js"],
+  [MediaType.Cjs, "js"],
+  [MediaType.Jsx, "jsx"],
+  [MediaType.TypeScript, "ts"],
+  [MediaType.Mts, "ts"],
+  [MediaType.Cts, "ts"],
+  [MediaType.Dts, "ts"],
+  [MediaType.Dmts, "ts"],
+  [MediaType.Dcts, "ts"],
+  [MediaType.Tsx, "tsx"],
+  [MediaType.Json, "json"],
+]);
+
+export function httpImports(importMapURL?: string | URL): Plugin {
+  if (importMapURL !== undefined) {
+    importMapURL = new URL(importMapURL).href;
+  }
   return {
-    name,
+    name: "http-imports",
     setup(build) {
+      let importMap: ImportMap | undefined;
+      build.onStart(async () => {
+        if (importMapURL !== undefined) {
+          const res = await fetch(importMapURL);
+          importMap = resolveImportMap(await res.json(), new URL(importMapURL));
+        }
+      });
       build.onResolve(
-        { filter: /^https?:/ },
-        ({ path }) => ({ path, namespace: name }),
-      );
-      build.onResolve(
-        { filter: /(?:)/, namespace: name },
-        ({ path, importer }) => ({
-          path: new URL(path, importer).href,
-          namespace: name,
-        }),
+        { filter: /(?:)/ },
+        ({ path, importer, namespace }) => {
+          if (!importer) {
+            return null;
+          }
+          const referrer = namespace === "remote"
+            ? new URL(importer)
+            : toFileUrl(importer);
+          const resolved = importMap
+            ? new URL(resolveModuleSpecifier(path, importMap, referrer))
+            : new URL(path, referrer);
+          return /^https?:$/.test(resolved.protocol)
+            ? { path: resolved.href, namespace: "remote" }
+            : { path: fromFileUrl(resolved), namespace };
+        },
       );
       build.onLoad(
-        { filter: /(?:)/, namespace: name },
+        { filter: /(?:)/, namespace: "remote" },
         async ({ path }) => {
           const res = await load(path);
           if (res?.kind !== "module") {
@@ -64,10 +86,10 @@ export const httpImports: Plugin = (() => {
           });
           return {
             contents: mod.source,
-            loader: loaders.get(mod.mediaType),
+            loader: mediaTypes.get(mod.mediaType),
           };
         },
       );
     },
   };
-})();
+}
