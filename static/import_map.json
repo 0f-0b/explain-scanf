@@ -1,16 +1,110 @@
 {
   "imports": {
-    "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.0.1?external=@codemirror/language,@codemirror/state,@codemirror/view&target=es2020&pin=v89",
-    "@codemirror/language": "https://esm.sh/@codemirror/language@6.2.0?external=@codemirror/state,@codemirror/view&target=es2020&pin=v89",
-    "@codemirror/state": "https://esm.sh/@codemirror/state@6.1.0?target=es2020&pin=v89",
-    "@codemirror/view": "https://esm.sh/@codemirror/view@6.1.2?external=@codemirror/state&target=es2020&pin=v89",
-    "@primer/octicons-react": "https://esm.sh/@primer/octicons-react@17.3.0?external=react&target=es2020&pin=v89",
-    "@webassemblyjs/floating-point-hex-parser": "https://esm.sh/@webassemblyjs/floating-point-hex-parser@1.11.1?target=es2020&pin=v89",
-    "clsx": "https://esm.sh/clsx@1.2.1?target=es2020&pin=v89",
-    "react": "https://esm.sh/react@18.2.0?target=es2020&pin=v89",
-    "react-dom": "https://esm.sh/react-dom@18.2.0?external=react&target=es2020&pin=v89",
-    "react-router-dom": "https://esm.sh/react-router-dom@6.3.0?external=react,react-dom&target=es2020&pin=v89",
-    "react-storage-hooks": "https://esm.sh/react-storage-hooks@4.0.1?external=react&target=es2020&pin=v89",
-    "use-latest": "https://esm.sh/use-latest@1.2.1?external=react&target=es2020&pin=v89"
+    "@codemirror/commands": "https://esm.sh/v90/*@codemirror/commands@6.0.1",
+    "@codemirror/commands/": "https://esm.sh/v90/*@codemirror/commands@6.0.1/",
+    "@codemirror/language": "https://esm.sh/v90/*@codemirror/language@6.2.1",
+    "@codemirror/language/": "https://esm.sh/v90/*@codemirror/language@6.2.1/",
+    "@codemirror/state": "https://esm.sh/v90/*@codemirror/state@6.1.1",
+    "@codemirror/state/": "https://esm.sh/v90/*@codemirror/state@6.1.1/",
+    "@codemirror/view": "https://esm.sh/v90/*@codemirror/view@6.2.0",
+    "@codemirror/view/": "https://esm.sh/v90/*@codemirror/view@6.2.0/",
+    "@primer/octicons-react": "https://esm.sh/v90/*@primer/octicons-react@17.4.0",
+    "@primer/octicons-react/": "https://esm.sh/v90/*@primer/octicons-react@17.4.0/",
+    "@webassemblyjs/floating-point-hex-parser": "https://esm.sh/v90/*@webassemblyjs/floating-point-hex-parser@1.11.4",
+    "@webassemblyjs/floating-point-hex-parser/": "https://esm.sh/v90/*@webassemblyjs/floating-point-hex-parser@1.11.4/",
+    "clsx": "https://esm.sh/v90/*clsx@1.2.1",
+    "clsx/": "https://esm.sh/v90/*clsx@1.2.1/",
+    "react": "https://esm.sh/v90/*react@18.2.0",
+    "react-dom": "https://esm.sh/v90/*react-dom@18.2.0",
+    "react-dom/": "https://esm.sh/v90/*react-dom@18.2.0/",
+    "react-router-dom": "https://esm.sh/v90/*react-router-dom@6.3.0",
+    "react-router-dom/": "https://esm.sh/v90/*react-router-dom@6.3.0/",
+    "react-storage-hooks": "https://esm.sh/v90/*react-storage-hooks@4.0.1",
+    "react-storage-hooks/": "https://esm.sh/v90/*react-storage-hooks@4.0.1/",
+    "react/": "https://esm.sh/v90/*react@18.2.0/",
+    "use-latest": "https://esm.sh/v90/*use-latest@1.2.1",
+    "use-latest/": "https://esm.sh/v90/*use-latest@1.2.1/"
+  },
+  "scopes": {
+    "https://esm.sh/v90/@babel/runtime@7.18.9/": {
+      "regenerator-runtime": "https://esm.sh/v90/*regenerator-runtime@0.13.9",
+      "regenerator-runtime/": "https://esm.sh/v90/*regenerator-runtime@0.13.9/"
+    },
+    "https://esm.sh/v90/@codemirror/commands@6.0.1/": {
+      "@codemirror/language": "https://esm.sh/v90/*@codemirror/language@6.2.1",
+      "@codemirror/language/": "https://esm.sh/v90/*@codemirror/language@6.2.1/",
+      "@codemirror/state": "https://esm.sh/v90/*@codemirror/state@6.1.1",
+      "@codemirror/state/": "https://esm.sh/v90/*@codemirror/state@6.1.1/",
+      "@codemirror/view": "https://esm.sh/v90/*@codemirror/view@6.2.0",
+      "@codemirror/view/": "https://esm.sh/v90/*@codemirror/view@6.2.0/",
+      "@lezer/common": "https://esm.sh/v90/*@lezer/common@1.0.0",
+      "@lezer/common/": "https://esm.sh/v90/*@lezer/common@1.0.0/"
+    },
+    "https://esm.sh/v90/@codemirror/language@6.2.1/": {
+      "@codemirror/state": "https://esm.sh/v90/*@codemirror/state@6.1.1",
+      "@codemirror/state/": "https://esm.sh/v90/*@codemirror/state@6.1.1/",
+      "@codemirror/view": "https://esm.sh/v90/*@codemirror/view@6.2.0",
+      "@codemirror/view/": "https://esm.sh/v90/*@codemirror/view@6.2.0/",
+      "@lezer/common": "https://esm.sh/v90/*@lezer/common@1.0.0",
+      "@lezer/common/": "https://esm.sh/v90/*@lezer/common@1.0.0/",
+      "@lezer/highlight": "https://esm.sh/v90/*@lezer/highlight@1.0.0",
+      "@lezer/highlight/": "https://esm.sh/v90/*@lezer/highlight@1.0.0/",
+      "@lezer/lr": "https://esm.sh/v90/*@lezer/lr@1.2.1",
+      "@lezer/lr/": "https://esm.sh/v90/*@lezer/lr@1.2.1/",
+      "style-mod": "https://esm.sh/v90/*style-mod@4.0.0",
+      "style-mod/": "https://esm.sh/v90/*style-mod@4.0.0/"
+    },
+    "https://esm.sh/v90/@codemirror/view@6.2.0/": {
+      "@codemirror/state": "https://esm.sh/v90/*@codemirror/state@6.1.1",
+      "@codemirror/state/": "https://esm.sh/v90/*@codemirror/state@6.1.1/",
+      "style-mod": "https://esm.sh/v90/*style-mod@4.0.0",
+      "style-mod/": "https://esm.sh/v90/*style-mod@4.0.0/",
+      "w3c-keyname": "https://esm.sh/v90/*w3c-keyname@2.2.6",
+      "w3c-keyname/": "https://esm.sh/v90/*w3c-keyname@2.2.6/"
+    },
+    "https://esm.sh/v90/@lezer/highlight@1.0.0/": {
+      "@lezer/common": "https://esm.sh/v90/*@lezer/common@1.0.0",
+      "@lezer/common/": "https://esm.sh/v90/*@lezer/common@1.0.0/"
+    },
+    "https://esm.sh/v90/@lezer/lr@1.2.1/": {
+      "@lezer/common": "https://esm.sh/v90/*@lezer/common@1.0.0",
+      "@lezer/common/": "https://esm.sh/v90/*@lezer/common@1.0.0/"
+    },
+    "https://esm.sh/v90/history@5.3.0/": {
+      "@babel/runtime": "https://esm.sh/v90/*@babel/runtime@7.18.9",
+      "@babel/runtime/": "https://esm.sh/v90/*@babel/runtime@7.18.9/"
+    },
+    "https://esm.sh/v90/loose-envify@1.4.0/": {
+      "js-tokens": "https://esm.sh/v90/*js-tokens@4.0.0",
+      "js-tokens/": "https://esm.sh/v90/*js-tokens@4.0.0/"
+    },
+    "https://esm.sh/v90/react-dom@18.2.0/": {
+      "loose-envify": "https://esm.sh/v90/*loose-envify@1.4.0",
+      "loose-envify/": "https://esm.sh/v90/*loose-envify@1.4.0/",
+      "scheduler": "https://esm.sh/v90/*scheduler@0.23.0",
+      "scheduler/": "https://esm.sh/v90/*scheduler@0.23.0/"
+    },
+    "https://esm.sh/v90/react-router-dom@6.3.0/": {
+      "history": "https://esm.sh/v90/*history@5.3.0",
+      "history/": "https://esm.sh/v90/*history@5.3.0/",
+      "react-router": "https://esm.sh/v90/*react-router@6.3.0",
+      "react-router/": "https://esm.sh/v90/*react-router@6.3.0/"
+    },
+    "https://esm.sh/v90/react-router@6.3.0/": {
+      "history": "https://esm.sh/v90/*history@5.3.0",
+      "history/": "https://esm.sh/v90/*history@5.3.0/"
+    },
+    "https://esm.sh/v90/react@18.2.0/": {
+      "loose-envify": "https://esm.sh/v90/*loose-envify@1.4.0",
+      "loose-envify/": "https://esm.sh/v90/*loose-envify@1.4.0/"
+    },
+    "https://esm.sh/v90/scheduler@0.23.0/": {
+      "loose-envify": "https://esm.sh/v90/*loose-envify@1.4.0",
+      "loose-envify/": "https://esm.sh/v90/*loose-envify@1.4.0/"
+    },
+    "https://esm.sh/v90/use-latest@1.2.1/": {
+      "use-isomorphic-layout-effect": "https://esm.sh/v90/*use-isomorphic-layout-effect@1.1.2",
+      "use-isomorphic-layout-effect/": "https://esm.sh/v90/*use-isomorphic-layout-effect@1.1.2/"
+    }
   }
 }
