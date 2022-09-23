@@ -34,6 +34,5 @@ export class DBError extends Error {
     super(message);
     this.name = "DBError";
     this.code = code;
-    Error.captureStackTrace?.(this, DBError);
   }
 }

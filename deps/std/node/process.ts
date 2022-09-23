@@ -1,1 +1,1 @@
-export { default as process } from "https://deno.land/std@0.151.0/node/process.ts";
+export { default as process } from "https://deno.land/std@0.157.0/node/process.ts";

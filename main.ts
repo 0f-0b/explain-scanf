@@ -23,10 +23,10 @@ await serve(
             try {
               return Code.create(await req.json());
             } catch (e) {
-              if (!(e instanceof StructError)) {
-                throw e;
+              if (e instanceof SyntaxError || e instanceof StructError) {
+                throw new errors.BadRequest(e.message);
               }
-              throw new errors.BadRequest(e.message);
+              throw e;
             }
           })();
           return Response.json({ id: await putCode(code) }, {

@@ -1,4 +1,5 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env
+/// <reference lib="deno.unstable" />
 
 import { Arborist } from "../deps/arborist.ts";
 import type { ImportMap, Scopes, SpecifierMap } from "../deps/importmap.ts";
@@ -7,7 +8,7 @@ import { process } from "../deps/std/node/process.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = 90;
+const pin = "v95";
 
 interface Node {
   name: string;
@@ -23,10 +24,10 @@ function mapNode(node: Node, scopes: Scopes): SpecifierMap {
   const imports: SpecifierMap = {};
   for (const { to } of node.edgesOut.values()) {
     const { name, version } = to;
-    const root = `https://esm.sh/v${pin}/*${name}@${version}`;
+    const root = `https://esm.sh/*${name}@${version}?target=esnext&pin=${pin}`;
     imports[name] = root;
-    imports[name + "/"] = root + "/";
-    const scope = `https://esm.sh/v${pin}/${name}@${version}/`;
+    imports[name + "/"] = root + "&path=/";
+    const scope = `https://esm.sh/${pin}/${name}@${version}/`;
     scopes[scope] ??= mapNode(to, scopes);
   }
   return imports;
@@ -61,7 +62,6 @@ function normalizeScopes(obj: Scopes | undefined): Scopes | undefined {
 Deno.chdir(new URL("..", import.meta.url));
 const arb = new Arborist({
   path: "static",
-  workspaceEnabled: false,
   legacyPeerDeps: true,
   update: true,
 });

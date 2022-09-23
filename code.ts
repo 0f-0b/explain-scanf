@@ -31,10 +31,10 @@ export async function getCode(id: string): Promise<Code | null> {
     const { code } = await doGetCode({ id });
     return code;
   } catch (e) {
-    if (!(e instanceof DBError && e.code === "instance not found")) {
-      throw e;
+    if (e instanceof DBError && e.code === "instance not found") {
+      return null;
     }
-    return null;
+    throw e;
   }
 }
 
@@ -57,9 +57,10 @@ export async function putCode(code: Code): Promise<string> {
       await doPutCode({ id, ...code });
       return id;
     } catch (e) {
-      if (!(e instanceof DBError && e.code === "instance not unique")) {
-        throw e;
+      if (e instanceof DBError && e.code === "instance not unique") {
+        continue;
       }
+      throw e;
     }
   }
 }

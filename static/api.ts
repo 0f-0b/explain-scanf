@@ -1,7 +1,9 @@
-import type { Code } from "../code.ts";
 import { timeout } from "./timeout.ts";
 
-export type { Code };
+export interface Code {
+  format: string;
+  input: string;
+}
 
 async function validate(res: Response): Promise<unknown> {
   const obj = await res.json();

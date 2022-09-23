@@ -1,7 +1,7 @@
 import { ShareIcon } from "../deps/primer/octicons_react.ts";
 import React, { useEffect, useState } from "../deps/react.ts";
 
-import { type Code, putCode } from "../code_api.ts";
+import { type Code, putCode } from "../api.ts";
 import { ErrorMessage } from "./error_message.tsx";
 
 export interface ShareButtonProps {
