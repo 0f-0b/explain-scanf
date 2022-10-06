@@ -3,7 +3,6 @@
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true
   },
-  "importMap": "./static/import_map.json",
   "fmt": {
     "files": {
       "exclude": [
@@ -19,6 +18,7 @@
     }
   },
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --lock=lock.json --lock-write main.ts static/main.tsx scripts/build.tsx scripts/generate_import_map.ts"
+    "lint": "deno fmt --check && deno lint && deno check --remote --lock=lock.json --lock-write main.ts scripts/build.tsx scripts/generate_import_map.ts",
+    "static:lint": "deno check --import-map=static/import_map.json --lock=static/lock.json --lock-write static/main.tsx"
   }
 }

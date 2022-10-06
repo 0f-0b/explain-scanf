@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env
+#!/usr/bin/env -S deno run --unstable --allow-read --allow-write --allow-net=registry.npmjs.org --allow-env --allow-sys
 /// <reference lib="deno.unstable" />
 
 import { Arborist } from "../deps/arborist.ts";
@@ -8,7 +8,7 @@ import { process } from "../deps/std/node/process.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v95";
+const pin = "v96";
 
 interface Node {
   name: string;

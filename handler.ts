@@ -1,4 +1,4 @@
-import { errors, HttpError } from "./deps/std/http/http_errors.ts";
+import { errors, HttpError, isHttpError } from "./deps/std/http/http_errors.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
@@ -7,6 +7,9 @@ import type {
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
 
+export * from "./deps/std/http/http_errors.ts";
+export * from "./deps/std/http/http_status.ts";
+export type { ConnInfo };
 type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
 export type ContextConsumer<T, R> = (req: Request, ctx: T) => R;
@@ -17,7 +20,7 @@ export function toStdHandler(handler: Handler<{ conn: ConnInfo }>): StdHandler {
 }
 
 export const onError = (error: unknown): Response => {
-  if (!(error instanceof HttpError)) {
+  if (!isHttpError(error)) {
     console.error(error);
     error = new errors.InternalServerError("Internal server error");
   }
@@ -53,6 +56,10 @@ export function route<T>(
   }));
   return async (req, ctx) => {
     const url = new URL(req.url);
+    const path = (ctx as { params?: { 0?: string } }).params?.[0];
+    if (path !== undefined) {
+      url.pathname = path;
+    }
     for (const { pattern, handler } of entries) {
       const match = pattern.exec(url);
       if (match) {

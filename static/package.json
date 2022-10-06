@@ -1,15 +1,15 @@
 {
   "dependencies": {
-    "@codemirror/commands": "^6.1.0",
+    "@codemirror/commands": "^6.1.1",
     "@codemirror/language": "^6.2.1",
     "@codemirror/state": "^6.1.2",
-    "@codemirror/view": "^6.2.4",
-    "@primer/octicons-react": "^17.5.0",
+    "@codemirror/view": "^6.3.0",
+    "@primer/octicons-react": "^17.6.0",
     "@webassemblyjs/floating-point-hex-parser": "^1.11.4",
     "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.1",
+    "react-router-dom": "^6.4.2",
     "react-storage-hooks": "^4.0.1",
     "use-latest": "^1.2.1"
   }

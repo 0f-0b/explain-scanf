@@ -2,19 +2,26 @@ name: Deploy
 on:
   push:
     branches: [main]
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: "deploy"
+  cancel-in-progress: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     steps:
-      - uses: actions/checkout@v2
-      - uses: denoland/setup-deno@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Deno
+        uses: denoland/setup-deno@v1
         with:
-          deno-version: "1"
-      - run: ./scripts/build.tsx
-      - uses: denoland/deployctl@v1
+          deno-version: 1
+      - name: Build
+        run: ./scripts/build.tsx
+      - name: Deploy
+        uses: denoland/deployctl@v1
         with:
           project: explain-scanf
           entrypoint: main.ts
