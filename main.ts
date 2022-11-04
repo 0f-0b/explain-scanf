@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env -S deno run --lock -A
 
 import { serve } from "./deps/std/http/server.ts";
 
