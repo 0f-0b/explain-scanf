@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --lock -A
+#!/usr/bin/env -S deno run --allow-read=. --allow-net=0.0.0.0,graphql.fauna.com --allow-env=FAUNA_SECRET
 
 import { serve } from "./deps/std/http/server.ts";
 

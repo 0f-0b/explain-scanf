@@ -18,7 +18,7 @@
     }
   },
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --remote --lock -- main.ts scripts/build.tsx scripts/generate_import_map.ts",
-    "static:lint": "deno check --import-map=static/import_map.json --lock -- static/main.tsx"
+    "lint": "deno fmt --check && deno lint && deno check --remote main.ts && deno check scripts/build.tsx && deno check --remote scripts/generate_import_map.ts",
+    "static:lint": "deno check --import-map=static/import_map.json static/main.tsx"
   }
 }

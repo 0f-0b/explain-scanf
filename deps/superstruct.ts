@@ -12,9 +12,9 @@ import {
   string as makeString,
   type Struct,
   unknown as makeUnknown,
-} from "https://esm.sh/superstruct@0.16.5?keep-names&pin=v96";
+} from "https://esm.sh/superstruct@0.16.5?keep-names&pin=v99";
 
-export * from "https://esm.sh/superstruct@0.16.5?keep-names&pin=v96";
+export * from "https://esm.sh/superstruct@0.16.5?keep-names&pin=v99";
 export const any = makeAny();
 export const bigint = makeBigint();
 export const boolean = makeBoolean();

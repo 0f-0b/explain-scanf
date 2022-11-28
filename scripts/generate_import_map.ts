@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --lock --no-prompt --allow-read --allow-write --allow-net=registry.npmjs.org --allow-env
+#!/usr/bin/env -S deno run --no-prompt --allow-read --allow-write --allow-net=registry.npmjs.org --allow-env
 /// <reference lib="deno.unstable" />
 
 import { Arborist, type Node } from "../deps/arborist.ts";
@@ -8,7 +8,7 @@ import { process } from "../deps/std/node/process.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v96";
+const pin = "v99";
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {
   const imports: SpecifierMap = {};

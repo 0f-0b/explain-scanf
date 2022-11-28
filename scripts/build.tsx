@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --lock -A
+#!/usr/bin/env -S deno run -A
 
 import { build, initialize, stop } from "../deps/esbuild.ts";
 import React from "../deps/react.ts";
