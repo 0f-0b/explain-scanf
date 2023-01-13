@@ -1,13 +1,13 @@
-import { type Infer, object, string } from "./deps/superstruct.ts";
+import { z } from "./deps/zod.ts";
 
 import { DBError, gql } from "./db.ts";
 import { randomString } from "./random.ts";
 
-export const Code = object({
-  format: string,
-  input: string,
+export const Code = z.strictObject({
+  format: z.string(),
+  input: z.string(),
 });
-export type Code = Infer<typeof Code>;
+export type Code = z.infer<typeof Code>;
 
 const doGetCode = gql<{ id: string }>`
   query($id: String!) {

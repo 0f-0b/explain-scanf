@@ -1,1 +1,1 @@
-export { default as dedent } from "https://esm.sh/string-dedent@3.0.1?pin=v99";
+export { default as dedent } from "https://esm.sh/string-dedent@3.0.1?pin=v102";

@@ -1,8 +1,10 @@
 import { errors, HttpError, isHttpError } from "./deps/std/http/http_errors.ts";
+import { Status } from "./deps/std/http/http_status.ts";
 import type {
   ConnInfo,
   Handler as StdHandler,
 } from "./deps/std/http/server.ts";
+import { ZodError, type ZodType } from "./deps/zod.ts";
 
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
@@ -12,10 +14,11 @@ export * from "./deps/std/http/http_status.ts";
 export type { ConnInfo };
 type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
-export type ContextConsumer<T, R> = (req: Request, ctx: T) => R;
-export type Handler<T> = ContextConsumer<T, Awaitable<Response>>;
+export type ContextConsumer<C, R> = (req: Request, ctx: C) => R;
+export type Handler<C> = ContextConsumer<C, Awaitable<Response>>;
+export type RootHandler = Handler<{ conn: ConnInfo }>;
 
-export function toStdHandler(handler: Handler<{ conn: ConnInfo }>): StdHandler {
+export function toStdHandler(handler: RootHandler): StdHandler {
   return async (req, conn) => await handler(req, { conn });
 }
 
@@ -28,7 +31,7 @@ export const onError = (error: unknown): Response => {
   return Response.json({ error: message }, { status });
 };
 
-export function logTime<T>(handler: Handler<T>): Handler<T> {
+export function logTime<C>(handler: Handler<C>): Handler<C> {
   return async (req, ctx) => {
     const start = performance.now();
     const result = await settled(handler(req, ctx));
@@ -46,10 +49,10 @@ export function logTime<T>(handler: Handler<T>): Handler<T> {
   };
 }
 
-export function route<T>(
-  routes: Record<string, Handler<Merge<T, { params: Record<string, string> }>>>,
-  fallback: Handler<T>,
-): Handler<T> {
+export function route<C>(
+  routes: Record<string, Handler<Merge<C, { params: Record<string, string> }>>>,
+  fallback: Handler<C>,
+): Handler<C> {
   const entries = Object.entries(routes).map(([pathname, handler]) => ({
     pattern: new URLPattern({ pathname }),
     handler,
@@ -70,8 +73,8 @@ export function route<T>(
   };
 }
 
-export function methods<T>(methods: Record<string, Handler<T>>): Handler<T> {
-  const methodMap = new Map<string, Handler<T>>();
+export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
+  const methodMap = new Map<string, Handler<C>>();
   for (const method in methods) {
     methodMap.set(method, methods[method]);
   }
@@ -82,5 +85,28 @@ export function methods<T>(methods: Record<string, Handler<T>>): Handler<T> {
       ),
     );
     return handler(req, ctx);
+  };
+}
+
+export function parseBodyAsJson<T, C>(
+  T: ZodType<T>,
+  handler: Handler<Merge<C, { body: T }>>,
+): Handler<C> {
+  return async (req, ctx) => {
+    let body: T;
+    try {
+      body = T.parse(await req.json());
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw new errors.BadRequest(e.message);
+      }
+      if (e instanceof ZodError) {
+        return Response.json({ error: "Cannot parse body", issues: e.issues }, {
+          status: Status.BadRequest,
+        });
+      }
+      throw e;
+    }
+    return await handler(req, { ...ctx, body });
   };
 }

@@ -1,4 +1,4 @@
-import { contentType } from "./deps/std/media_types.ts";
+import { contentType } from "./deps/std/media_types/content_type.ts";
 import { extname } from "./deps/std/path.ts";
 
 export interface StaticFileOptions {
