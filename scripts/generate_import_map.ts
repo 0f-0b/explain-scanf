@@ -8,7 +8,7 @@ import { process } from "../deps/std/node/process.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v102";
+const pin = "v104";
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {
   const imports: SpecifierMap = {};

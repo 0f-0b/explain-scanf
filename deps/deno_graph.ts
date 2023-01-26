@@ -25,8 +25,7 @@ async function cache(url: string): Promise<string> {
     }
     const tempFile = await Deno.makeTempFile();
     try {
-      const { writable } = await Deno.open(tempFile, { write: true });
-      await res.body!.pipeTo(writable);
+      await Deno.writeFile(tempFile, res.body ?? new Uint8Array());
       await Deno.rename(tempFile, path);
     } catch (e) {
       await Deno.remove(tempFile);

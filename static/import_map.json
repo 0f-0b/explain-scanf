@@ -1,102 +1,102 @@
 {
   "imports": {
-    "@codemirror/commands": "https://esm.sh/*@codemirror/commands@6.1.3?target=esnext&pin=v102",
-    "@codemirror/commands/": "https://esm.sh/*@codemirror/commands@6.1.3?target=esnext&pin=v102&path=/",
-    "@codemirror/language": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v102",
-    "@codemirror/language/": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v102&path=/",
-    "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102",
-    "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102&path=/",
-    "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102",
-    "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102&path=/",
-    "@primer/octicons-react": "https://esm.sh/*@primer/octicons-react@17.10.2?target=esnext&pin=v102",
-    "@primer/octicons-react/": "https://esm.sh/*@primer/octicons-react@17.10.2?target=esnext&pin=v102&path=/",
-    "@webassemblyjs/floating-point-hex-parser": "https://esm.sh/*@webassemblyjs/floating-point-hex-parser@1.11.4?target=esnext&pin=v102",
-    "@webassemblyjs/floating-point-hex-parser/": "https://esm.sh/*@webassemblyjs/floating-point-hex-parser@1.11.4?target=esnext&pin=v102&path=/",
-    "clsx": "https://esm.sh/*clsx@1.2.1?target=esnext&pin=v102",
-    "clsx/": "https://esm.sh/*clsx@1.2.1?target=esnext&pin=v102&path=/",
-    "react": "https://esm.sh/*react@18.2.0?target=esnext&pin=v102",
-    "react-dom": "https://esm.sh/*react-dom@18.2.0?target=esnext&pin=v102",
-    "react-dom/": "https://esm.sh/*react-dom@18.2.0?target=esnext&pin=v102&path=/",
-    "react-router-dom": "https://esm.sh/*react-router-dom@6.6.2?target=esnext&pin=v102",
-    "react-router-dom/": "https://esm.sh/*react-router-dom@6.6.2?target=esnext&pin=v102&path=/",
-    "react-storage-hooks": "https://esm.sh/*react-storage-hooks@4.0.1?target=esnext&pin=v102",
-    "react-storage-hooks/": "https://esm.sh/*react-storage-hooks@4.0.1?target=esnext&pin=v102&path=/",
-    "react/": "https://esm.sh/*react@18.2.0?target=esnext&pin=v102&path=/",
-    "use-latest": "https://esm.sh/*use-latest@1.2.1?target=esnext&pin=v102",
-    "use-latest/": "https://esm.sh/*use-latest@1.2.1?target=esnext&pin=v102&path=/"
+    "@codemirror/commands": "https://esm.sh/*@codemirror/commands@6.2.0?target=esnext&pin=v104",
+    "@codemirror/commands/": "https://esm.sh/*@codemirror/commands@6.2.0?target=esnext&pin=v104&path=/",
+    "@codemirror/language": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v104",
+    "@codemirror/language/": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v104&path=/",
+    "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104",
+    "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104&path=/",
+    "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104",
+    "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104&path=/",
+    "@primer/octicons-react": "https://esm.sh/*@primer/octicons-react@17.11.1?target=esnext&pin=v104",
+    "@primer/octicons-react/": "https://esm.sh/*@primer/octicons-react@17.11.1?target=esnext&pin=v104&path=/",
+    "@webassemblyjs/floating-point-hex-parser": "https://esm.sh/*@webassemblyjs/floating-point-hex-parser@1.11.4?target=esnext&pin=v104",
+    "@webassemblyjs/floating-point-hex-parser/": "https://esm.sh/*@webassemblyjs/floating-point-hex-parser@1.11.4?target=esnext&pin=v104&path=/",
+    "clsx": "https://esm.sh/*clsx@1.2.1?target=esnext&pin=v104",
+    "clsx/": "https://esm.sh/*clsx@1.2.1?target=esnext&pin=v104&path=/",
+    "react": "https://esm.sh/*react@18.2.0?target=esnext&pin=v104",
+    "react-dom": "https://esm.sh/*react-dom@18.2.0?target=esnext&pin=v104",
+    "react-dom/": "https://esm.sh/*react-dom@18.2.0?target=esnext&pin=v104&path=/",
+    "react-router-dom": "https://esm.sh/*react-router-dom@6.7.0?target=esnext&pin=v104",
+    "react-router-dom/": "https://esm.sh/*react-router-dom@6.7.0?target=esnext&pin=v104&path=/",
+    "react-storage-hooks": "https://esm.sh/*react-storage-hooks@4.0.1?target=esnext&pin=v104",
+    "react-storage-hooks/": "https://esm.sh/*react-storage-hooks@4.0.1?target=esnext&pin=v104&path=/",
+    "react/": "https://esm.sh/*react@18.2.0?target=esnext&pin=v104&path=/",
+    "use-latest": "https://esm.sh/*use-latest@1.2.1?target=esnext&pin=v104",
+    "use-latest/": "https://esm.sh/*use-latest@1.2.1?target=esnext&pin=v104&path=/"
   },
   "scopes": {
-    "https://esm.sh/v102/@codemirror/commands@6.1.3/": {
-      "@codemirror/language": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v102",
-      "@codemirror/language/": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v102&path=/",
-      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102",
-      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102&path=/",
-      "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102",
-      "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102&path=/",
-      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102",
-      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/@codemirror/commands@6.2.0/": {
+      "@codemirror/language": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v104",
+      "@codemirror/language/": "https://esm.sh/*@codemirror/language@6.4.0?target=esnext&pin=v104&path=/",
+      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104",
+      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104&path=/",
+      "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104",
+      "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104&path=/",
+      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104",
+      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/@codemirror/language@6.4.0/": {
-      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102",
-      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102&path=/",
-      "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102",
-      "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v102&path=/",
-      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102",
-      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102&path=/",
-      "@lezer/highlight": "https://esm.sh/*@lezer/highlight@1.1.3?target=esnext&pin=v102",
-      "@lezer/highlight/": "https://esm.sh/*@lezer/highlight@1.1.3?target=esnext&pin=v102&path=/",
-      "@lezer/lr": "https://esm.sh/*@lezer/lr@1.3.0?target=esnext&pin=v102",
-      "@lezer/lr/": "https://esm.sh/*@lezer/lr@1.3.0?target=esnext&pin=v102&path=/",
-      "style-mod": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v102",
-      "style-mod/": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/@codemirror/language@6.4.0/": {
+      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104",
+      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104&path=/",
+      "@codemirror/view": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104",
+      "@codemirror/view/": "https://esm.sh/*@codemirror/view@6.7.3?target=esnext&pin=v104&path=/",
+      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104",
+      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104&path=/",
+      "@lezer/highlight": "https://esm.sh/*@lezer/highlight@1.1.3?target=esnext&pin=v104",
+      "@lezer/highlight/": "https://esm.sh/*@lezer/highlight@1.1.3?target=esnext&pin=v104&path=/",
+      "@lezer/lr": "https://esm.sh/*@lezer/lr@1.3.1?target=esnext&pin=v104",
+      "@lezer/lr/": "https://esm.sh/*@lezer/lr@1.3.1?target=esnext&pin=v104&path=/",
+      "style-mod": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v104",
+      "style-mod/": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/@codemirror/view@6.7.3/": {
-      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102",
-      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v102&path=/",
-      "style-mod": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v102",
-      "style-mod/": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v102&path=/",
-      "w3c-keyname": "https://esm.sh/*w3c-keyname@2.2.6?target=esnext&pin=v102",
-      "w3c-keyname/": "https://esm.sh/*w3c-keyname@2.2.6?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/@codemirror/view@6.7.3/": {
+      "@codemirror/state": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104",
+      "@codemirror/state/": "https://esm.sh/*@codemirror/state@6.2.0?target=esnext&pin=v104&path=/",
+      "style-mod": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v104",
+      "style-mod/": "https://esm.sh/*style-mod@4.0.0?target=esnext&pin=v104&path=/",
+      "w3c-keyname": "https://esm.sh/*w3c-keyname@2.2.6?target=esnext&pin=v104",
+      "w3c-keyname/": "https://esm.sh/*w3c-keyname@2.2.6?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/@lezer/highlight@1.1.3/": {
-      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102",
-      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/@lezer/highlight@1.1.3/": {
+      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104",
+      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/@lezer/lr@1.3.0/": {
-      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102",
-      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/@lezer/lr@1.3.1/": {
+      "@lezer/common": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104",
+      "@lezer/common/": "https://esm.sh/*@lezer/common@1.0.2?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/loose-envify@1.4.0/": {
-      "js-tokens": "https://esm.sh/*js-tokens@4.0.0?target=esnext&pin=v102",
-      "js-tokens/": "https://esm.sh/*js-tokens@4.0.0?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/loose-envify@1.4.0/": {
+      "js-tokens": "https://esm.sh/*js-tokens@4.0.0?target=esnext&pin=v104",
+      "js-tokens/": "https://esm.sh/*js-tokens@4.0.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/react-dom@18.2.0/": {
-      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102",
-      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102&path=/",
-      "scheduler": "https://esm.sh/*scheduler@0.23.0?target=esnext&pin=v102",
-      "scheduler/": "https://esm.sh/*scheduler@0.23.0?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/react-dom@18.2.0/": {
+      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104",
+      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104&path=/",
+      "scheduler": "https://esm.sh/*scheduler@0.23.0?target=esnext&pin=v104",
+      "scheduler/": "https://esm.sh/*scheduler@0.23.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/react-router-dom@6.6.2/": {
-      "@remix-run/router": "https://esm.sh/*@remix-run/router@1.2.1?target=esnext&pin=v102",
-      "@remix-run/router/": "https://esm.sh/*@remix-run/router@1.2.1?target=esnext&pin=v102&path=/",
-      "react-router": "https://esm.sh/*react-router@6.6.2?target=esnext&pin=v102",
-      "react-router/": "https://esm.sh/*react-router@6.6.2?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/react-router-dom@6.7.0/": {
+      "@remix-run/router": "https://esm.sh/*@remix-run/router@1.3.0?target=esnext&pin=v104",
+      "@remix-run/router/": "https://esm.sh/*@remix-run/router@1.3.0?target=esnext&pin=v104&path=/",
+      "react-router": "https://esm.sh/*react-router@6.7.0?target=esnext&pin=v104",
+      "react-router/": "https://esm.sh/*react-router@6.7.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/react-router@6.6.2/": {
-      "@remix-run/router": "https://esm.sh/*@remix-run/router@1.2.1?target=esnext&pin=v102",
-      "@remix-run/router/": "https://esm.sh/*@remix-run/router@1.2.1?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/react-router@6.7.0/": {
+      "@remix-run/router": "https://esm.sh/*@remix-run/router@1.3.0?target=esnext&pin=v104",
+      "@remix-run/router/": "https://esm.sh/*@remix-run/router@1.3.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/react@18.2.0/": {
-      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102",
-      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/react@18.2.0/": {
+      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104",
+      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/scheduler@0.23.0/": {
-      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102",
-      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/scheduler@0.23.0/": {
+      "loose-envify": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104",
+      "loose-envify/": "https://esm.sh/*loose-envify@1.4.0?target=esnext&pin=v104&path=/"
     },
-    "https://esm.sh/v102/use-latest@1.2.1/": {
-      "use-isomorphic-layout-effect": "https://esm.sh/*use-isomorphic-layout-effect@1.1.2?target=esnext&pin=v102",
-      "use-isomorphic-layout-effect/": "https://esm.sh/*use-isomorphic-layout-effect@1.1.2?target=esnext&pin=v102&path=/"
+    "https://esm.sh/v104/use-latest@1.2.1/": {
+      "use-isomorphic-layout-effect": "https://esm.sh/*use-isomorphic-layout-effect@1.1.2?target=esnext&pin=v104",
+      "use-isomorphic-layout-effect/": "https://esm.sh/*use-isomorphic-layout-effect@1.1.2?target=esnext&pin=v104&path=/"
     }
   }
 }
