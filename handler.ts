@@ -1,4 +1,4 @@
-import { errors, HttpError, isHttpError } from "./deps/std/http/http_errors.ts";
+import { errors, isHttpError } from "./deps/std/http/http_errors.ts";
 import { Status } from "./deps/std/http/http_status.ts";
 import type {
   ConnInfo,
@@ -23,12 +23,10 @@ export function toStdHandler(handler: RootHandler): StdHandler {
 }
 
 export const onError = (error: unknown): Response => {
-  if (!isHttpError(error)) {
-    console.error(error);
-    error = new errors.InternalServerError("Internal server error");
-  }
-  const { message, status } = error as HttpError;
-  return Response.json({ error: message }, { status });
+  console.error(error);
+  return Response.json({ error: "Internal server error" }, {
+    status: Status.InternalServerError,
+  });
 };
 
 export function logTime<C>(handler: Handler<C>): Handler<C> {
@@ -36,16 +34,30 @@ export function logTime<C>(handler: Handler<C>): Handler<C> {
     const start = performance.now();
     const result = await settled(handler(req, ctx));
     const end = performance.now();
-    const rt = `${(end - start).toFixed(1)}ms`;
+    const rt = (end - start).toFixed(1);
     if (result.status === "rejected") {
       const error = result.reason;
-      console.warn(`${req.method} ${req.url} ${rt} ${error}`);
+      console.warn(`${req.method} ${req.url} - ${rt} ms - ${error}`);
       throw error;
     }
     const res = result.value;
-    res.headers.append("x-response-time", rt);
-    console.log(`${req.method} ${req.url} ${rt} ${res.status}`);
+    res.headers.append("server-timing", `rt;dur=${rt}`);
+    console.log(`${req.method} ${req.url} - ${rt} ms - ${res.status}`);
     return res;
+  };
+}
+
+export function reportHttpErrors<C>(handler: Handler<C>): Handler<C> {
+  return async (req, ctx) => {
+    try {
+      return await handler(req, ctx);
+    } catch (e) {
+      if (isHttpError(e)) {
+        const { message, status } = e;
+        return Response.json({ error: message }, { status });
+      }
+      throw e;
+    }
   };
 }
 

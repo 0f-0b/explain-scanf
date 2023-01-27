@@ -7,13 +7,14 @@ import {
   logTime,
   methods,
   parseBodyAsJson,
+  reportHttpErrors,
   type RootHandler,
   route,
   Status,
 } from "./handler.ts";
 import { staticFile } from "./static.ts";
 
-export const handler: RootHandler = logTime(route({
+export const handler: RootHandler = logTime(reportHttpErrors(route({
   "/": () => staticFile("index.html"),
   "/c/:id": () => staticFile("index.html"),
   "/robots.txt": () => staticFile("robots.txt"),
@@ -52,4 +53,4 @@ export const handler: RootHandler = logTime(route({
     }
     throw e;
   }
-}));
+})));
