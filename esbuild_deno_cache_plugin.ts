@@ -1,14 +1,28 @@
-import { DenoDir, FileFetcher } from "../deps/deno_cache.ts";
-import { init, MediaType, parseModule } from "../deps/deno_graph.ts";
-import type { Loader, Plugin } from "../deps/esbuild.ts";
-import { AsyncMutex } from "../deps/esfx/async_mutex.ts";
+import { DenoDir, FileFetcher } from "./deps/deno_cache.ts";
+import { init, MediaType, parseModule } from "./deps/deno_graph.ts";
+import type { Loader, Plugin } from "./deps/esbuild.ts";
+import { AsyncMutex } from "./deps/esfx/async_mutex.ts";
 import {
   type ImportMap,
   resolveImportMap,
   resolveModuleSpecifier,
-} from "../deps/importmap.ts";
-import { fromFileUrl, toFileUrl } from "../deps/std/path.ts";
+} from "./deps/importmap.ts";
+import { fromFileUrl, toFileUrl } from "./deps/std/path.ts";
 
+const loaders = new Map<MediaType, Loader>([
+  [MediaType.JavaScript, "js"],
+  [MediaType.Mjs, "js"],
+  [MediaType.Cjs, "js"],
+  [MediaType.Jsx, "jsx"],
+  [MediaType.TypeScript, "ts"],
+  [MediaType.Mts, "ts"],
+  [MediaType.Cts, "ts"],
+  [MediaType.Dts, "ts"],
+  [MediaType.Dmts, "ts"],
+  [MediaType.Dcts, "ts"],
+  [MediaType.Tsx, "tsx"],
+  [MediaType.Json, "json"],
+]);
 const { deps } = new DenoDir();
 const fetcher = new FileFetcher(deps);
 const mutexes = new Map<string, AsyncMutex>();
@@ -27,27 +41,13 @@ const load = async (specifier: string) => {
     mutex.unlock();
   }
 };
-const mediaTypes = new Map<MediaType, Loader>([
-  [MediaType.JavaScript, "js"],
-  [MediaType.Mjs, "js"],
-  [MediaType.Cjs, "js"],
-  [MediaType.Jsx, "jsx"],
-  [MediaType.TypeScript, "ts"],
-  [MediaType.Mts, "ts"],
-  [MediaType.Cts, "ts"],
-  [MediaType.Dts, "ts"],
-  [MediaType.Dmts, "ts"],
-  [MediaType.Dcts, "ts"],
-  [MediaType.Tsx, "tsx"],
-  [MediaType.Json, "json"],
-]);
 
-export function httpImports(importMapURL?: string | URL): Plugin {
+export function denoCachePlugin(importMapURL?: string | URL): Plugin {
   if (importMapURL !== undefined) {
     importMapURL = new URL(importMapURL).href;
   }
   return {
-    name: "http-imports",
+    name: "deno-cache",
     setup(build) {
       let importMap: ImportMap | undefined;
       build.onStart(async () => {
@@ -85,8 +85,8 @@ export function httpImports(importMapURL?: string | URL): Plugin {
             headers: res.headers,
           });
           return {
-            contents: mod.source,
-            loader: mediaTypes.get(mod.mediaType),
+            contents: res.content,
+            loader: loaders.get(mod.mediaType ?? MediaType.Unknown),
           };
         },
       );

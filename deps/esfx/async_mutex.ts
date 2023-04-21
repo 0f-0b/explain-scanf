@@ -1,1 +1,1 @@
-export * from "https://esm.sh/@esfx/async-mutex@1.0.0?bundle&pin=v105";
+export * from "npm:@esfx/async-mutex@1.0.0";

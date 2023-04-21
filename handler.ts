@@ -4,7 +4,7 @@ import type {
   ConnInfo,
   Handler as StdHandler,
 } from "./deps/std/http/server.ts";
-import { ZodError, type ZodType } from "./deps/zod.ts";
+import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
@@ -101,7 +101,7 @@ export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
 }
 
 export function parseBodyAsJson<T, C>(
-  T: ZodType<T>,
+  T: ZodType<T, ZodTypeDef, unknown>,
   handler: Handler<Merge<C, { body: T }>>,
 ): Handler<C> {
   return async (req, ctx) => {

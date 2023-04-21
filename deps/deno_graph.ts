@@ -1,8 +1,8 @@
-import { init as instantiate } from "https://deno.land/x/deno_graph@0.41.0/mod.ts";
+import { init as instantiate } from "https://deno.land/x/deno_graph@0.47.1/mod.ts";
 import { DenoDir } from "./deno_cache.ts";
 import { dirname, toFileUrl } from "./std/path.ts";
 
-export * from "https://deno.land/x/deno_graph@0.41.0/mod.ts";
+export * from "https://deno.land/x/deno_graph@0.47.1/mod.ts";
 
 async function cache(url: string): Promise<string> {
   const { deps } = new DenoDir();
@@ -35,7 +35,7 @@ async function cache(url: string): Promise<string> {
   return path;
 }
 
-const wasmUrl = "https://deno.land/x/deno_graph@0.41.0/lib/deno_graph_bg.wasm";
+const wasmUrl = "https://deno.land/x/deno_graph@0.47.1/deno_graph_wasm_bg.wasm";
 
 export async function init(): Promise<undefined> {
   await instantiate({ url: toFileUrl(await cache(wasmUrl)) });

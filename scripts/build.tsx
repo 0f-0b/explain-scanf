@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
 
-import { httpImports } from "../plugin/http_imports.ts";
+import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
 async function bundle(
   outDir: string,
@@ -21,7 +21,7 @@ async function bundle(
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [httpImports(toFileUrl(resolve(importMapPath)))],
+      plugins: [denoCachePlugin(toFileUrl(resolve(importMapPath)))],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",

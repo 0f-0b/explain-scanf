@@ -1,3 +1,1 @@
-import * as React from "https://esm.sh/react@18.2.0?pin=v105";
-
-export default React;
+export { default } from "https://esm.sh/v117/react@18.2.0";

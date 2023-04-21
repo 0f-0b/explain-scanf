@@ -1,20 +1,19 @@
 #!/usr/bin/env -S deno run --no-prompt --allow-read --allow-write --allow-net=registry.npmjs.org --allow-env
-/// <reference lib="deno.unstable" />
 
+import process from "node:process";
 import { Arborist, type Node } from "../deps/arborist.ts";
 import type { ImportMap, Scopes, SpecifierMap } from "../deps/importmap.ts";
-import { process } from "../deps/std/node/process.ts";
 
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v105";
+const pin = "v117";
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {
   const imports: SpecifierMap = {};
   for (const { to } of node.edgesOut.values()) {
     const { name, version } = to;
-    const root = `https://esm.sh/*${name}@${version}?target=esnext&pin=${pin}`;
+    const root = `https://esm.sh/${pin}/*${name}@${version}?target=esnext`;
     imports[name] = root;
     imports[name + "/"] = root + "&path=/";
     const scope = `https://esm.sh/${pin}/${name}@${version}/`;

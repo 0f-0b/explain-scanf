@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "https://deno.land/x/deno_graph@0.26.0/": "https://deno.land/x/deno_graph@0.47.1/"
+  }
+}
