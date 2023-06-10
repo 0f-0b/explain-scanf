@@ -1,4 +1,4 @@
-import React from "./deps/react.ts";
+import { React } from "./deps/react.ts";
 
 import { ErrorMessage } from "./components/error_message.tsx";
 

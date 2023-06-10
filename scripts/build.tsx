@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run -A
 
 import { build, initialize, stop } from "../deps/esbuild.ts";
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
@@ -26,6 +26,7 @@ async function bundle(
       sourcemap: "linked",
       format: "esm",
       target: "es2020",
+      supported: { "nesting": false },
       minify: true,
       charset: "utf8",
     });

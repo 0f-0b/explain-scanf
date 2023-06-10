@@ -16,7 +16,7 @@ type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
 export type ContextConsumer<C, R> = (req: Request, ctx: C) => R;
 export type Handler<C> = ContextConsumer<C, Awaitable<Response>>;
-export type RootHandler = Handler<{ conn: ConnInfo }>;
+export type RootHandler = Handler<{ readonly conn: ConnInfo }>;
 
 export function toStdHandler(handler: RootHandler): StdHandler {
   return async (req, conn) => await handler(req, { conn });
@@ -62,7 +62,11 @@ export function reportHttpErrors<C>(handler: Handler<C>): Handler<C> {
 }
 
 export function route<C>(
-  routes: Record<string, Handler<Merge<C, { params: Record<string, string> }>>>,
+  routes: {
+    readonly [pathname: string]: Handler<
+      Merge<C, { readonly params: Record<string, string | undefined> }>
+    >;
+  },
   fallback: Handler<C>,
 ): Handler<C> {
   const entries = Object.entries(routes).map(([pathname, handler]) => ({
@@ -102,7 +106,7 @@ export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
 
 export function parseBodyAsJson<T, C>(
   T: ZodType<T, ZodTypeDef, unknown>,
-  handler: Handler<Merge<C, { body: T }>>,
+  handler: Handler<Merge<C, { readonly body: T }>>,
 ): Handler<C> {
   return async (req, ctx) => {
     let body: T;

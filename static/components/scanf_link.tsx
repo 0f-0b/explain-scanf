@@ -1,4 +1,4 @@
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 
 export const ScanfLink: React.FC = () => (
   <a

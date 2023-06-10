@@ -3,20 +3,9 @@
     "useUnknownInCatchVariables": true
   },
   "importMap": "import_map.json",
-  "fmt": {
-    "files": {
-      "exclude": [
-        "dist"
-      ]
-    }
-  },
-  "lint": {
-    "files": {
-      "exclude": [
-        "dist"
-      ]
-    }
-  },
+  "exclude": [
+    "dist"
+  ],
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check --all main.ts && deno check scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
     "static:lint": "deno check --import-map=static/import_map.json static/main.tsx"

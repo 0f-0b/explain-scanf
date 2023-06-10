@@ -27,7 +27,8 @@ import {
   keymap,
   lineNumbers,
 } from "./deps/codemirror/view.ts";
-import React, {
+import {
+  React,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -38,8 +39,8 @@ import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
 import type { Code } from "./api.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
 import { escapeString } from "./codemirror/escape_string.ts";
-import { CodeMirror } from "./components/codemirror.tsx";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
+import { CodeMirror } from "./components/codemirror.tsx";
 import {
   HlComment,
   HlFunction,

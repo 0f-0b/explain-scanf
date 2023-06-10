@@ -27,7 +27,7 @@ export const handler: RootHandler = logTime(reportHttpErrors(route({
     }),
     "/code/:id": methods({
       GET: async (_, { params: { id } }) => {
-        const code = await getCode(id) ??
+        const code = await getCode(id!) ??
           fail(new errors.NotFound("Code not found"));
         return Response.json({ code });
       },

@@ -1,5 +1,5 @@
 export {
-  default,
+  default as React,
   useCallback,
   useContext,
   useDebugValue,

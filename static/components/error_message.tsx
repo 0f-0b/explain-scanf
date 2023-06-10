@@ -1,5 +1,5 @@
 import { clsx } from "../deps/clsx.ts";
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 
 export interface ErrorMessageProps
   extends Omit<React.ComponentPropsWithoutRef<"span">, "children"> {

@@ -1,4 +1,4 @@
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 
 export type HlProps = React.PropsWithChildren;
 export const HlKeyword: React.FC<HlProps> = ({ children }) => (

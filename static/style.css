@@ -23,10 +23,10 @@ pre {
 
 .format {
   display: inline-block;
-}
 
-.format .cm-line {
-  padding: 0 1px;
+  .cm-line {
+    padding: 0 1px;
+  }
 }
 
 .cm-tooltip-section {

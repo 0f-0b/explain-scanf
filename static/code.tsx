@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "./deps/react.ts";
+import { React, useEffect, useState } from "./deps/react.ts";
 import { useNavigate, useParams } from "./deps/react_router_dom.ts";
 
 import { getCode } from "./api.ts";

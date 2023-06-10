@@ -3,7 +3,7 @@ import {
   type EditorStateConfig,
 } from "../deps/codemirror/state.ts";
 import { EditorView, type ViewUpdate } from "../deps/codemirror/view.ts";
-import React, { useLayoutEffect, useMemo, useRef } from "../deps/react.ts";
+import { React, useLayoutEffect, useMemo, useRef } from "../deps/react.ts";
 import { useLatest } from "../deps/use_latest.ts";
 
 export interface CodeMirrorProps

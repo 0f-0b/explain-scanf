@@ -1,1 +1,1 @@
-export { default } from "react-dom";
+export { default as ReactDOM } from "react-dom";
