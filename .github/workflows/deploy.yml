@@ -18,6 +18,9 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: 1
+      - name: Cache dependencies
+        working-directory: static
+        run: deno cache main.tsx
       - name: Build
         run: ./scripts/build.tsx
       - name: Deploy
