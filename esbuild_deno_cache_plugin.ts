@@ -42,6 +42,23 @@ const load = async (specifier: string) => {
   }
 };
 
+interface NpmSpecifier {
+  name: string;
+  version: string;
+  path: string;
+}
+
+const npmSpecifierRE = /^\/?((?:@[^/]+\/)?[^@/]+)(?:@([^/]+))?((?:\/[^]*)?)$/;
+
+function parseNpmSpecifier(str: string): NpmSpecifier {
+  const match = npmSpecifierRE.exec(str);
+  if (!match) {
+    throw new TypeError("Invalid package specifier");
+  }
+  const { 1: name, 2: version = "*", 3: path } = match;
+  return { name, version, path };
+}
+
 export function denoCachePlugin(importMapURL?: string | URL): Plugin {
   if (importMapURL !== undefined) {
     importMapURL = new URL(importMapURL).href;
@@ -49,7 +66,7 @@ export function denoCachePlugin(importMapURL?: string | URL): Plugin {
   return {
     name: "deno-cache",
     setup(build) {
-      let importMap: ImportMap | undefined;
+      let importMap: ImportMap = {};
       build.onStart(async () => {
         if (importMapURL !== undefined) {
           const res = await fetch(importMapURL);
@@ -58,19 +75,36 @@ export function denoCachePlugin(importMapURL?: string | URL): Plugin {
       });
       build.onResolve(
         { filter: /(?:)/ },
-        ({ path, importer, namespace }) => {
-          if (!importer) {
+        ({ path, importer, namespace, resolveDir, kind }) => {
+          if (kind !== "import-statement" && kind !== "dynamic-import") {
             return null;
           }
-          const referrer = namespace === "remote"
-            ? new URL(importer)
-            : toFileUrl(importer);
-          const resolved = importMap
-            ? new URL(resolveModuleSpecifier(path, importMap, referrer))
-            : new URL(path, referrer);
-          return /^https?:$/.test(resolved.protocol)
-            ? { path: resolved.href, namespace: "remote" }
-            : { path: fromFileUrl(resolved), namespace };
+          let resolved: URL;
+          try {
+            const referrer = namespace === "remote"
+              ? new URL(importer)
+              : toFileUrl(importer);
+            resolved = new URL(
+              resolveModuleSpecifier(path, importMap, referrer),
+            );
+          } catch {
+            return null;
+          }
+          switch (resolved.protocol) {
+            case "http:":
+            case "https:":
+              return { path: resolved.href, namespace: "remote" };
+            case "npm:": {
+              const { name, path } = parseNpmSpecifier(resolved.pathname);
+              return build.resolve(`${name}${path}`, {
+                importer,
+                resolveDir,
+                kind: "import-statement",
+              });
+            }
+            default:
+              return { path: fromFileUrl(resolved), namespace };
+          }
         },
       );
       build.onLoad(

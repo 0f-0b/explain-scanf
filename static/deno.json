@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true
+  },
+  "importMap": "import_map.json"
+}

@@ -7,7 +7,7 @@
     "dist"
   ],
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --all main.ts && deno check scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
-    "static:lint": "deno check --import-map=static/import_map.json static/main.tsx"
+    "lint": "deno fmt --check && deno lint && deno check --all main.ts && deno check --all scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
+    "static:lint": "cd static && deno check main.tsx"
   }
 }
