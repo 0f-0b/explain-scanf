@@ -8,14 +8,16 @@ process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
 const pin = "v125";
+const dev = false;
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {
   const imports: SpecifierMap = {};
   for (const { to } of node.edgesOut.values()) {
     const { name, version } = to;
-    const root = `https://esm.sh/${pin}/*${name}@${version}?target=esnext`;
-    imports[name] = root;
-    imports[name + "/"] = root + "&path=/";
+    const base = `https://esm.sh/${pin}/*${name}@${version}`;
+    const query = `${dev ? "dev&" : ""}target=esnext`;
+    imports[`${name}`] = `${base}?${query}`;
+    imports[`${name}/`] = `${base}&${query}/`;
     const scope = `https://esm.sh/${pin}/${name}@${version}/`;
     scopes[scope] ??= mapNode(to, scopes);
   }

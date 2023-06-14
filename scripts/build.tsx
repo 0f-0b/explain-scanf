@@ -8,11 +8,21 @@ import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
 
 import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
-async function bundle(
-  outDir: string,
-  inputs: string[],
-  importMapPath: string,
-): Promise<string[] | null> {
+let dev = false;
+for (const arg of Deno.args) {
+  if (arg === "--dev") {
+    dev = true;
+    continue;
+  }
+  console.error(`Unexpected argument '${arg}'.`);
+  Deno.exit(2);
+}
+Deno.chdir(new URL("..", import.meta.url));
+await initialize({});
+await emptyDir("dist");
+const [js, css] = await (async () => {
+  const outDir = "dist";
+  const inputs = ["static/main.tsx", "static/style.css"];
   try {
     const { metafile } = await build({
       bundle: true,
@@ -21,13 +31,13 @@ async function bundle(
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin(toFileUrl(resolve(importMapPath)))],
+      plugins: [denoCachePlugin(toFileUrl(resolve("static/import_map.json")))],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",
       target: "es2020",
       supported: { "nesting": false },
-      minify: true,
+      minify: !dev,
       charset: "utf8",
     });
     const outputs = new Map<string, string>();
@@ -38,18 +48,9 @@ async function bundle(
     }
     return inputs.map((path) => outputs.get(path)!);
   } catch {
-    return null;
+    Deno.exit(1);
   }
-}
-
-Deno.chdir(new URL("..", import.meta.url));
-await initialize({});
-await emptyDir("dist");
-const [js, css] = await bundle(
-  "dist",
-  ["static/main.tsx", "static/style.css"],
-  "static/import_map.json",
-) ?? Deno.exit(1);
+})();
 stop();
 const html = renderToStaticMarkup(
   <html lang="en">
