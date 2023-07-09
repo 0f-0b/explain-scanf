@@ -42,6 +42,10 @@ const load = async (specifier: string) => {
   }
 };
 
+function asPath(pathOrURL: string | URL): string {
+  return typeof pathOrURL === "string" ? pathOrURL : fromFileUrl(pathOrURL);
+}
+
 interface NpmSpecifier {
   name: string;
   version: string;
@@ -59,10 +63,20 @@ function parseNpmSpecifier(str: string): NpmSpecifier {
   return { name, version, path };
 }
 
-export function denoCachePlugin(importMapURL?: string | URL): Plugin {
-  if (importMapURL !== undefined) {
-    importMapURL = new URL(importMapURL).href;
-  }
+export interface DenoCachePluginOptions {
+  importMapURL?: string | URL;
+  nodeResolutionRootDir?: string | URL;
+}
+
+export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
+  const importMapURL = (() => {
+    const url = options?.importMapURL;
+    return url === undefined ? undefined : new URL(url).href;
+  })();
+  const nodeResolutionRootDir = (() => {
+    const pathOrURL = options?.nodeResolutionRootDir;
+    return pathOrURL === undefined ? undefined : asPath(pathOrURL);
+  })();
   return {
     name: "deno-cache",
     setup(build) {
@@ -98,7 +112,7 @@ export function denoCachePlugin(importMapURL?: string | URL): Plugin {
               const { name, path } = parseNpmSpecifier(resolved.pathname);
               return build.resolve(`${name}${path}`, {
                 importer,
-                resolveDir,
+                resolveDir: nodeResolutionRootDir ?? resolveDir,
                 kind: "import-statement",
               });
             }

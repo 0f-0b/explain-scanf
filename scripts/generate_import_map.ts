@@ -7,7 +7,7 @@ import type { ImportMap, Scopes, SpecifierMap } from "../deps/importmap.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v125";
+const pin = "v128";
 const dev = false;
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {

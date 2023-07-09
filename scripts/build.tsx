@@ -1,8 +1,9 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
 
+/* @jsx h */
 import { build, initialize, stop } from "../deps/esbuild.ts";
-import { React } from "../deps/react.ts";
-import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
+import { toHtml } from "../deps/hast_util_to_html.ts";
+import { h } from "../deps/hastscript.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
 
@@ -31,7 +32,9 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin(toFileUrl(resolve("static/import_map.json")))],
+      plugins: [denoCachePlugin({
+        importMapURL: toFileUrl(resolve("static/import_map.json")),
+      })],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",
@@ -52,10 +55,10 @@ const [js, css] = await (async () => {
   }
 })();
 stop();
-const html = renderToStaticMarkup(
+const html = toHtml(
   <html lang="en">
     <head>
-      <meta charSet="utf-8" />
+      <meta charset="utf-8" />
       <meta
         name="viewport"
         content="width=device-width,initial-scale=1,shrink-to-fit=no"
@@ -66,8 +69,14 @@ const html = renderToStaticMarkup(
       <script src={"/" + js} type="module" />
     </head>
     <body>
-      <main id="root" role="application" />
+      <div id="root" />
     </body>
   </html>,
+  {
+    omitOptionalTags: true,
+    preferUnquoted: true,
+    quoteSmart: true,
+    tightCommaSeparatedLists: true,
+  },
 );
 await Deno.writeTextFile("index.html", `<!DOCTYPE html>${html}\n`);

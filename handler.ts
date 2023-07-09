@@ -1,9 +1,5 @@
 import { errors, isHttpError } from "./deps/std/http/http_errors.ts";
 import { Status } from "./deps/std/http/http_status.ts";
-import type {
-  ConnInfo,
-  Handler as StdHandler,
-} from "./deps/std/http/server.ts";
 import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
 import { type Awaitable, settled } from "./async.ts";
@@ -11,14 +7,13 @@ import { fail } from "./fail.ts";
 
 export * from "./deps/std/http/http_errors.ts";
 export * from "./deps/std/http/http_status.ts";
-export type { ConnInfo };
 type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
 export type ContextConsumer<C, R> = (req: Request, ctx: C) => R;
 export type Handler<C> = ContextConsumer<C, Awaitable<Response>>;
-export type RootHandler = Handler<{ readonly conn: ConnInfo }>;
+export type RootHandler = Handler<{ readonly conn: Deno.ServeHandlerInfo }>;
 
-export function toStdHandler(handler: RootHandler): StdHandler {
+export function toStdHandler(handler: RootHandler): Deno.ServeHandler {
   return async (req, conn) => await handler(req, { conn });
 }
 
