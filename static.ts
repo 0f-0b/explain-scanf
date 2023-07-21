@@ -19,3 +19,17 @@ export async function staticFile(
     ],
   });
 }
+
+export function decodeURLPathComponents(pathname: string): string[] | null {
+  const segments = pathname.split("/").filter(Boolean);
+  let components: string[];
+  try {
+    components = segments.map(decodeURIComponent);
+  } catch {
+    return null;
+  }
+  if (components.some((component) => /[/\\]/.test(component))) {
+    return null;
+  }
+  return components;
+}

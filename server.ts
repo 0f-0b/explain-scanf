@@ -12,7 +12,7 @@ import {
   route,
   Status,
 } from "./handler.ts";
-import { staticFile } from "./static.ts";
+import { decodeURLPathComponents, staticFile } from "./static.ts";
 
 export const handler: RootHandler = logTime(reportHttpErrors(route({
   "/": () => staticFile("index.html"),
@@ -34,23 +34,21 @@ export const handler: RootHandler = logTime(reportHttpErrors(route({
     }),
   }, () => fail(new errors.NotFound("Not found"))),
 }, async (req) => {
-  const path = (() => {
+  const path = decodeURLPathComponents(new URL(req.url).pathname);
+  if (path) {
     try {
-      return decodeURIComponent(new URL(req.url).pathname);
-    } catch {
-      throw new errors.BadRequest("Malformed path");
-    }
-  })();
-  try {
-    return await staticFile(join("dist", path), {
-      cacheControl: "max-age=2592000, immutable",
-    });
-  } catch (e) {
-    if (e instanceof Deno.errors.NotFound) {
-      return await staticFile("index.html", {
-        status: Status.NotFound,
+      return await staticFile(join("dist", ...path), {
+        cacheControl: "max-age=2592000, immutable",
       });
+    } catch (e) {
+      if (
+        !(e instanceof Deno.errors.NotFound ||
+          e instanceof Deno.errors.NotADirectory ||
+          e instanceof Deno.errors.IsADirectory)
+      ) {
+        throw e;
+      }
     }
-    throw e;
   }
+  return await staticFile("index.html", { status: Status.NotFound });
 })));
