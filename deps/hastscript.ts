@@ -1,1 +1,1 @@
-export * from "npm:hastscript@7.2.0";
+export * from "npm:hastscript@8.0.0";

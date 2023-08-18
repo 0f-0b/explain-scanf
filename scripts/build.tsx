@@ -5,7 +5,9 @@ import { build, initialize, stop } from "../deps/esbuild.ts";
 import { toHtml } from "../deps/hast_util_to_html.ts";
 import { h } from "../deps/hastscript.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
-import { relative, resolve, toFileUrl } from "../deps/std/path.ts";
+import { relative } from "../deps/std/path/relative.ts";
+import { resolve } from "../deps/std/path/resolve.ts";
+import { toFileUrl } from "../deps/std/path/to_file_url.ts";
 
 import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 

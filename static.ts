@@ -1,5 +1,5 @@
 import { contentType } from "./deps/std/media_types/content_type.ts";
-import { extname } from "./deps/std/path.ts";
+import { extname } from "./deps/std/path/extname.ts";
 
 export interface StaticFileOptions {
   status?: number;

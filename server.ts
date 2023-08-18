@@ -1,4 +1,4 @@
-import { join } from "./deps/std/path.ts";
+import { join } from "./deps/std/path/join.ts";
 
 import { Code, getCode, putCode } from "./code.ts";
 import { fail } from "./fail.ts";

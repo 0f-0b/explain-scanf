@@ -2,7 +2,7 @@ import { errors, isHttpError } from "./deps/std/http/http_errors.ts";
 import { Status } from "./deps/std/http/http_status.ts";
 import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
-import { type Awaitable, settled } from "./async.ts";
+import { settled, type Awaitable } from "./async.ts";
 import { fail } from "./fail.ts";
 
 export * from "./deps/std/http/http_errors.ts";
@@ -48,8 +48,8 @@ export function reportHttpErrors<C>(handler: Handler<C>): Handler<C> {
       return await handler(req, ctx);
     } catch (e) {
       if (isHttpError(e)) {
-        const { message, status } = e;
-        return Response.json({ error: message }, { status });
+        const { message, status, headers } = e;
+        return Response.json({ error: message }, { status, headers });
       }
       throw e;
     }
@@ -93,6 +93,11 @@ export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
     const handler = methodMap.get(req.method) ?? fail(
       new errors.MethodNotAllowed(
         `Method ${req.method} is not allowed for the URL`,
+        {
+          headers: [
+            ["allow", Array.from(methodMap.keys()).join(", ")],
+          ],
+        },
       ),
     );
     return handler(req, ctx);

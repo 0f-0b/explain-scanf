@@ -1,13 +1,18 @@
-import { DenoDir, FileFetcher } from "./deps/deno_cache.ts";
-import { init, MediaType, parseModule } from "./deps/deno_graph.ts";
+import { type CacheSetting, createCache } from "./deps/deno_cache.ts";
+import {
+  init,
+  type LoadResponse,
+  MediaType,
+  parseModule,
+} from "./deps/deno_graph.ts";
 import type { Loader, Plugin } from "./deps/esbuild.ts";
-import { AsyncMutex } from "./deps/esfx/async_mutex.ts";
 import {
   type ImportMap,
   resolveImportMap,
   resolveModuleSpecifier,
 } from "./deps/importmap.ts";
-import { fromFileUrl, toFileUrl } from "./deps/std/path.ts";
+import { fromFileUrl } from "./deps/std/path/from_file_url.ts";
+import { toFileUrl } from "./deps/std/path/to_file_url.ts";
 
 const loaders = new Map<MediaType, Loader>([
   [MediaType.JavaScript, "js"],
@@ -23,24 +28,6 @@ const loaders = new Map<MediaType, Loader>([
   [MediaType.Tsx, "tsx"],
   [MediaType.Json, "json"],
 ]);
-const { deps } = new DenoDir();
-const fetcher = new FileFetcher(deps);
-const mutexes = new Map<string, AsyncMutex>();
-const load = async (specifier: string) => {
-  const url = new URL(specifier);
-  const key = deps.getCacheFilename(url);
-  const mutex = mutexes.get(key) ?? new AsyncMutex();
-  if (!mutex.tryLock()) {
-    await mutex.lock();
-  }
-  mutexes.set(key, mutex);
-  try {
-    return await fetcher.fetch(url);
-  } finally {
-    mutexes.delete(key);
-    mutex.unlock();
-  }
-};
 
 function asPath(pathOrURL: string | URL): string {
   return typeof pathOrURL === "string" ? pathOrURL : fromFileUrl(pathOrURL);
@@ -64,11 +51,19 @@ function parseNpmSpecifier(str: string): NpmSpecifier {
 }
 
 export interface DenoCachePluginOptions {
+  allowRemote?: boolean;
+  cacheSetting?: CacheSetting;
+  denoDir?: string | URL;
+  vendorDir?: string | URL;
   importMapURL?: string | URL;
   nodeResolutionRootDir?: string | URL;
 }
 
 export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
+  const allowRemote = options?.allowRemote;
+  const cacheSetting = options?.cacheSetting;
+  const denoDir = options?.denoDir;
+  const vendorDir = options?.vendorDir;
   const importMapURL = (() => {
     const url = options?.importMapURL;
     return url === undefined ? undefined : new URL(url).href;
@@ -80,8 +75,15 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
   return {
     name: "deno-cache",
     setup(build) {
+      let load: (specifier: string) => Promise<LoadResponse | undefined>;
       let importMap: ImportMap = {};
       build.onStart(async () => {
+        ({ load } = createCache({
+          allowRemote,
+          cacheSetting,
+          root: denoDir,
+          vendorRoot: vendorDir,
+        }));
         if (importMapURL !== undefined) {
           const res = await fetch(importMapURL);
           importMap = resolveImportMap(await res.json(), new URL(importMapURL));
