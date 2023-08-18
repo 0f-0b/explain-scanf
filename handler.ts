@@ -2,7 +2,7 @@ import { errors, isHttpError } from "./deps/std/http/http_errors.ts";
 import { Status } from "./deps/std/http/http_status.ts";
 import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
-import { settled, type Awaitable } from "./async.ts";
+import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
 
 export * from "./deps/std/http/http_errors.ts";
