@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "@codemirror/commands": "6.2.4",
+    "@codemirror/commands": "6.2.5",
     "@codemirror/language": "6.9.0",
     "@codemirror/state": "6.2.1",
-    "@codemirror/view": "6.16.0",
+    "@codemirror/view": "6.17.0",
     "@primer/octicons-react": "19.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

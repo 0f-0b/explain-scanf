@@ -8,6 +8,6 @@
   ],
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check --all main.ts && deno check --all scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
-    "static:lint": "cd static && deno check main.tsx"
+    "static:lint": "cd static && deno check main.tsx && deno check --all sw.ts"
   }
 }
