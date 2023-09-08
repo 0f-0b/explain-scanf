@@ -135,8 +135,8 @@
         "integrity": "sha512-SQ7Kzhh9+D+ZW9MA0zkYv3VXhIDNx+LzM6EJ+/65I3QY+enU6Itte7E5XX7EWrqLW2FN4n06GWzBnPoC3th2aQ==",
         "dependencies": {}
       },
-      "@npmcli/agent@2.1.0": {
-        "integrity": "sha512-/HFJP3a/DzgIg+6TWVee3bQmnBcWeKKYE9DKQqS8SWpAV8oYDTn/zkDM8iQ7bWI6kDDgNfHOlEFZZpN/UXMwig==",
+      "@npmcli/agent@2.1.1": {
+        "integrity": "sha512-6RlbiOAi6L6uUYF4/CDEkDZQnKw0XDsFJVrEpnib8rAx2WRMOsUyAdgnvDpX/fdkDWxtqE+NHwF465llI2wR0g==",
         "dependencies": {
           "http-proxy-agent": "http-proxy-agent@7.0.0",
           "https-proxy-agent": "https-proxy-agent@7.0.2",
@@ -286,8 +286,8 @@
           "make-fetch-happen": "make-fetch-happen@13.0.0"
         }
       },
-      "@sigstore/tuf@2.1.0": {
-        "integrity": "sha512-BUoVCx+7Wj+8moEGvUU2MyBI+f93lmg1CLmoG6KrhQMeDyAG8HAZNk+YRCNuvwvSDCfPhwsj37Bg63/Q+bnGsw==",
+      "@sigstore/tuf@2.2.0": {
+        "integrity": "sha512-KKATZ5orWfqd9ZG6MN8PtCIx4eevWSuGRKQvofnWXRpyMyUEpmrzg5M5BrCpjM+NfZ0RbNGOh5tCz/P2uoRqOA==",
         "dependencies": {
           "@sigstore/protobuf-specs": "@sigstore/protobuf-specs@0.2.1",
           "tuf-js": "tuf-js@2.1.0"
@@ -939,7 +939,7 @@
       "make-fetch-happen@13.0.0": {
         "integrity": "sha512-7ThobcL8brtGo9CavByQrQi+23aIfgYU++wg4B87AIS8Rb2ZBt/MEaDqzA00Xwv/jUjAjYkLHjVolYuTLKda2A==",
         "dependencies": {
-          "@npmcli/agent": "@npmcli/agent@2.1.0",
+          "@npmcli/agent": "@npmcli/agent@2.1.1",
           "cacache": "cacache@18.0.0",
           "http-cache-semantics": "http-cache-semantics@4.1.1",
           "is-lambda": "is-lambda@1.0.1",
@@ -1375,7 +1375,7 @@
           "@sigstore/bundle": "@sigstore/bundle@2.1.0",
           "@sigstore/protobuf-specs": "@sigstore/protobuf-specs@0.2.1",
           "@sigstore/sign": "@sigstore/sign@2.1.0",
-          "@sigstore/tuf": "@sigstore/tuf@2.1.0"
+          "@sigstore/tuf": "@sigstore/tuf@2.2.0"
         }
       },
       "smart-buffer@4.2.0": {
