@@ -1,6 +1,7 @@
+import { DAY } from "./deps/std/datetime/constants.ts";
 import { z } from "./deps/zod.ts";
 
-import { DBError, gql } from "./db.ts";
+import { DBError, gql } from "./fauna.ts";
 import { randomString } from "./random.ts";
 
 export const Code = z.strictObject({
@@ -9,6 +10,7 @@ export const Code = z.strictObject({
 });
 export type Code = z.infer<typeof Code>;
 
+/** @deprecated */
 const doGetCode = gql<{ id: string }>`
   query($id: String!) {
     code(id: $id) {
@@ -23,9 +25,13 @@ const doGetCode = gql<{ id: string }>`
   };
 }>;
 
-export async function getCode(id: string): Promise<Code | null> {
+export async function getCode(kv: Deno.Kv, id: string): Promise<Code | null> {
   if (!/^[a-z0-9]{8}$/.test(id)) {
     return null;
+  }
+  const entry = await kv.get(["code", id]) as Deno.KvEntryMaybe<Code>;
+  if (entry.versionstamp !== null) {
+    return entry.value;
   }
   try {
     const { code } = await doGetCode({ id });
@@ -38,29 +44,16 @@ export async function getCode(id: string): Promise<Code | null> {
   }
 }
 
-const doPutCode = gql<{ id: string; format: string; input: string }>`
-  mutation($id: String!, $format: String!, $input: String!) {
-    createCode(data: { id: $id, format: $format, input: $input }) {
-      id
-    }
-  }
-`<{
-  createCode: {
-    id: string;
-  };
-}>;
-
-export async function putCode(code: Code): Promise<string> {
+export async function putCode(kv: Deno.Kv, code: Code): Promise<string> {
   for (;;) {
-    try {
-      const id = randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789");
-      await doPutCode({ id, ...code });
+    const id = randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789");
+    const result = await kv.atomic()
+      .check({ key: ["code", id], versionstamp: null })
+      .set(["code", id], code /* , { expireIn: 90 * DAY } */)
+      .set(["expire", Date.now() + 90 * DAY, "code", id], null)
+      .commit();
+    if (result.ok) {
       return id;
-    } catch (e) {
-      if (e instanceof DBError && e.code === "instance not unique") {
-        continue;
-      }
-      throw e;
     }
   }
 }

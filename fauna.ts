@@ -2,6 +2,7 @@ import { dedent } from "./deps/string_dedent.ts";
 
 import { requireEnv } from "./env.ts";
 
+/** @deprecated */
 export function gql<T>(
   template: { readonly raw: ArrayLike<string> },
 ): <R>(variables: T) => Promise<R> {
