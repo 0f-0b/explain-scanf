@@ -49,8 +49,7 @@ export async function putCode(kv: Deno.Kv, code: Code): Promise<string> {
     const id = randomString(8, "abcdefghijklmnopqrstuvwxyz0123456789");
     const result = await kv.atomic()
       .check({ key: ["code", id], versionstamp: null })
-      .set(["code", id], code /* , { expireIn: 90 * DAY } */)
-      .set(["expire", Date.now() + 90 * DAY, "code", id], null)
+      .set(["code", id], code, { expireIn: 90 * DAY })
       .commit();
     if (result.ok) {
       return id;

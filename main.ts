@@ -6,23 +6,14 @@ import { getHandler } from "./server.ts";
 
 const kv = await Deno.openKv();
 try {
-  const server = Deno.serve({
-    signal,
-    handler: toStdHandler(getHandler(kv)),
-    onError,
-  });
-  await Promise.all([
-    server.finished,
-    (async () => {
-      const iter = kv.list({ prefix: ["expire"], end: ["expire", Date.now()] });
-      for await (const { key } of iter) {
-        kv.atomic()
-          .delete(key)
-          .delete(key.slice(2))
-          .commit();
-      }
-    })(),
-  ]);
+  const server = Deno.serve({ handler: toStdHandler(getHandler(kv)), onError });
+  const onAbort = () => server.shutdown();
+  signal.addEventListener("abort", onAbort, { once: true });
+  try {
+    await server.finished;
+  } finally {
+    signal.removeEventListener("abort", onAbort);
+  }
 } finally {
   kv.close();
 }

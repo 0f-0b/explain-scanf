@@ -1,55 +1,11 @@
 {
-  "version": "2",
-  "remote": {
-    "https://esm.sh/stable/react@18.2.0/esnext/react.mjs": "8477d1f643b153873958c52c85d876aa1cf000f17f8557bbce65e5a9ae21263a",
-    "https://esm.sh/v132/*@codemirror/commands@6.2.5?target=esnext": "a27c5162eb86d690c6af71d6b1a21f98e2aaf185376356dbbab3e9acee5b0448",
-    "https://esm.sh/v132/*@codemirror/language@6.9.0?target=esnext": "1791037bba4c6969ca565353168bd92722d8156cb4597535daaffae1c24fea59",
-    "https://esm.sh/v132/*@codemirror/state@6.2.1?target=esnext": "f87cfef0718d545d5a382d5b298d800b90d22705815d9d405cae22681bd20e50",
-    "https://esm.sh/v132/*@codemirror/view@6.18.0?target=esnext": "442a7e7a684250573f4f697246ed07bc89c82735536aeb4dd05268cd6e39d176",
-    "https://esm.sh/v132/*@lezer/common@1.0.4?target=esnext": "a2a7352a97a1e6fa740c93f11be23f911a5de9c86cea97226e7712a68cc3dace",
-    "https://esm.sh/v132/*@lezer/highlight@1.1.6?target=esnext": "af4382575ca3a79ad9179d9f0fd94d6c9a4a76dcf902019d688b3f7b8b83fc98",
-    "https://esm.sh/v132/*@lezer/lr@1.3.10?target=esnext": "e1a152d5f084bba17b9af466eff6585aa14c94b846556e9347a5f39b8f44efcd",
-    "https://esm.sh/v132/*@primer/octicons-react@19.7.0?target=esnext": "088f5638da45b77cdae85142ea8b6b7896ae964d12b9448bab34be309a5fe762",
-    "https://esm.sh/v132/*@remix-run/router@1.8.0?target=esnext": "0ad057d32648ba016a9379002e65d48210f33c604e9e78123ba223530feeaec7",
-    "https://esm.sh/v132/*react-dom@18.2.0&target=esnext/client": "ac92657bd7b6ec6ad335a3f55b06b0325e398c51a9241f44ab20fcd3d7437921",
-    "https://esm.sh/v132/*react-dom@18.2.0?target=esnext": "31c106a9d38023d7fd4087c1996f506652bbe49a6d79991a801c7fa401d14e1a",
-    "https://esm.sh/v132/*react-router-dom@6.15.0?target=esnext": "8610b7f3e0a6b0a30c8b6b90cb6ac154298d3443db59536c9fb50aa97a853d00",
-    "https://esm.sh/v132/*react-router@6.15.0?target=esnext": "b206c3d45391da86c20a6735de332c69c8f28fc391ddba1efbee7e62261e63c2",
-    "https://esm.sh/v132/*react-storage-hooks@4.0.1?target=esnext": "618c5fff141a5189c2faa8e93f6c32265a5c1e491039e7d9565b5c0458e4cd1d",
-    "https://esm.sh/v132/*react@18.2.0?target=esnext": "f082d59fe37237a03121ed55571caf350ddae35016da28de46e5c188af95de4a",
-    "https://esm.sh/v132/*scheduler@0.23.0?target=esnext": "ef7c8c82689631ae66686fdd7b5d25d0e84ff47fe4e46a09ebfebfcec0fd1c7f",
-    "https://esm.sh/v132/*style-mod@4.1.0?target=esnext": "cc8d90b19558e694261f998de27d66e5269dd84f5aac0ea77e1b98ac4f7f7ae1",
-    "https://esm.sh/v132/*use-isomorphic-layout-effect@1.1.2?target=esnext": "8a536d252ae6ea6a64274051a46705c7777ee1bacbf2ecf0e62516b208514d4a",
-    "https://esm.sh/v132/*use-latest@1.2.1?target=esnext": "a7ea4916a4575927b286c145b28d0e244b12f6a4d7a4ecd29744aba480d3a8ce",
-    "https://esm.sh/v132/*w3c-keyname@2.2.8?target=esnext": "db6fe5782481eb3272f98893c1c31a29a7ba3a49fbe817f015c18c02623d4a30",
-    "https://esm.sh/v132/@codemirror/commands@6.2.5/X-ZS8q/esnext/commands.mjs": "3e57a795cf68c372f41d5da6cff0b6c9d6ca246cc4888885018de29e759c2d29",
-    "https://esm.sh/v132/@codemirror/language@6.9.0/X-ZS8q/esnext/language.mjs": "290b5132863bf2577692cb7797b559f7c2ac4630ef1deec383f677eadd24549e",
-    "https://esm.sh/v132/@codemirror/state@6.2.1/X-ZS8q/esnext/state.mjs": "9b337f42290a03cf8eba17ef39e03c4356ca90c686bb968ceaf043bc3057038d",
-    "https://esm.sh/v132/@codemirror/view@6.18.0/X-ZS8q/esnext/view.mjs": "6bd530fa89f3d76610608b003d34423b2b244fa5b3898442df45aa2a1ca081a1",
-    "https://esm.sh/v132/@lezer/common@1.0.4/X-ZS8q/esnext/common.mjs": "b7df5858dc586820f917b54dc226acf9cd529c26ca71cf26d7770c6c59405bb0",
-    "https://esm.sh/v132/@lezer/highlight@1.1.6/X-ZS8q/esnext/highlight.mjs": "7242c4bcc3198bfc2699d9ed02eaac8904ef6cb57c6f07696df0950d86bc91df",
-    "https://esm.sh/v132/@lezer/lr@1.3.10/X-ZS8q/esnext/lr.mjs": "bdb6e1c2d7aae259fcd33f46cb7b40312ea93eb6e5c8416ff5734f72d77043ac",
-    "https://esm.sh/v132/@primer/octicons-react@19.7.0/X-ZS8q/esnext/octicons-react.mjs": "f421a10c9d33ca5b00a7772add5bdf2387746bc83bd7a2e57b4e19fda58d2811",
-    "https://esm.sh/v132/@remix-run/router@1.8.0/X-ZS8q/esnext/router.mjs": "333b25b9d6105e8a7ec52da635700c0b06308a3f9a98e79a7a9c246dd0a4972e",
-    "https://esm.sh/v132/node_events.js": "b64c92b1feea55b195f2efa8ac4b2b459f692e30de18e29031e0dde7833e1453",
-    "https://esm.sh/v132/node_process.js": "13a1bd2438678b509dd68a0006c11c50c77451c9bcdeaa25c6602236ffce247c",
-    "https://esm.sh/v132/react-dom@18.2.0/X-ZS8q/esnext/client.js": "6176461690d184384ea5455858217c1466c63583aa5774461e58b00b8413ea2e",
-    "https://esm.sh/v132/react-dom@18.2.0/X-ZS8q/esnext/react-dom.mjs": "fbd329ced36d54d2dcc107d68db309e4aba2d3f68b7870e4b4fb3ae0c2f91177",
-    "https://esm.sh/v132/react-router-dom@6.15.0/X-ZS8q/esnext/react-router-dom.mjs": "82b6a31002656fa9f2bf2107b6fbc3b9f1515e39e0f77c938220734aeec9b60a",
-    "https://esm.sh/v132/react-router@6.15.0/X-ZS8q/esnext/react-router.mjs": "966d438a2710480d5c114e2ff5f23eefb56ce09734aa29e312b62f95aecaca0a",
-    "https://esm.sh/v132/react-storage-hooks@4.0.1/X-ZS8q/esnext/react-storage-hooks.mjs": "4144d9209299f6429c4072f77c1cdf9ffa6f4f2b6032dc8532613320fbe65044",
-    "https://esm.sh/v132/scheduler@0.23.0/X-ZS8q/esnext/scheduler.mjs": "55a646df4898a5eabbe836eb5465460130e40d40a11513b5e8d2a09c46ce04c4",
-    "https://esm.sh/v132/style-mod@4.1.0/X-ZS8q/esnext/style-mod.mjs": "38cbe2b3d5f886ce5034fc5cb7d24f033fbc9491853d72f621ce1350f95b7d48",
-    "https://esm.sh/v132/use-isomorphic-layout-effect@1.1.2/X-ZS8q/esnext/use-isomorphic-layout-effect.mjs": "dceb94c873ec7167e10b281bd4d5181bc371ed324d8fad3e57ee197c5c0f15fe",
-    "https://esm.sh/v132/use-latest@1.2.1/X-ZS8q/esnext/use-latest.mjs": "0eb6af483a062acc2827bfa13b711c9700eb4aa9f676f2653a387ed0df41e400",
-    "https://esm.sh/v132/w3c-keyname@2.2.8/X-ZS8q/esnext/w3c-keyname.mjs": "5a011ee0cff51e84d1883ef8913794e079d55d3140b092eb01c3b7778ab98f7a"
-  },
-  "npm": {
+  "version": "3",
+  "packages": {
     "specifiers": {
-      "@webassemblyjs/floating-point-hex-parser@1.11.6": "@webassemblyjs/floating-point-hex-parser@1.11.6",
-      "clsx@2.0.0": "clsx@2.0.0"
+      "npm:@webassemblyjs/floating-point-hex-parser@1.11.6": "npm:@webassemblyjs/floating-point-hex-parser@1.11.6",
+      "npm:clsx@2.0.0": "npm:clsx@2.0.0"
     },
-    "packages": {
+    "npm": {
       "@webassemblyjs/floating-point-hex-parser@1.11.6": {
         "integrity": "sha512-ejAj9hfRJ2XMsNHk/v6Fu2dGS+i4UaXBXGemOfQ/JfQ6mdQg/WXtwleQRLLS4OvfDhv8rYnVwH27YJLMyYsxhw==",
         "dependencies": {}
@@ -59,5 +15,55 @@
         "dependencies": {}
       }
     }
+  },
+  "redirects": {
+    "https://esm.sh/v128/@types/react@~18.2/index.d.ts": "https://esm.sh/v128/@types/react@18.2.20/index.d.ts",
+    "https://esm.sh/v132/@types/react-dom@~18.2/X-ZS8q/client~.d.ts": "https://esm.sh/v132/@types/react-dom@18.2.7/X-ZS8q/client~.d.ts",
+    "https://esm.sh/v132/@types/react-dom@~18.2/X-ZS8q/index.d.ts": "https://esm.sh/v132/@types/react-dom@18.2.7/X-ZS8q/index.d.ts",
+    "https://esm.sh/v132/@types/scheduler@^0/X-ZS8q/index.d.ts": "https://esm.sh/v132/@types/scheduler@0.16.3/X-ZS8q/index.d.ts"
+  },
+  "remote": {
+    "https://esm.sh/stable/react@18.2.0/esnext/react.mjs": "8477d1f643b153873958c52c85d876aa1cf000f17f8557bbce65e5a9ae21263a",
+    "https://esm.sh/v132/*@codemirror/commands@6.2.5?target=esnext": "a27c5162eb86d690c6af71d6b1a21f98e2aaf185376356dbbab3e9acee5b0448",
+    "https://esm.sh/v132/*@codemirror/language@6.9.1?target=esnext": "9b800aa03263c898bfe841f1d3f8f262f7d8098eb3e6ed66a22a9a1a6fe5677b",
+    "https://esm.sh/v132/*@codemirror/state@6.2.1?target=esnext": "f87cfef0718d545d5a382d5b298d800b90d22705815d9d405cae22681bd20e50",
+    "https://esm.sh/v132/*@codemirror/view@6.20.2?target=esnext": "471ff167d0c3ad9fe63e47d499be3accb52754154fa5dbb2e44657c438bef500",
+    "https://esm.sh/v132/*@lezer/common@1.1.0?target=esnext": "75b355653a464c788dfedd784b00a5d60d1b54ecef844815203ee3b2fa89766c",
+    "https://esm.sh/v132/*@lezer/highlight@1.1.6?target=esnext": "af4382575ca3a79ad9179d9f0fd94d6c9a4a76dcf902019d688b3f7b8b83fc98",
+    "https://esm.sh/v132/*@lezer/lr@1.3.12?target=esnext": "4850e05199961114f3b322816e4afab177d79f9359e26e384055e2644544bd58",
+    "https://esm.sh/v132/*@primer/octicons-react@19.8.0?target=esnext": "b3c1ce69183d875c987646a63c372b2c311beedfa48be43282b85eb595336aef",
+    "https://esm.sh/v132/*@remix-run/router@1.9.0?target=esnext": "ce6d0fa388d58bd4deb528f6c07692d19d9c717f5d1e1e1fb5ab29cf59be31ca",
+    "https://esm.sh/v132/*react-dom@18.2.0&target=esnext/client": "ac92657bd7b6ec6ad335a3f55b06b0325e398c51a9241f44ab20fcd3d7437921",
+    "https://esm.sh/v132/*react-dom@18.2.0?target=esnext": "31c106a9d38023d7fd4087c1996f506652bbe49a6d79991a801c7fa401d14e1a",
+    "https://esm.sh/v132/*react-router-dom@6.16.0?target=esnext": "2aa0c89ddc300725656d73b2f47e6702863c9d19fae49725391a6abbbaeed3db",
+    "https://esm.sh/v132/*react-router@6.16.0?target=esnext": "2b1a7cacb8d4a76668658b5d65fb4b29d311b69251538e2ce3a2dc620938795c",
+    "https://esm.sh/v132/*react-storage-hooks@4.0.1?target=esnext": "618c5fff141a5189c2faa8e93f6c32265a5c1e491039e7d9565b5c0458e4cd1d",
+    "https://esm.sh/v132/*react@18.2.0?target=esnext": "f082d59fe37237a03121ed55571caf350ddae35016da28de46e5c188af95de4a",
+    "https://esm.sh/v132/*scheduler@0.23.0?target=esnext": "ef7c8c82689631ae66686fdd7b5d25d0e84ff47fe4e46a09ebfebfcec0fd1c7f",
+    "https://esm.sh/v132/*style-mod@4.1.0?target=esnext": "cc8d90b19558e694261f998de27d66e5269dd84f5aac0ea77e1b98ac4f7f7ae1",
+    "https://esm.sh/v132/*use-isomorphic-layout-effect@1.1.2?target=esnext": "8a536d252ae6ea6a64274051a46705c7777ee1bacbf2ecf0e62516b208514d4a",
+    "https://esm.sh/v132/*use-latest@1.2.1?target=esnext": "a7ea4916a4575927b286c145b28d0e244b12f6a4d7a4ecd29744aba480d3a8ce",
+    "https://esm.sh/v132/*w3c-keyname@2.2.8?target=esnext": "db6fe5782481eb3272f98893c1c31a29a7ba3a49fbe817f015c18c02623d4a30",
+    "https://esm.sh/v132/@codemirror/commands@6.2.5/X-ZS8q/esnext/commands.mjs": "3e57a795cf68c372f41d5da6cff0b6c9d6ca246cc4888885018de29e759c2d29",
+    "https://esm.sh/v132/@codemirror/language@6.9.1/X-ZS8q/esnext/language.mjs": "6ccd406da51a4995bfd806bcac78cfa394c796ebae371463f252135b9942bc30",
+    "https://esm.sh/v132/@codemirror/state@6.2.1/X-ZS8q/esnext/state.mjs": "9b337f42290a03cf8eba17ef39e03c4356ca90c686bb968ceaf043bc3057038d",
+    "https://esm.sh/v132/@codemirror/view@6.20.2/X-ZS8q/esnext/view.mjs": "7be482398b40bbc16b1faa2a50d39ac8bde3e7b1771006ac1d8f6b6c50ea06e4",
+    "https://esm.sh/v132/@lezer/common@1.1.0/X-ZS8q/esnext/common.mjs": "4e5a65a90b70c412a58819b250d110db663a78327f1cdf1b3a22a5580d7191d2",
+    "https://esm.sh/v132/@lezer/highlight@1.1.6/X-ZS8q/esnext/highlight.mjs": "7242c4bcc3198bfc2699d9ed02eaac8904ef6cb57c6f07696df0950d86bc91df",
+    "https://esm.sh/v132/@lezer/lr@1.3.12/X-ZS8q/esnext/lr.mjs": "c0cb0d13065b5665edebbd802c136c7e379834a1ba8ae9a3abd33bf74c373191",
+    "https://esm.sh/v132/@primer/octicons-react@19.8.0/X-ZS8q/esnext/octicons-react.mjs": "ba95434e8930d6c1b207fe9cba2e4714e142d8ac0b04352b39727d832d98abea",
+    "https://esm.sh/v132/@remix-run/router@1.9.0/X-ZS8q/esnext/router.mjs": "cdfd53f8b73b8a9cf3b5f9d7f60542a637a9fb02f6e97b4719edda73fe7a5ad8",
+    "https://esm.sh/v132/node_events.js": "b64c92b1feea55b195f2efa8ac4b2b459f692e30de18e29031e0dde7833e1453",
+    "https://esm.sh/v132/node_process.js": "13a1bd2438678b509dd68a0006c11c50c77451c9bcdeaa25c6602236ffce247c",
+    "https://esm.sh/v132/react-dom@18.2.0/X-ZS8q/esnext/client.js": "6176461690d184384ea5455858217c1466c63583aa5774461e58b00b8413ea2e",
+    "https://esm.sh/v132/react-dom@18.2.0/X-ZS8q/esnext/react-dom.mjs": "fbd329ced36d54d2dcc107d68db309e4aba2d3f68b7870e4b4fb3ae0c2f91177",
+    "https://esm.sh/v132/react-router-dom@6.16.0/X-ZS8q/esnext/react-router-dom.mjs": "a0dd58da1e3ebf1caacbcce7d7269b307c6d706bfb690facee5c149b2075e368",
+    "https://esm.sh/v132/react-router@6.16.0/X-ZS8q/esnext/react-router.mjs": "1d2161f36c0e1e3425429d5aa1c6fdc44fbff92e253c9b28936229a1f32cefa9",
+    "https://esm.sh/v132/react-storage-hooks@4.0.1/X-ZS8q/esnext/react-storage-hooks.mjs": "4144d9209299f6429c4072f77c1cdf9ffa6f4f2b6032dc8532613320fbe65044",
+    "https://esm.sh/v132/scheduler@0.23.0/X-ZS8q/esnext/scheduler.mjs": "55a646df4898a5eabbe836eb5465460130e40d40a11513b5e8d2a09c46ce04c4",
+    "https://esm.sh/v132/style-mod@4.1.0/X-ZS8q/esnext/style-mod.mjs": "38cbe2b3d5f886ce5034fc5cb7d24f033fbc9491853d72f621ce1350f95b7d48",
+    "https://esm.sh/v132/use-isomorphic-layout-effect@1.1.2/X-ZS8q/esnext/use-isomorphic-layout-effect.mjs": "dceb94c873ec7167e10b281bd4d5181bc371ed324d8fad3e57ee197c5c0f15fe",
+    "https://esm.sh/v132/use-latest@1.2.1/X-ZS8q/esnext/use-latest.mjs": "0eb6af483a062acc2827bfa13b711c9700eb4aa9f676f2653a387ed0df41e400",
+    "https://esm.sh/v132/w3c-keyname@2.2.8/X-ZS8q/esnext/w3c-keyname.mjs": "5a011ee0cff51e84d1883ef8913794e079d55d3140b092eb01c3b7778ab98f7a"
   }
 }
