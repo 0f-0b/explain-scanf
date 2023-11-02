@@ -3,6 +3,5 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "deno.enable": true,
-  "deno.importMap": "./static/import_map.json",
   "deno.unstable": true
 }

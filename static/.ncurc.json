@@ -1,6 +1,0 @@
-{
-  "packageManager": "npm",
-  "reject": [
-    "@webassemblyjs/floating-point-hex-parser"
-  ]
-}

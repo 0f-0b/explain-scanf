@@ -8,8 +8,6 @@ import { toHtml } from "../deps/hast_util_to_html.ts";
 import { encodeBase64Url } from "../deps/std/encoding/base64url.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path/relative.ts";
-import { resolve } from "../deps/std/path/resolve.ts";
-import { toFileUrl } from "../deps/std/path/to_file_url.ts";
 
 import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
@@ -25,9 +23,6 @@ for (const arg of Deno.args) {
 Deno.chdir(new URL("..", import.meta.url));
 await emptyDir("dist");
 const [js, css] = await (async () => {
-  const cachePlugin = denoCachePlugin({
-    importMapURL: toFileUrl(resolve("static/import_map.json")),
-  });
   const cwd = Deno.cwd();
   const outDir = "dist";
   const outputs = new Map<string, string>();
@@ -40,7 +35,7 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [cachePlugin],
+      plugins: [denoCachePlugin()],
       absWorkingDir: cwd,
       sourcemap: "linked",
       format: "esm",
@@ -77,7 +72,7 @@ const [js, css] = await (async () => {
       bundle: true,
       outfile: "dist/sw.js",
       entryPoints: ["static/sw.ts"],
-      plugins: [cachePlugin],
+      plugins: [denoCachePlugin()],
       absWorkingDir: cwd,
       sourcemap: "linked",
       format: "esm",

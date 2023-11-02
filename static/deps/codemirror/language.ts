@@ -1,1 +1,1 @@
-export * from "@codemirror/language";
+export * from "npm:@codemirror/language@6.9.2";

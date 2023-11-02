@@ -1,1 +1,1 @@
-export * from "react-router-dom";
+export * from "npm:react-router-dom@6.18.0";
