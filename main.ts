@@ -4,6 +4,17 @@ import { onError, toStdHandler } from "./handler.ts";
 import { signal } from "./interrupt_signal.ts";
 import { getHandler } from "./server.ts";
 
+Object.defineProperty(Deno.Kv.prototype, Symbol.dispose, {
+  value: function (this: Deno.Kv) {
+    try {
+      this.close();
+    } catch {
+      // ignored
+    }
+  },
+  writable: true,
+  configurable: true,
+});
 using kv = await Deno.openKv();
 const server = Deno.serve({ handler: toStdHandler(getHandler(kv)), onError });
 const abort = () => server.shutdown();
