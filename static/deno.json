@@ -3,5 +3,8 @@
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true
   },
-  "importMap": "import_map.json"
+  "importMap": "import_map.json",
+  "tasks": {
+    "lint": "deno check main.tsx && deno check --all sw.ts"
+  }
 }

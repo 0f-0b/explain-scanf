@@ -3,7 +3,7 @@ import { join } from "./deps/std/path/join.ts";
 import { Code, getCode, putCode } from "./code.ts";
 import { fail } from "./fail.ts";
 import {
-  errors,
+  HttpError,
   logTime,
   methods,
   parseBodyAsJson,
@@ -29,11 +29,11 @@ export function getHandler(kv: Deno.Kv): RootHandler {
       "/code/:id": methods({
         GET: async (_, { params: { id } }) => {
           const code = await getCode(kv, id!) ??
-            fail(new errors.NotFound("Code not found"));
+            fail(new HttpError(Status.NotFound, "Code not found"));
           return Response.json({ code });
         },
       }),
-    }, () => fail(new errors.NotFound("Not found"))),
+    }, () => fail(new HttpError(Status.NotFound, "Not found"))),
   }, async (req) => {
     const path = decodeURLPathComponents(new URL(req.url).pathname);
     if (path) {

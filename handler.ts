@@ -1,12 +1,12 @@
-import { errors, isHttpError } from "./deps/std/http/http_errors.ts";
-import { Status } from "./deps/std/http/http_status.ts";
+import { Status } from "./deps/std/http/status.ts";
 import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
+import { HttpError } from "./http_error.ts";
 
-export * from "./deps/std/http/http_errors.ts";
-export * from "./deps/std/http/http_status.ts";
+export * from "./deps/std/http/status.ts";
+export * from "./http_error.ts";
 type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
 export type ContextConsumer<C, R> = (req: Request, ctx: C) => R;
@@ -47,7 +47,7 @@ export function reportHttpErrors<C>(handler: Handler<C>): Handler<C> {
     try {
       return await handler(req, ctx);
     } catch (e) {
-      if (isHttpError(e)) {
+      if (e instanceof HttpError) {
         const { message, status, headers } = e;
         return Response.json({ error: message }, { status, headers });
       }
@@ -91,7 +91,8 @@ export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
   }
   return (req, ctx) => {
     const handler = methodMap.get(req.method) ?? fail(
-      new errors.MethodNotAllowed(
+      new HttpError(
+        Status.MethodNotAllowed,
         `Method ${req.method} is not allowed for the URL`,
         {
           headers: [
@@ -114,7 +115,7 @@ export function parseBodyAsJson<T, C>(
       body = T.parse(await req.json());
     } catch (e) {
       if (e instanceof SyntaxError) {
-        throw new errors.BadRequest(e.message);
+        throw new HttpError(Status.BadRequest, e.message);
       }
       if (e instanceof ZodError) {
         return Response.json({ error: "Cannot parse body", issues: e.issues }, {

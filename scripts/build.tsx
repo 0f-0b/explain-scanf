@@ -4,7 +4,7 @@
 import { build, stop } from "../deps/esbuild.ts";
 import { toHtml } from "../deps/hast_util_to_html.ts";
 import { h } from "../deps/hastscript.ts";
-import { encodeBase64URL } from "../deps/std/encoding/base64url.ts";
+import { encodeBase64Url } from "../deps/std/encoding/base64url.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path/relative.ts";
 import { resolve } from "../deps/std/path/resolve.ts";
@@ -84,7 +84,7 @@ const [js, css] = await (async () => {
       minify: !dev,
       charset: "utf8",
       define: {
-        "CURRENT_CACHE_KEY": JSON.stringify(encodeBase64URL(xoredHash.buffer)),
+        "CURRENT_CACHE_KEY": JSON.stringify(encodeBase64Url(xoredHash.buffer)),
         "CACHEABLE_PATHS": JSON.stringify([
           "/",
           ...outputNames.map((name) => "/" + name),

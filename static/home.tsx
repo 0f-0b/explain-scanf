@@ -58,7 +58,7 @@ import {
   undefinedBehavior,
   unimplemented,
 } from "./scanf.ts";
-import { lazyLocalStorage, useStorageState } from "./storage.ts";
+import { useStorageState } from "./use_storage_state.ts";
 
 const colors = [
   Decoration.mark({ class: "color-0" }),
@@ -161,14 +161,16 @@ export interface HomeLocationState {
   code: Code;
 }
 
+const getLocalStorage = () => localStorage;
+
 export const Home: React.FC = () => {
   const [format, setFormat] = useStorageState(
-    lazyLocalStorage,
+    getLocalStorage,
     "format",
     "%d%f%s",
   );
   const [input, setInput] = useStorageState(
-    lazyLocalStorage,
+    getLocalStorage,
     "input",
     "25 54.32E-1 Hamster\n",
   );

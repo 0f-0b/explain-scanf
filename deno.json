@@ -6,7 +6,7 @@
     "dist"
   ],
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --unstable --all dump_kv.ts && deno check --unstable --all main.ts && deno check --all scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
-    "static:lint": "cd static && deno check main.tsx && deno check --all sw.ts"
+    "lint": "deno fmt --check && deno lint && deno check --unstable-kv --all dump_kv.ts && deno check --unstable-http --unstable-kv --all main.ts && deno check --all scripts/build.tsx && deno check --all scripts/generate_import_map.ts",
+    "static:lint": "cd static && deno task lint"
   }
 }

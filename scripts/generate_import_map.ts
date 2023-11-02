@@ -7,7 +7,7 @@ import type { ImportMap, Scopes, SpecifierMap } from "../deps/importmap.ts";
 process.on("log", (level: string, ...args: unknown[]) => {
   console.error(`[${level}]`, ...args);
 });
-const pin = "v132";
+const pin = "v133";
 const dev = false;
 
 function mapNode(node: Node, scopes: Scopes): SpecifierMap {
@@ -51,16 +51,16 @@ function normalizeScopes(obj: Scopes | undefined): Scopes | undefined {
 }
 
 Deno.chdir(new URL("..", import.meta.url));
-const arb = new Arborist({
-  path: "static",
-  legacyPeerDeps: true,
-  update: true,
-});
+const arb = new Arborist({ path: "static", update: true });
 const idealTree = await arb.buildIdealTree();
 const scopes: Scopes = {};
 const imports = mapNode(idealTree.root, scopes);
 const importMap: ImportMap = {
-  imports: normalizeSpecifierMap(imports),
+  imports: normalizeSpecifierMap({
+    // ensure versions of type packages match
+    "https://esm.sh/v128/": `https://esm.sh/${pin}/`,
+    ...imports,
+  }),
   scopes: normalizeScopes(scopes),
 };
 await Deno.writeTextFile(

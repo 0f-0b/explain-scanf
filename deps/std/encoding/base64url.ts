@@ -1,1 +1,4 @@
-export { encode as encodeBase64URL } from "https://deno.land/std@0.202.0/encoding/base64url.ts";
+export {
+  decodeBase64Url,
+  encodeBase64Url,
+} from "https://deno.land/std@0.205.0/encoding/base64url.ts";
