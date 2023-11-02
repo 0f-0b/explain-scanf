@@ -4,6 +4,9 @@ import { onError, toStdHandler } from "./handler.ts";
 import { signal } from "./interrupt_signal.ts";
 import { getHandler } from "./server.ts";
 
+if (typeof Symbol.dispose !== "symbol") {
+  Object.defineProperty(Symbol, "dispose", { value: Symbol("Symbol.dispose") });
+}
 Object.defineProperty(Deno.Kv.prototype, Symbol.dispose, {
   value: function (this: Deno.Kv) {
     try {
