@@ -2,6 +2,7 @@
   "compilerOptions": {
     "useUnknownInCatchVariables": true
   },
+  "importMap": "import_map.json",
   "exclude": [
     "dist"
   ],

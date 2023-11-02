@@ -1,9 +1,10 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
 
-/* @jsx h */
+/* @jsxImportSource hastscript */
+import "hastscript/jsx-runtime";
+
 import { build, stop } from "../deps/esbuild.ts";
 import { toHtml } from "../deps/hast_util_to_html.ts";
-import { h } from "../deps/hastscript.ts";
 import { encodeBase64Url } from "../deps/std/encoding/base64url.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path/relative.ts";
