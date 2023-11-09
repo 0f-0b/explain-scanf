@@ -1,23 +1,16 @@
 #!/usr/bin/env -S deno run --unstable-http --unstable-kv --allow-read=dist,index.html,robots.txt --allow-net=0.0.0.0,graphql.fauna.com --allow-env=FAUNA_SECRET
 
+import { fail } from "./fail.ts";
 import { onError, toStdHandler } from "./handler.ts";
 import { signal } from "./interrupt_signal.ts";
 import { getHandler } from "./server.ts";
 
 if (typeof Symbol.dispose !== "symbol") {
-  Object.defineProperty(Symbol, "dispose", { value: Symbol("Symbol.dispose") });
+  const dispose = Object.getOwnPropertySymbols(Deno.FsFile.prototype)
+    .find((symbol) => symbol.description === "Symbol.dispose") ??
+    fail(new TypeError("Cannot find Symbol.dispose"));
+  Object.defineProperty(Symbol, "dispose", { value: dispose });
 }
-Object.defineProperty(Deno.Kv.prototype, Symbol.dispose, {
-  value: function (this: Deno.Kv) {
-    try {
-      this.close();
-    } catch {
-      // ignored
-    }
-  },
-  writable: true,
-  configurable: true,
-});
 using kv = await Deno.openKv();
 const server = Deno.serve({ handler: toStdHandler(getHandler(kv)), onError });
 const abort = () => server.shutdown();

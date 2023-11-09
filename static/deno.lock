@@ -5,10 +5,10 @@
       "npm:@codemirror/commands@6.3.0": "npm:@codemirror/commands@6.3.0",
       "npm:@codemirror/language@6.9.2": "npm:@codemirror/language@6.9.2",
       "npm:@codemirror/state@6.3.1": "npm:@codemirror/state@6.3.1",
-      "npm:@codemirror/view@6.21.4": "npm:@codemirror/view@6.21.4",
+      "npm:@codemirror/view@6.22.0": "npm:@codemirror/view@6.22.0",
       "npm:@primer/octicons-react@19.8.0": "npm:@primer/octicons-react@19.8.0_react@18.2.0",
-      "npm:@types/react-dom@^18": "npm:@types/react-dom@18.2.14",
-      "npm:@types/react@^18": "npm:@types/react@18.2.34",
+      "npm:@types/react-dom@^18": "npm:@types/react-dom@18.2.15",
+      "npm:@types/react@^18": "npm:@types/react@18.2.37",
       "npm:@webassemblyjs/floating-point-hex-parser@1.11.6": "npm:@webassemblyjs/floating-point-hex-parser@1.11.6",
       "npm:clsx@2.0.0": "npm:clsx@2.0.0",
       "npm:react-dom@18.2.0": "npm:react-dom@18.2.0_react@18.2.0",
@@ -22,7 +22,7 @@
         "dependencies": {
           "@codemirror/language": "@codemirror/language@6.9.2",
           "@codemirror/state": "@codemirror/state@6.3.1",
-          "@codemirror/view": "@codemirror/view@6.21.4",
+          "@codemirror/view": "@codemirror/view@6.22.0",
           "@lezer/common": "@lezer/common@1.1.0"
         }
       },
@@ -30,7 +30,7 @@
         "integrity": "sha512-QGTQXSpAKDIzaSE96zNK1UfIUhPgkT1CLjh1N5qVzZuxgsEOhz5RqaN8QCIdyOQklGLx3MgHd9YrE3X3+Pl1ow==",
         "dependencies": {
           "@codemirror/state": "@codemirror/state@6.3.1",
-          "@codemirror/view": "@codemirror/view@6.21.4",
+          "@codemirror/view": "@codemirror/view@6.22.0",
           "@lezer/common": "@lezer/common@1.1.0",
           "@lezer/highlight": "@lezer/highlight@1.1.6",
           "@lezer/lr": "@lezer/lr@1.3.14",
@@ -41,8 +41,8 @@
         "integrity": "sha512-88e4HhMtKJyw6fKprGaN/yZfiaoGYOi2nM45YCUC6R/kex9sxFWBDGatS1vk4lMgnWmdIIB9tk8Gj1LmL8YfvA==",
         "dependencies": {}
       },
-      "@codemirror/view@6.21.4": {
-        "integrity": "sha512-WKVZ7nvN0lwWPfAf05WxWqTpwjC8YN3q5goj3CsSig7//DD81LULgOx3nBegqpqP0iygBqRmW8z0KSc2QTAdAg==",
+      "@codemirror/view@6.22.0": {
+        "integrity": "sha512-6zLj4YIoIpfTGKrDMTbeZRpa8ih4EymMCKmddEDcJWrCdp/N1D46B38YEz4creTb4T177AVS9EyXkLeC/HL2jA==",
         "dependencies": {
           "@codemirror/state": "@codemirror/state@6.3.1",
           "style-mod": "style-mod@4.1.0",
@@ -75,26 +75,26 @@
         "integrity": "sha512-BHdhcWgeiudl91HvVa2wxqZjSHbheSgIiDvxrF1VjFzBzpTtuDPkOdOi3Iqvc08kXtFkLjhbS+ML9aM8mJS+wQ==",
         "dependencies": {}
       },
-      "@types/prop-types@15.7.9": {
-        "integrity": "sha512-n1yyPsugYNSmHgxDFjicaI2+gCNjsBck8UX9kuofAKlc0h1bL+20oSF72KeNaW2DUlesbEVCFgyV2dPGTiY42g==",
+      "@types/prop-types@15.7.10": {
+        "integrity": "sha512-mxSnDQxPqsZxmeShFH+uwQ4kO4gcJcGahjjMFeLbKE95IAZiiZyiEepGZjtXJ7hN/yfu0bu9xN2ajcU0JcxX6A==",
         "dependencies": {}
       },
-      "@types/react-dom@18.2.14": {
-        "integrity": "sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==",
+      "@types/react-dom@18.2.15": {
+        "integrity": "sha512-HWMdW+7r7MR5+PZqJF6YFNSCtjz1T0dsvo/f1BV6HkV+6erD/nA7wd9NM00KVG83zf2nJ7uATPO9ttdIPvi3gg==",
         "dependencies": {
-          "@types/react": "@types/react@18.2.34"
+          "@types/react": "@types/react@18.2.37"
         }
       },
-      "@types/react@18.2.34": {
-        "integrity": "sha512-U6eW/alrRk37FU/MS2RYMjx0Va2JGIVXELTODaTIYgvWGCV4Y4TfTUzG8DdmpDNIT0Xpj/R7GfyHOJJrDttcvg==",
+      "@types/react@18.2.37": {
+        "integrity": "sha512-RGAYMi2bhRgEXT3f4B92WTohopH6bIXw05FuGlmJEnv/omEn190+QYEIYxIAuIBdKgboYYdVved2p1AxZVQnaw==",
         "dependencies": {
-          "@types/prop-types": "@types/prop-types@15.7.9",
-          "@types/scheduler": "@types/scheduler@0.16.5",
+          "@types/prop-types": "@types/prop-types@15.7.10",
+          "@types/scheduler": "@types/scheduler@0.16.6",
           "csstype": "csstype@3.1.2"
         }
       },
-      "@types/scheduler@0.16.5": {
-        "integrity": "sha512-s/FPdYRmZR8SjLWGMCuax7r3qCWQw9QKHzXVukAuuIJkXkDRwp+Pu5LMIVFi0Fxbav35WURicYr8u1QsoybnQw==",
+      "@types/scheduler@0.16.6": {
+        "integrity": "sha512-Vlktnchmkylvc9SnwwwozTv04L/e1NykF5vgoQ0XTmI8DD+wxfjQuHuvHS3p0r2jz2x2ghPs2h1FVeDirIteWA==",
         "dependencies": {}
       },
       "@webassemblyjs/floating-point-hex-parser@1.11.6": {

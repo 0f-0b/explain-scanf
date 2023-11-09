@@ -34,7 +34,11 @@ import {
   useMemo,
   useRef,
 } from "./deps/react.ts";
-import { useLocation, useNavigate } from "./deps/react_router_dom.ts";
+import {
+  type Location,
+  useLocation,
+  useNavigate,
+} from "./deps/react_router_dom.ts";
 
 import type { Code } from "./api.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
@@ -177,28 +181,31 @@ export const Home: React.FC = () => {
   const formatView = useRef<EditorView>(null);
   const inputView = useRef<EditorView>(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const locationState = location.state as HomeLocationState | null;
+  const location = useLocation() as Location<HomeLocationState | null>;
   useLayoutEffect(() => {
-    if (!locationState) {
-      return;
+    const oldFormat = formatView.current!.state.doc.toString();
+    if (format !== oldFormat) {
+      formatView.current!.dispatch({
+        changes: { from: 0, to: oldFormat.length, insert: format },
+      });
     }
-    const { format: newFormat, input: newInput } = locationState.code;
-    formatView.current!.dispatch({
-      changes: { from: 0, to: format.length, insert: newFormat },
-    });
-    inputView.current!.dispatch({
-      changes: { from: 0, to: input.length, insert: newInput },
-    });
-  }, [locationState]);
+  }, [format]);
+  useLayoutEffect(() => {
+    const oldInput = inputView.current!.state.doc.toString();
+    if (input !== oldInput) {
+      inputView.current!.dispatch({
+        changes: { from: 0, to: oldInput.length, insert: input },
+      });
+    }
+  }, [input]);
   useEffect(() => {
-    if (!locationState) {
-      return;
+    if (location.state) {
+      const { format, input } = location.state.code;
+      setFormat(format);
+      setInput(input);
+      navigate("/", { replace: true });
     }
-    navigate("/", {
-      replace: true,
-    });
-  }, [locationState]);
+  }, [location.state]);
   const directives = useMemo(() => parseFormat(format), [format]);
   useLayoutEffect(() => {
     const convs = directives === undefinedBehavior
