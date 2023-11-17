@@ -1,4 +1,4 @@
-import { Status } from "./deps/std/http/status.ts";
+import { STATUS_CODE } from "./deps/std/http/status.ts";
 import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
 
 import { type Awaitable, settled } from "./async.ts";
@@ -20,7 +20,7 @@ export function toStdHandler(handler: RootHandler): Deno.ServeHandler {
 export const onError = (error: unknown): Response => {
   console.error(error);
   return Response.json({ error: "Internal server error" }, {
-    status: Status.InternalServerError,
+    status: STATUS_CODE.InternalServerError,
   });
 };
 
@@ -92,8 +92,8 @@ export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
   return (req, ctx) => {
     const handler = methodMap.get(req.method) ?? fail(
       new HttpError(
-        Status.MethodNotAllowed,
         `Method ${req.method} is not allowed for the URL`,
+        "MethodNotAllowed",
         {
           headers: [
             ["allow", Array.from(methodMap.keys()).join(", ")],
@@ -115,11 +115,11 @@ export function parseBodyAsJson<T, C>(
       body = T.parse(await req.json());
     } catch (e) {
       if (e instanceof SyntaxError) {
-        throw new HttpError(Status.BadRequest, e.message);
+        throw new HttpError(e.message, "BadRequest");
       }
       if (e instanceof ZodError) {
         return Response.json({ error: "Cannot parse body", issues: e.issues }, {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         });
       }
       throw e;
