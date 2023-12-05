@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --unstable-http --unstable-kv --allow-read=dist,index.html,robots.txt --allow-net=0.0.0.0,graphql.fauna.com --allow-env=FAUNA_SECRET
+#!/usr/bin/env -S deno run --unstable-http --unstable-kv --allow-read=dist,index.html,robots.txt --allow-net=0.0.0.0
 
 import { fail } from "./fail.ts";
 import { onError, toStdHandler } from "./handler.ts";

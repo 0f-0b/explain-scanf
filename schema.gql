@@ -1,9 +1,0 @@
-type Code {
-  id: String! @unique(index: "codeById")
-  format: String!
-  input: String!
-}
-
-type Query {
-  code(id: String!): Code @resolver
-}
