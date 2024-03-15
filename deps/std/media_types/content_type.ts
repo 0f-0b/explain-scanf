@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.208.0/media_types/content_type.ts";
+export * from "jsr:@std/media-types@^0.220.1/content_type";

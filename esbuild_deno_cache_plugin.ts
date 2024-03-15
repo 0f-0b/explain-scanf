@@ -1,32 +1,30 @@
-import { type CacheSetting, createCache } from "./deps/deno_cache.ts";
+import { type CacheSetting, createCache } from "./deps/deno/cache_dir.ts";
 import {
+  createGraph,
   init,
   type LoadResponse,
-  MediaType,
   parseModule,
-} from "./deps/deno_graph.ts";
+} from "./deps/deno/graph.ts";
 import type { Loader, Plugin } from "./deps/esbuild.ts";
-import {
-  type ImportMap,
-  resolveImportMap,
-  resolveModuleSpecifier,
-} from "./deps/importmap.ts";
+import { parseFromJson } from "./deps/import_map.ts";
 import { fromFileUrl } from "./deps/std/path/from_file_url.ts";
+import { resolve } from "./deps/std/path/resolve.ts";
 import { toFileUrl } from "./deps/std/path/to_file_url.ts";
 
-const loaders = new Map<MediaType, Loader>([
-  [MediaType.JavaScript, "js"],
-  [MediaType.Mjs, "js"],
-  [MediaType.Cjs, "js"],
-  [MediaType.Jsx, "jsx"],
-  [MediaType.TypeScript, "ts"],
-  [MediaType.Mts, "ts"],
-  [MediaType.Cts, "ts"],
-  [MediaType.Dts, "ts"],
-  [MediaType.Dmts, "ts"],
-  [MediaType.Dcts, "ts"],
-  [MediaType.Tsx, "tsx"],
-  [MediaType.Json, "json"],
+const decoder = new TextDecoder();
+const loaders = new Map<string, Loader>([
+  ["JavaScript", "js"],
+  ["Mjs", "js"],
+  ["Cjs", "js"],
+  ["JSX", "jsx"],
+  ["TypeScript", "ts"],
+  ["Mts", "ts"],
+  ["Cts", "ts"],
+  ["Dts", "ts"],
+  ["Dmts", "ts"],
+  ["Dcts", "ts"],
+  ["TSX", "tsx"],
+  ["Json", "json"],
 ]);
 
 function asPath(pathOrURL: string | URL): string {
@@ -76,50 +74,84 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
     name: "deno-cache",
     setup(build) {
       let load: (specifier: string) => Promise<LoadResponse | undefined>;
-      let importMap: ImportMap = {};
+      let resolveImport = (specifier: string, referrer: string) =>
+        /^\.{0,2}\//.test(specifier)
+          ? new URL(specifier, referrer).href
+          : new URL(specifier).href;
+      // deno-lint-ignore ban-types
+      const redirects: Record<string, string> = { __proto__: null } as {};
       build.onStart(async () => {
-        ({ load } = createCache({
+        const { load: innerLoad } = createCache({
           allowRemote,
           cacheSetting,
           root: denoDir,
           vendorRoot: vendorDir,
-        }));
+        });
+        load = async (specifier) => {
+          const res = await innerLoad(specifier);
+          if (res?.kind === "module" && Array.isArray(res.content)) {
+            res.content = new Uint8Array(res.content);
+          }
+          return res;
+        };
         if (importMapURL !== undefined) {
-          const res = await fetch(importMapURL);
-          importMap = resolveImportMap(await res.json(), new URL(importMapURL));
+          const res = await load(importMapURL);
+          if (res?.kind !== "module") {
+            throw new TypeError("Failed to load import map");
+          }
+          const json = typeof res.content === "string"
+            ? res.content
+            : decoder.decode(res.content);
+          const importMap = await parseFromJson(importMapURL, json);
+          resolveImport = importMap.resolve.bind(importMap);
         }
       });
       build.onResolve(
         { filter: /(?:)/ },
-        ({ path, importer, namespace, resolveDir, kind }) => {
-          if (kind !== "import-statement" && kind !== "dynamic-import") {
+        async ({ path, importer, namespace, resolveDir, kind }) => {
+          if (kind === "entry-point" && namespace === "file") {
+            const root = toFileUrl(resolve(resolveDir, path)).href;
+            const graph = await createGraph(root, {
+              kind: "codeOnly",
+              load,
+              resolve: resolveImport,
+            });
+            Object.assign(redirects, graph.redirects);
+          }
+          if (
+            !((namespace === "file" || namespace === "remote") &&
+              (kind === "import-statement" || kind === "dynamic-import"))
+          ) {
             return null;
           }
-          let resolved: URL;
-          try {
-            const referrer = namespace === "remote"
-              ? new URL(importer)
-              : toFileUrl(importer);
-            resolved = new URL(
-              resolveModuleSpecifier(path, importMap, referrer),
-            );
-          } catch {
+          const resolved = (() => {
+            const referrer = namespace === "file"
+              ? toFileUrl(importer).href
+              : importer;
+            try {
+              return resolveImport(path, referrer);
+            } catch {
+              return null;
+            }
+          })();
+          if (resolved === null) {
             return null;
           }
-          switch (resolved.protocol) {
+          const actual = new URL(redirects[resolved] ?? resolved);
+          switch (actual.protocol) {
             case "http:":
             case "https:":
-              return { path: resolved.href, namespace: "remote" };
+              return { path: actual.href, namespace: "remote" };
             case "npm:": {
-              const { name, path } = parseNpmSpecifier(resolved.pathname);
-              return build.resolve(`${name}${path}`, {
+              const { name, path } = parseNpmSpecifier(actual.pathname);
+              return await build.resolve(`${name}${path}`, {
                 importer,
                 resolveDir: nodeResolutionRootDir ?? resolveDir,
                 kind: "import-statement",
               });
             }
             default:
-              return { path: fromFileUrl(resolved), namespace };
+              return { path: fromFileUrl(actual), namespace: "file" };
           }
         },
       );
@@ -131,12 +163,12 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
             return null;
           }
           await init();
-          const mod = parseModule(res.specifier, res.content, {
+          const mod = parseModule(res.specifier, new Uint8Array(), {
             headers: res.headers,
           });
           return {
             contents: res.content,
-            loader: loaders.get(mod.mediaType ?? MediaType.Unknown),
+            loader: loaders.get(mod.mediaType ?? "Unknown"),
           };
         },
       );

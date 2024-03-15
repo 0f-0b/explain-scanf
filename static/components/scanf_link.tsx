@@ -13,7 +13,7 @@ export const ScanfLink: React.FC = () => (
           sessionStorage.getItem("e") === null
         ) {
           sessionStorage.setItem("e", "");
-          window.open(
+          open(
             atob("aHR0cHM6Ly95b3V0dS5iZS9kUXc0dzlXZ1hjUQ"),
             "_blank",
             "noreferrer",

@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.208.0/path/to_file_url.ts";
+export * from "jsr:@std/path@^0.220.1/to_file_url";

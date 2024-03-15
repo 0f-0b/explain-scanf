@@ -1,13 +1,13 @@
 {
+  "importMap": "import_map.json",
   "compilerOptions": {
     "useUnknownInCatchVariables": true
   },
-  "importMap": "import_map.json",
   "exclude": [
     "dist"
   ],
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --unstable-kv --all dump_kv.ts && deno check --unstable-kv --all main.ts && deno check --all scripts/build.tsx",
+    "lint": "deno fmt --check && deno lint && deno check --all dump_kv.ts && deno check --all main.ts && deno check --all scripts/build.tsx",
     "static:lint": "cd static && deno task lint"
   }
 }

@@ -1,1 +1,1 @@
-export * from "npm:@codemirror/view@6.22.1";
+export * from "npm:@codemirror/view@6.26.0";

@@ -14,7 +14,17 @@ export type Handler<C> = ContextConsumer<C, Awaitable<Response>>;
 export type RootHandler = Handler<{ readonly conn: Deno.ServeHandlerInfo }>;
 
 export function toStdHandler(handler: RootHandler): Deno.ServeHandler {
-  return async (req, conn) => await handler(req, { conn });
+  return async (req, conn) => {
+    const headersOnly = req.method === "HEAD";
+    if (headersOnly) {
+      req = new Request(req, { method: "GET" });
+    }
+    let res = await handler(req, { conn });
+    if (headersOnly) {
+      res = new Response(null, res);
+    }
+    return res;
+  };
 }
 
 export const onError = (error: unknown): Response => {

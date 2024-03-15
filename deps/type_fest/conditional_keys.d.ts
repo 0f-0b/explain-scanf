@@ -1,1 +1,1 @@
-export * from "npm:type-fest@4.8.3/source/conditional-keys.d.ts";
+export * from "npm:type-fest@4.12.0/source/conditional-keys.d.ts";

@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.208.0/path/extname.ts";
+export * from "jsr:@std/path@^0.220.1/extname";

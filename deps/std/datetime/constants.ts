@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.208.0/datetime/constants.ts";
+export * from "jsr:@std/datetime@^0.220.1/constants";

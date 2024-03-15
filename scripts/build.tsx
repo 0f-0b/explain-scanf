@@ -91,7 +91,7 @@ const [js, css] = await (async () => {
   } catch {
     throw "Build failed";
   } finally {
-    stop();
+    await stop();
   }
 })();
 const html = toHtml(
