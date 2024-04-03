@@ -28,3 +28,4 @@ jobs:
         with:
           project: explain-scanf
           entrypoint: main.ts
+          import-map: generated_import_map.json

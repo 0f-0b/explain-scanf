@@ -21,6 +21,11 @@
   "exclude": [
     "dist"
   ],
+  "fmt": {
+    "exclude": [
+      "**/generated_import_map.json"
+    ]
+  },
   "lint": {
     "rules": {
       "include": [

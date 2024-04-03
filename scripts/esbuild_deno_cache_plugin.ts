@@ -35,35 +35,6 @@ function optionAsURL(url: string | URL | undefined): string | undefined {
   return url === undefined ? undefined : new URL(url).href;
 }
 
-type JsonObject = { [key: string]: JsonValue | undefined };
-type JsonArray = JsonValue[];
-type JsonValue = JsonObject | JsonArray | string | number | boolean | null;
-
-function isJsonObject(value: JsonValue | undefined): value is JsonObject {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
-}
-
-function expandImports(imports: JsonObject): JsonObject {
-  // deno-lint-ignore ban-types
-  const result: JsonObject = { __proto__: null } as {};
-  for (const [key, value] of Object.entries(imports)) {
-    result[key] = value;
-    if (typeof value !== "string" || key.endsWith("/") || value.endsWith("/")) {
-      continue;
-    }
-    const keyWithSlash = `${key}/`;
-    if (keyWithSlash in imports) {
-      continue;
-    }
-    const match = /^(jsr|npm):\/?/.exec(value);
-    if (!match) {
-      continue;
-    }
-    result[keyWithSlash] = `${match[1]}:/${value.substring(match[0].length)}/`;
-  }
-  return result;
-}
-
 interface NpmSpecifier {
   name: string;
   version: string;
@@ -87,7 +58,6 @@ export interface DenoCachePluginOptions {
   denoDir?: string | URL;
   vendorDir?: string | URL;
   importMapURL?: string | URL;
-  expandImportMap?: boolean;
   nodeResolutionRootDir?: string | URL;
 }
 
@@ -97,7 +67,6 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
   const denoDir = optionAsPath(options?.denoDir);
   const vendorDir = optionAsPath(options?.vendorDir);
   const importMapURL = optionAsURL(options?.importMapURL);
-  const expandImportMap = options?.expandImportMap;
   const nodeResolutionRootDir = optionAsPath(options?.nodeResolutionRootDir);
   return {
     name: "deno-cache",
@@ -121,27 +90,9 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
           if (res?.kind !== "module") {
             throw new TypeError("Failed to load import map");
           }
-          let json = typeof res.content === "string"
+          const json = typeof res.content === "string"
             ? res.content
             : decoder.decode(res.content);
-          if (expandImportMap) {
-            const obj = JSON.parse(json) as JsonValue;
-            if (isJsonObject(obj)) {
-              const { imports, scopes } = obj;
-              if (isJsonObject(imports)) {
-                obj.imports = expandImports(imports);
-              }
-              if (isJsonObject(scopes)) {
-                for (const key of Object.keys(scopes)) {
-                  const scopedImports = scopes[key];
-                  if (isJsonObject(scopedImports)) {
-                    scopes[key] = expandImports(scopedImports);
-                  }
-                }
-              }
-            }
-            json = JSON.stringify(obj);
-          }
           const importMap = await parseFromJson(importMapURL, json);
           resolveImport = importMap.resolve.bind(importMap);
         }

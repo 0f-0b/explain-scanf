@@ -5,10 +5,13 @@
 import { encodeBase64Url } from "@std/encoding/base64url";
 import { emptyDir } from "@std/fs/empty-dir";
 import { relative } from "@std/path/relative";
+import { resolve } from "@std/path/resolve";
+import { toFileUrl } from "@std/path/to-file-url";
 import { build, stop } from "esbuild";
 import { toHtml } from "hast-util-to-html";
 
-import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
+import { denoCachePlugin } from "./esbuild_deno_cache_plugin.ts";
+import { expandImportMap } from "./expand_import_map.ts";
 
 let dev = false;
 for (const arg of Deno.args) {
@@ -20,6 +23,18 @@ for (const arg of Deno.args) {
   Deno.exit(2);
 }
 Deno.chdir(new URL("..", import.meta.url));
+
+async function generateImportMap(
+  configPath: string,
+  importMapPath: string,
+): Promise<undefined> {
+  const config = JSON.parse(await Deno.readTextFile(configPath));
+  const importMap = expandImportMap(config);
+  await Deno.writeTextFile(importMapPath, JSON.stringify(importMap));
+}
+
+await generateImportMap("deno.json", "generated_import_map.json");
+await generateImportMap("static/deno.json", "static/generated_import_map.json");
 await emptyDir("dist");
 const [js, css] = await (async () => {
   const cwd = Deno.cwd();
@@ -35,8 +50,7 @@ const [js, css] = await (async () => {
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
       plugins: [denoCachePlugin({
-        importMapURL: import.meta.resolve("../static/deno.json"),
-        expandImportMap: true,
+        importMapURL: toFileUrl(resolve("static/generated_import_map.json")),
       })],
       absWorkingDir: cwd,
       sourcemap: "linked",
