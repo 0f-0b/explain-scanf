@@ -1,5 +1,6 @@
-import { clsx } from "../deps/clsx.ts";
-import { React } from "../deps/react.ts";
+import { clsx } from "clsx";
+// deno-lint-ignore verbatim-module-syntax
+import { React } from "react";
 
 export interface ErrorMessageProps
   extends Omit<React.ComponentPropsWithoutRef<"span">, "children"> {

@@ -9,14 +9,14 @@ import {
   selectLine,
   simplifySelection,
   standardKeymap,
-} from "./deps/codemirror/commands.ts";
-import { indentUnit } from "./deps/codemirror/language.ts";
+} from "@codemirror/commands";
+import { indentUnit } from "@codemirror/language";
 import {
   Compartment,
   EditorState,
   type Extension,
   Transaction,
-} from "./deps/codemirror/state.ts";
+} from "@codemirror/state";
 import {
   Decoration,
   drawSelection,
@@ -26,19 +26,9 @@ import {
   hoverTooltip,
   keymap,
   lineNumbers,
-} from "./deps/codemirror/view.ts";
-import {
-  React,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "./deps/react.ts";
-import {
-  type Location,
-  useLocation,
-  useNavigate,
-} from "./deps/react_router_dom.ts";
+} from "@codemirror/view";
+import { React, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { type Location, useLocation, useNavigate } from "react-router-dom";
 
 import type { Code } from "./api.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";

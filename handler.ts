@@ -1,11 +1,11 @@
-import { STATUS_CODE } from "./deps/std/http/status.ts";
-import { ZodError, type ZodType, type ZodTypeDef } from "./deps/zod.ts";
+import { STATUS_CODE } from "@std/http/status";
+import { ZodError, type ZodType, type ZodTypeDef } from "zod";
 
 import { type Awaitable, settled } from "./async.ts";
 import { fail } from "./fail.ts";
 import { HttpError } from "./http_error.ts";
 
-export * from "./deps/std/http/status.ts";
+export * from "@std/http/status";
 export * from "./http_error.ts";
 type Simplify<T> = Omit<T, never>;
 type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;

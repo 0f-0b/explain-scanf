@@ -1,5 +1,0 @@
-{
-  "imports": {
-    "hastscript/jsx-runtime": "./deps/hastscript/html.ts"
-  }
-}

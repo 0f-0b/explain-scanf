@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect } from "./deps/react.ts";
+import { type React, useCallback, useEffect } from "react";
 
 import { useDefaultedState } from "./use_defaulted_state.ts";
 import { useFallibleEffect } from "./use_fallible_effect.ts";

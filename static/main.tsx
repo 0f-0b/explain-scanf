@@ -2,11 +2,12 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 /// <reference lib="es2020" />
+
 import "./register_sw.ts";
 
-import { React } from "./deps/react.ts";
-import { createRoot } from "./deps/react_dom/client.ts";
-import { BrowserRouter } from "./deps/react_router_dom.ts";
+import { React } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 import { App } from "./app.tsx";
 

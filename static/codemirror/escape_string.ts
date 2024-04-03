@@ -1,4 +1,4 @@
-import type { Extension } from "../deps/codemirror/state.ts";
+import type { Extension } from "@codemirror/state";
 import {
   Decoration,
   type DecorationSet,
@@ -7,7 +7,7 @@ import {
   ViewPlugin,
   type ViewUpdate,
   WidgetType,
-} from "../deps/codemirror/view.ts";
+} from "@codemirror/view";
 
 import { stringEscapeRE, stringEscapes } from "../escape.ts";
 

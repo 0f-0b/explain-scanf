@@ -1,4 +1,5 @@
-import { React } from "../deps/react.ts";
+// deno-lint-ignore verbatim-module-syntax
+import { React } from "react";
 
 export const ScanfLink: React.FC = () => (
   <a

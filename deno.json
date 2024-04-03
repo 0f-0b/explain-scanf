@@ -1,11 +1,33 @@
 {
-  "importMap": "import_map.json",
+  "imports": {
+    "@deno/cache-dir": "jsr:@deno/cache-dir@^0.8.0",
+    "@deno/graph": "jsr:@deno/graph@^0.69.10",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.19.1/mod.ts",
+    "@std/datetime": "jsr:@std/datetime@^0.221.0",
+    "@std/encoding": "jsr:@std/encoding@^0.221.0",
+    "@std/fs": "jsr:@std/fs@^0.221.0",
+    "@std/http": "jsr:@std/http@^0.221.0",
+    "@std/media-types": "jsr:@std/media-types@^0.221.0",
+    "@std/path": "jsr:@std/path@^0.221.0",
+    "esbuild": "https://deno.land/x/esbuild@v0.20.2/mod.js",
+    "hast-util-to-html": "npm:hast-util-to-html@9.0.0",
+    "hastscript": "npm:hastscript@8.0.0",
+    "type-fest": "npm:type-fest@4.14.0/source",
+    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
+  },
   "compilerOptions": {
     "useUnknownInCatchVariables": true
   },
   "exclude": [
     "dist"
   ],
+  "lint": {
+    "rules": {
+      "include": [
+        "verbatim-module-syntax"
+      ]
+    }
+  },
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check --all dump_kv.ts && deno check --all main.ts && deno check --all scripts/build.tsx",
     "static:lint": "cd static && deno task lint"

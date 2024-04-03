@@ -1,4 +1,5 @@
-import { React } from "../deps/react.ts";
+// deno-lint-ignore verbatim-module-syntax
+import { React } from "react";
 
 export type HlProps = React.PropsWithChildren;
 export const HlKeyword: React.FC<HlProps> = ({ children }) => (

@@ -1,5 +1,5 @@
-import { React } from "./deps/react.ts";
-import { Route, Routes } from "./deps/react_router_dom.ts";
+import { React } from "react";
+import { Route, Routes } from "react-router-dom";
 
 const Home = React.lazy(() => import("./home.tsx"));
 const Code = React.lazy(() => import("./code.tsx"));

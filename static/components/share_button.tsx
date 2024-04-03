@@ -1,5 +1,6 @@
-import { ShareIcon } from "../deps/primer/octicons_react.ts";
-import { React, useEffect, useState } from "../deps/react.ts";
+import { ShareIcon } from "@primer/octicons-react";
+// deno-lint-ignore verbatim-module-syntax
+import { React, useEffect, useState } from "react";
 
 import { type Code, putCode } from "../api.ts";
 import { ErrorMessage } from "./error_message.tsx";

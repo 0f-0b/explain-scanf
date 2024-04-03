@@ -1,5 +1,5 @@
-import { DAY } from "./deps/std/datetime/constants.ts";
-import { z } from "./deps/zod.ts";
+import { DAY } from "@std/datetime/constants";
+import { z } from "zod";
 
 import { randomString } from "./random.ts";
 

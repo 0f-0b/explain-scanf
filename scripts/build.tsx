@@ -1,13 +1,12 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
 
 /* @jsxImportSource hastscript */
-import "hastscript/jsx-runtime";
 
-import { build, stop } from "../deps/esbuild.ts";
-import { toHtml } from "../deps/hast_util_to_html.ts";
-import { encodeBase64Url } from "../deps/std/encoding/base64url.ts";
-import { emptyDir } from "../deps/std/fs/empty_dir.ts";
-import { relative } from "../deps/std/path/relative.ts";
+import { encodeBase64Url } from "@std/encoding/base64url";
+import { emptyDir } from "@std/fs/empty-dir";
+import { relative } from "@std/path/relative";
+import { build, stop } from "esbuild";
+import { toHtml } from "hast-util-to-html";
 
 import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
@@ -35,7 +34,10 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin()],
+      plugins: [denoCachePlugin({
+        importMapURL: import.meta.resolve("../static/deno.json"),
+        expandImportMap: true,
+      })],
       absWorkingDir: cwd,
       sourcemap: "linked",
       format: "esm",

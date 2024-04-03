@@ -1,4 +1,4 @@
-import { parseHexFloat } from "./deps/floating_point_hex_parser.ts";
+import { parseHexFloat } from "floating-point-hex-parser";
 
 import type {
   DeclarationSpecifier,

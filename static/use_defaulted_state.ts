@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "./deps/react.ts";
+import { type React, useEffect, useRef, useState } from "react";
 
 function callIfCallable<T>(value: T | (() => T)): T {
   return typeof value === "function" ? (value as () => T)() : value;

@@ -1,5 +1,5 @@
-import { type ErrorStatus, STATUS_CODE } from "./deps/std/http/status.ts";
-import type { ConditionalKeys } from "./deps/type_fest/conditional_keys.d.ts";
+import { type ErrorStatus, STATUS_CODE } from "@std/http/status";
+import type { ConditionalKeys } from "type-fest/conditional-keys";
 
 export type HttpErrorName = ConditionalKeys<typeof STATUS_CODE, ErrorStatus>;
 

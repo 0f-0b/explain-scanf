@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from "./deps/react.ts";
-import { useNavigate, useParams } from "./deps/react_router_dom.ts";
+// deno-lint-ignore verbatim-module-syntax
+import { React, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { getCode } from "./api.ts";
 import { ErrorMessage } from "./components/error_message.tsx";
