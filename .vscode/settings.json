@@ -1,7 +1,0 @@
-{
-  "[markdown][typescript][typescriptreact]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
-  },
-  "deno.enable": true,
-  "deno.unstable": true
-}
