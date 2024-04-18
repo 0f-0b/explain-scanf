@@ -6,7 +6,7 @@ permissions:
   contents: read
   id-token: write
 concurrency:
-  group: "deploy"
+  group: deploy
   cancel-in-progress: true
 jobs:
   deploy:
@@ -20,7 +20,7 @@ jobs:
           deno-version: 1
       - name: Cache dependencies
         working-directory: static
-        run: deno cache main.tsx
+        run: deno task cache
       - name: Build
         run: ./scripts/build.tsx
       - name: Deploy
