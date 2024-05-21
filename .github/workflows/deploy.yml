@@ -20,7 +20,7 @@ jobs:
           deno-version: 1
       - name: Cache dependencies
         working-directory: static
-        run: deno task cache
+        run: mkdir node_modules && deno task cache
       - name: Build
         run: ./scripts/build.tsx
       - name: Deploy
