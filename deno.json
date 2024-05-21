@@ -3,17 +3,17 @@
     "@deno/cache-dir": "jsr:@deno/cache-dir@^0.8.0",
     "@deno/graph": "jsr:@deno/graph@^0.69.10",
     "@deno/import-map": "https://deno.land/x/import_map@v0.19.1/mod.ts",
-    "@std/datetime": "jsr:@std/datetime@^0.223.0",
-    "@std/encoding": "jsr:@std/encoding@^0.223.0",
-    "@std/fs": "jsr:@std/fs@^0.223.0",
-    "@std/http": "jsr:@std/http@^0.223.0",
-    "@std/media-types": "jsr:@std/media-types@^0.223.0",
-    "@std/path": "jsr:@std/path@^0.223.0",
-    "esbuild": "https://deno.land/x/esbuild@v0.20.2/mod.js",
+    "@std/datetime": "jsr:@std/datetime@^0.224.0",
+    "@std/encoding": "jsr:@std/encoding@^0.224.1",
+    "@std/fs": "jsr:@std/fs@^0.229.1",
+    "@std/http": "jsr:@std/http@^0.224.0",
+    "@std/media-types": "jsr:@std/media-types@^0.224.1",
+    "@std/path": "jsr:@std/path@^0.225.1",
+    "esbuild": "https://deno.land/x/esbuild@v0.21.3/mod.js",
     "hast-util-to-html": "npm:hast-util-to-html@9.0.1",
     "hastscript": "npm:hastscript@8.0.0",
-    "type-fest": "npm:type-fest@4.15.0/source",
-    "zod": "https://deno.land/x/zod@v3.23.0-beta.0/mod.ts"
+    "type-fest": "npm:type-fest@4.18.2/source",
+    "zod": "https://deno.land/x/zod@v3.23.3/mod.ts"
   },
   "compilerOptions": {
     "useUnknownInCatchVariables": true

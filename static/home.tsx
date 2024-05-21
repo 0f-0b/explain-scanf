@@ -1,3 +1,5 @@
+/* @jsxImportSource react */
+
 import {
   copyLineDown,
   copyLineUp,
@@ -27,7 +29,14 @@ import {
   keymap,
   lineNumbers,
 } from "@codemirror/view";
-import { React, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  Fragment,
+  type React,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { type Location, useLocation, useNavigate } from "react-router-dom";
 
 import type { Code } from "./api.ts";
@@ -272,7 +281,7 @@ export const Home: React.FC = () => {
           </HlString>
           <span>
             {args.map((arg, index, arr) => (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 , {arg
                   ? (
                     <>
@@ -281,7 +290,7 @@ export const Home: React.FC = () => {
                     </>
                   )
                   : <HlVariable>NULL</HlVariable>}
-              </React.Fragment>
+              </Fragment>
             ))}
           </span>);{" "}
           <HlComment>
@@ -313,7 +322,7 @@ export const Home: React.FC = () => {
       <pre className="variables">
         <code>
           {args.map((arg, index, arr) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               <DeclarationNode
                 ast={{
                   specifiers: arg.specifiers,
@@ -329,7 +338,7 @@ export const Home: React.FC = () => {
                 }}
               />
               {"\n"}
-            </React.Fragment>
+            </Fragment>
           ))}
         </code>
       </pre>

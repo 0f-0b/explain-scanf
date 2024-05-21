@@ -1,6 +1,14 @@
+/* @jsxImportSource react */
+
 import { EditorState, type EditorStateConfig } from "@codemirror/state";
 import { EditorView, type ViewUpdate } from "@codemirror/view";
-import { React, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  type React,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { useLatest } from "use-latest";
 
 export interface CodeMirrorProps
@@ -9,7 +17,7 @@ export interface CodeMirrorProps
   onUpdate?: (update: ViewUpdate) => unknown;
 }
 
-export const CodeMirror = React.forwardRef<EditorView, CodeMirrorProps>(({
+export const CodeMirror = forwardRef<EditorView, CodeMirrorProps>(({
   initialConfig,
   onUpdate,
   ...props

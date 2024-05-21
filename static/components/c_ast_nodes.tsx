@@ -1,4 +1,6 @@
-import { React } from "react";
+/* @jsxImportSource react */
+
+import { Fragment, type React } from "react";
 
 import type {
   Declaration,
@@ -72,17 +74,17 @@ type NC<T> = React.FC<{ ast: T }>;
 export const DeclarationNode: NC<Declaration> = ({ ast }) => (
   <>
     {ast.specifiers.map((specifier, index, arr) => (
-      <React.Fragment key={index}>
+      <Fragment key={index}>
         <DeclarationSpecifierNode ast={specifier} />
         {index !== arr.length - 1 || ast.declarators.length ? " " : ""}
-      </React.Fragment>
+      </Fragment>
     ))}
     {ast.declarators.map((declarator, index) =>
       index
         ? (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             , <InitDeclaratorNode ast={declarator} />
-          </React.Fragment>
+          </Fragment>
         )
         : <InitDeclaratorNode key={index} ast={declarator} />
     )};
@@ -161,10 +163,10 @@ export const ExpressionNode: NC<Expression> = ({ ast }) => {
       return (
         <>
           <HlFunction>{ast.name}</HlFunction>({ast.args.map((arg, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {index ? ", " : ""}
               <ExpressionNode ast={arg} />
-            </React.Fragment>
+            </Fragment>
           ))})
         </>
       );

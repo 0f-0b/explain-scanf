@@ -59,6 +59,7 @@ const [js, css] = await (async () => {
       supported: { "nesting": false },
       minify: !dev,
       charset: "utf8",
+      jsx: "automatic",
     });
     const outputNames: string[] = [];
     for (
@@ -111,27 +112,27 @@ const [js, css] = await (async () => {
   }
 })();
 const html = toHtml(
-  <html lang="en">
-    <head>
-      <meta charset="utf-8" />
-      <meta
-        name="viewport"
-        content="width=device-width,initial-scale=1,shrink-to-fit=no"
-      />
-      <meta name="description" content="Explains the magic behind fscanf." />
-      <title>Explain scanf</title>
-      <link rel="stylesheet" href={"/" + css} />
-      <script src={"/" + js} type="module" />
-    </head>
-    <body>
-      <div id="root" />
-    </body>
-  </html>,
+  <>
+    {{ type: "doctype" }}
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta name="description" content="Explains the magic behind fscanf." />
+        <title>Explain scanf</title>
+        <link rel="stylesheet" href={"/" + css} />
+        <script src={"/" + js} type="module" />
+      </head>
+      <body>
+        <div id="root" />
+      </body>
+    </html>
+  </>,
   {
     omitOptionalTags: true,
     preferUnquoted: true,
     quoteSmart: true,
     tightCommaSeparatedLists: true,
+    upperDoctype: true,
   },
 );
-await Deno.writeTextFile("index.html", `<!DOCTYPE html>${html}\n`);
+await Deno.writeTextFile("index.html", html);

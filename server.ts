@@ -3,18 +3,18 @@ import { join } from "@std/path/join";
 import { Code, getCode, putCode } from "./code.ts";
 import { fail } from "./fail.ts";
 import {
+  type Handler,
   HttpError,
   logTime,
   methods,
   parseBodyAsJson,
   reportHttpErrors,
-  type RootHandler,
   route,
   STATUS_CODE,
 } from "./handler.ts";
 import { decodeURLPathComponents, staticFile } from "./static.ts";
 
-export function getHandler(kv: Deno.Kv): RootHandler {
+export function getHandler(kv: Deno.Kv): Handler {
   return logTime(reportHttpErrors(route({
     "/": () => staticFile("index.html"),
     "/c/:id": () => staticFile("index.html"),

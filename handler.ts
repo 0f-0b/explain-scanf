@@ -7,32 +7,25 @@ import { HttpError } from "./http_error.ts";
 
 export * from "@std/http/status";
 export * from "./http_error.ts";
-type Simplify<T> = Omit<T, never>;
-type Merge<T, U> = Simplify<Omit<T, keyof U> & U>;
-export type ContextConsumer<C, R> = (req: Request, ctx: C) => R;
-export type Handler<C> = ContextConsumer<C, Awaitable<Response>>;
-export type RootHandler = Handler<{ readonly conn: Deno.ServeHandlerInfo }>;
+type Merge<T, U> = Omit<T, keyof U> & U;
+export type Handler<C = unknown> = (
+  req: Request,
+  ctx: C,
+) => Awaitable<Response>;
 
-export function toStdHandler(handler: RootHandler): Deno.ServeHandler {
-  return async (req, conn) => {
+export function toFetch(handler: Handler): (req: Request) => Promise<Response> {
+  return async (req) => {
     const headersOnly = req.method === "HEAD";
     if (headersOnly) {
       req = new Request(req, { method: "GET" });
     }
-    let res = await handler(req, { conn });
+    let res = await handler(req, null);
     if (headersOnly) {
       res = new Response(null, res);
     }
     return res;
   };
 }
-
-export const onError = (error: unknown): Response => {
-  console.error(error);
-  return Response.json({ error: "Internal server error" }, {
-    status: STATUS_CODE.InternalServerError,
-  });
-};
 
 export function logTime<C>(handler: Handler<C>): Handler<C> {
   return async (req, ctx) => {
@@ -80,7 +73,7 @@ export function route<C>(
   }));
   return async (req, ctx) => {
     const url = new URL(req.url);
-    const path = (ctx as { params?: { 0?: string } }).params?.[0];
+    const path = (ctx as { params?: { 0?: string } } | null)?.params?.[0];
     if (path !== undefined) {
       url.pathname = path;
     }

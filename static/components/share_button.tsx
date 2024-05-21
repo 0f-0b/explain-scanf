@@ -1,6 +1,7 @@
+/* @jsxImportSource react */
+
 import { ShareIcon } from "@primer/octicons-react";
-// deno-lint-ignore verbatim-module-syntax
-import { React, useEffect, useState } from "react";
+import { type React, useEffect, useState } from "react";
 
 import { type Code, putCode } from "../api.ts";
 import { ErrorMessage } from "./error_message.tsx";

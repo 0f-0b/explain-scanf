@@ -27,5 +27,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: explain-scanf
-          entrypoint: main.ts
+          entrypoint: deno_deploy_compat.ts
           import-map: generated_import_map.json

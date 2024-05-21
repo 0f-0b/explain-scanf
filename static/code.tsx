@@ -1,5 +1,6 @@
-// deno-lint-ignore verbatim-module-syntax
-import { React, useEffect, useState } from "react";
+/* @jsxImportSource react */
+
+import { type React, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getCode } from "./api.ts";

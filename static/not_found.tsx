@@ -1,5 +1,6 @@
-// deno-lint-ignore verbatim-module-syntax
-import { React } from "react";
+/* @jsxImportSource react */
+
+import type { React } from "react";
 
 import { ErrorMessage } from "./components/error_message.tsx";
 
