@@ -20,12 +20,12 @@ jobs:
           deno-version: 1
       - name: Cache dependencies
         working-directory: static
-        run: mkdir node_modules && deno task cache
+        run: deno task cache
       - name: Build
         run: ./scripts/build.tsx
       - name: Deploy
         uses: denoland/deployctl@v1
         with:
           project: explain-scanf
-          entrypoint: deno_deploy_compat.ts
+          entrypoint: main.ts
           import-map: generated_import_map.json
