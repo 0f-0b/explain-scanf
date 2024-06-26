@@ -58,6 +58,7 @@ export interface DenoCachePluginOptions {
   denoDir?: string | URL;
   vendorDir?: string | URL;
   importMapURL?: string | URL;
+  expandImportMap?: boolean;
   nodeResolutionRootDir?: string | URL;
 }
 
@@ -67,6 +68,7 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
   const denoDir = optionAsPath(options?.denoDir);
   const vendorDir = optionAsPath(options?.vendorDir);
   const importMapURL = optionAsURL(options?.importMapURL);
+  const expandImportMap = options?.expandImportMap;
   const nodeResolutionRootDir = optionAsPath(options?.nodeResolutionRootDir);
   return {
     name: "deno-cache",
@@ -93,7 +95,9 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
           const json = typeof res.content === "string"
             ? res.content
             : decoder.decode(res.content);
-          const importMap = await parseFromJson(importMapURL, json);
+          const importMap = await parseFromJson(importMapURL, json, {
+            expandImports: expandImportMap,
+          });
           resolveImport = importMap.resolve.bind(importMap);
         }
       });
@@ -151,7 +155,7 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
             return null;
           }
           await init();
-          const mod = parseModule(res.specifier, new Uint8Array(), {
+          const mod = await parseModule(res.specifier, new Uint8Array(), {
             headers: res.headers,
           });
           return {
