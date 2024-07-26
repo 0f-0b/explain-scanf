@@ -51,6 +51,6 @@ export function getHandler(kv: Deno.Kv): Handler {
         }
       }
     }
-    return await staticFile("index.html", { status: STATUS_CODE.NotFound });
+    return await staticFile("404.html", { status: STATUS_CODE.NotFound });
   })));
 }

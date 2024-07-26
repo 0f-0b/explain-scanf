@@ -4,4 +4,5 @@ generated_import_map.json
 node_modules/
 .env
 /index.html
+/404.html
 /dist/

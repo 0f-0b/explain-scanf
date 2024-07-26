@@ -23,6 +23,7 @@ for (const arg of Deno.args) {
   Deno.exit(2);
 }
 Deno.chdir(new URL("..", import.meta.url));
+const encoder = new TextEncoder();
 
 async function generateImportMap(
   configPath: string,
@@ -34,6 +35,34 @@ async function generateImportMap(
     { expandImports: true },
   );
   await Deno.writeTextFile(importMapPath, importMap.toJSON());
+}
+
+async function createCacheKey(paths: string[]): Promise<string> {
+  const hashAlgorithm = "SHA-1";
+  const hashLength = 5;
+  const hash = new Uint32Array(hashLength);
+  for (const path of paths) {
+    const piece = new Uint32Array(
+      await crypto.subtle.digest(hashAlgorithm, encoder.encode(path)),
+    );
+    for (let i = 0; i < hashLength; i++) {
+      hash[i] ^= piece[i];
+    }
+  }
+  return encodeBase64Url(hash.buffer);
+}
+
+type HastTree = typeof toHtml extends (tree: infer T) => string ? T : HastTree;
+
+async function writeHtml(path: string, tree: HastTree): Promise<undefined> {
+  const html = toHtml(tree, {
+    omitOptionalTags: true,
+    preferUnquoted: true,
+    quoteSmart: true,
+    tightCommaSeparatedLists: true,
+    upperDoctype: true,
+  });
+  await Deno.writeTextFile(path, html);
 }
 
 await generateImportMap("deno.json", "generated_import_map.json");
@@ -64,30 +93,19 @@ const [js, css] = await (async () => {
       charset: "utf8",
       jsx: "automatic",
     });
-    const outputNames: string[] = [];
+    const cacheablePaths = ["/"];
     for (
       const [path, { entryPoint, inputs }] of Object.entries(metafile.outputs)
     ) {
       const filename = relative(outDir, path);
       if (Object.keys(inputs).length !== 0) {
-        outputNames.push(filename);
+        cacheablePaths.push("/" + filename);
       }
       if (entryPoint !== undefined) {
         outputs.set(entryPoint, filename);
       }
     }
-    const hashAlgorithm = "SHA-1";
-    const hashLength = 5;
-    const xoredHash = new Uint32Array(hashLength);
-    const encoder = new TextEncoder();
-    for (const name of outputNames) {
-      const hash = new Uint32Array(
-        await crypto.subtle.digest(hashAlgorithm, encoder.encode(name)),
-      );
-      for (let i = 0; i < hashLength; i++) {
-        xoredHash[i] ^= hash[i];
-      }
-    }
+    const currentCacheKey = await createCacheKey(cacheablePaths);
     await build({
       bundle: true,
       outfile: "dist/sw.js",
@@ -100,11 +118,8 @@ const [js, css] = await (async () => {
       minify: !dev,
       charset: "utf8",
       define: {
-        "CURRENT_CACHE_KEY": JSON.stringify(encodeBase64Url(xoredHash.buffer)),
-        "CACHEABLE_PATHS": JSON.stringify([
-          "/",
-          ...outputNames.map((name) => "/" + name),
-        ]),
+        "CURRENT_CACHE_KEY": JSON.stringify(currentCacheKey),
+        "CACHEABLE_PATHS": JSON.stringify(cacheablePaths),
       },
     });
     return inputs.map((path) => outputs.get(path)!);
@@ -114,7 +129,8 @@ const [js, css] = await (async () => {
     await stop();
   }
 })();
-const html = toHtml(
+await writeHtml(
+  "index.html",
   <>
     {{ type: "doctype" }}
     <html lang="en">
@@ -130,12 +146,20 @@ const html = toHtml(
       </body>
     </html>
   </>,
-  {
-    omitOptionalTags: true,
-    preferUnquoted: true,
-    quoteSmart: true,
-    tightCommaSeparatedLists: true,
-    upperDoctype: true,
-  },
 );
-await Deno.writeTextFile("index.html", html);
+await writeHtml(
+  "404.html",
+  <>
+    {{ type: "doctype" }}
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>404 Not Found</title>
+      </head>
+      <body style="text-align:center">
+        <h1>404 Not Found</h1>
+        <hr />nginx/1.27.0
+      </body>
+    </html>
+  </>,
+);
