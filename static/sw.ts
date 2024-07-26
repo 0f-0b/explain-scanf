@@ -18,37 +18,28 @@ declare global {
 declare const CURRENT_CACHE_KEY: string;
 declare const CACHEABLE_PATHS: readonly string[];
 const currentCacheKey = CURRENT_CACHE_KEY;
-const cacheablePaths = new Set(CACHEABLE_PATHS);
 
-async function cachedFetch(req: Request): Promise<Response> {
-  console.log(`Intercepting request to ${req.url}`);
-  const res = await fetch(req).catch(Response.error);
-  if (res.ok) {
-    const cache = await caches.open(currentCacheKey);
-    cache.put(req, res.clone());
-  } else {
-    const cached = await caches.match(req);
-    if (cached) {
-      return cached;
-    }
-  }
-  return res;
+async function createCache(): Promise<undefined> {
+  const cache = await caches.open(currentCacheKey);
+  await cache.addAll(CACHEABLE_PATHS);
 }
 
-addEventListener("activate", (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.map(async (key) => {
-      if (key !== currentCacheKey) {
-        await caches.delete(key);
-      }
-    }));
-  })());
-});
-addEventListener("fetch", (event) => {
-  const req = event.request;
-  const url = new URL(req.url);
-  if (cacheablePaths.has(url.pathname)) {
-    event.respondWith(cachedFetch(req));
-  }
-});
+async function evictOldCaches(): Promise<undefined> {
+  const keys = await caches.keys();
+  await Promise.all(
+    keys.map((key) => key === currentCacheKey ? false : caches.delete(key)),
+  );
+}
+
+async function queryCache(req: Request): Promise<Response> {
+  return await caches.match(req, {
+    cacheName: currentCacheKey,
+  }) ?? await fetch(req);
+}
+
+addEventListener("install", (event) => event.waitUntil(createCache()));
+addEventListener("activate", (event) => event.waitUntil(evictOldCaches()));
+addEventListener(
+  "fetch",
+  (event) => event.respondWith(queryCache(event.request)),
+);

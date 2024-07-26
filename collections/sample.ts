@@ -1,5 +1,8 @@
 import { toLength } from "./to_length.ts";
 
+const { floor, random } = Math;
+
 export function sample<T>(arr: ArrayLike<T>): T | undefined {
-  return arr[Math.floor(Math.random() * toLength(arr.length))];
+  const length = toLength(arr.length);
+  return length === 0 ? undefined : arr[floor(random() * length)];
 }

@@ -10,14 +10,14 @@ export async function staticFile(
   path: string,
   options?: StaticFileOptions,
 ): Promise<Response> {
-  const extension = extname(path);
-  return new Response(await Deno.readFile(path), {
-    status: options?.status,
-    headers: [
-      ["content-type", contentType(extension) ?? "application/octet-stream"],
-      ["cache-control", options?.cacheControl ?? "no-cache"],
-    ],
-  });
+  const contentTypeValue = contentType(extname(path));
+  const file = await Deno.open(path);
+  const res = new Response(file.readable, { status: options?.status });
+  if (contentTypeValue) {
+    res.headers.append("content-type", contentTypeValue);
+  }
+  res.headers.append("cache-control", options?.cacheControl ?? "no-cache");
+  return res;
 }
 
 export function decodeURLPathComponents(pathname: string): string[] | null {

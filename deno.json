@@ -1,25 +1,25 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@^0.10.1",
-    "@deno/graph": "jsr:@deno/graph@^0.78.1",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@^0.10.2",
+    "@deno/graph": "jsr:@deno/graph@^0.80.1",
     "@deno/import-map": "https://deno.land/x/import_map@v0.20.0/mod.ts",
-    "@std/datetime": "jsr:@std/datetime@^0.224.1",
-    "@std/encoding": "jsr:@std/encoding@^1.0.0-rc.2",
-    "@std/fs": "jsr:@std/fs@^1.0.0-rc.1",
-    "@std/http": "jsr:@std/http@^0.224.5",
-    "@std/media-types": "jsr:@std/media-types@^1.0.0-rc.1",
-    "@std/path": "jsr:@std/path@^1.0.0-rc.2",
-    "esbuild": "https://deno.land/x/esbuild@v0.21.5/mod.js",
+    "@std/datetime": "jsr:@std/datetime@^0.224.3",
+    "@std/encoding": "jsr:@std/encoding@^1.0.0",
+    "@std/fs": "jsr:@std/fs@1.0.0-rc.6",
+    "@std/http": "jsr:@std/http@1.0.0-rc.5",
+    "@std/media-types": "jsr:@std/media-types@^1.0.0",
+    "@std/path": "jsr:@std/path@^1.0.0",
+    "esbuild": "https://deno.land/x/esbuild@v0.23.0/mod.js",
     "hast-util-to-html": "npm:hast-util-to-html@9.0.1",
     "hastscript": "npm:hastscript@8.0.0",
-    "type-fest": "npm:type-fest@4.20.1",
-    "type-fest/": "npm:/type-fest@4.20.1/source/",
+    "type-fest": "npm:type-fest@4.23.0",
+    "type-fest/": "npm:/type-fest@4.23.0/source/",
     "zod": "https://deno.land/x/zod@v3.23.3/mod.ts"
   },
   "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.10.1/": {
-      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.78.1/types",
-      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.78.1"
+    "https://jsr.io/@deno/cache-dir/0.10.2/": {
+      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.80.1/types",
+      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.80.1"
     }
   },
   "compilerOptions": {

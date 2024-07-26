@@ -54,7 +54,6 @@ import {
 import { ScanfLink } from "./components/scanf_link.tsx";
 import { ShareButton } from "./components/share_button.tsx";
 import {
-  type ConversionDirective,
   explain,
   parseFormat,
   sscanf,
@@ -209,9 +208,7 @@ export const Home: React.FC = () => {
   useLayoutEffect(() => {
     const convs = directives === undefinedBehavior
       ? []
-      : directives.filter((directive): directive is ConversionDirective =>
-        directive.type === "conversion"
-      );
+      : directives.filter((directive) => directive.type === "conversion");
     formatView.current!.dispatch({
       effects: [
         highlight.reconfigure(EditorView.decorations.of(Decoration.set(
