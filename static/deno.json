@@ -1,23 +1,19 @@
 {
   "imports": {
-    "@codemirror/commands": "npm:@codemirror/commands@6.6.0",
-    "@codemirror/language": "npm:@codemirror/language@6.10.2",
+    "@codemirror/commands": "npm:@codemirror/commands@6.6.2",
+    "@codemirror/language": "npm:@codemirror/language@6.10.3",
     "@codemirror/state": "npm:@codemirror/state@6.4.1",
-    "@codemirror/view": "npm:@codemirror/view@6.29.0",
+    "@codemirror/view": "npm:@codemirror/view@6.34.1",
     "@primer/octicons-react": "npm:@primer/octicons-react@19.11.0",
     "clsx": "npm:clsx@2.1.1",
     "floating-point-hex-parser": "./deps/floating_point_hex_parser.ts",
     "react": "./deps/react.ts",
     "react/jsx-runtime": "./deps/react/jsx_runtime.ts",
     "react-dom/client": "./deps/react_dom/client.ts",
-    "react-router-dom": "npm:react-router-dom@6.25.1",
+    "react-router-dom": "npm:react-router-dom@6.26.2",
     "use-latest": "./deps/use_latest.ts"
   },
-  "compilerOptions": {
-    "noImplicitOverride": true,
-    "useUnknownInCatchVariables": true
-  },
-  "nodeModulesDir": true,
+  "nodeModulesDir": "auto",
   "lint": {
     "rules": {
       "include": [

@@ -4,7 +4,7 @@ import type { React } from "react";
 
 export const ScanfLink: React.FC = () => (
   <a
-    href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fscanf.html"
+    href="https://pubs.opengroup.org/onlinepubs/9799919799/functions/fscanf.html"
     target="_blank"
     rel="noreferrer"
     onClick={(event) => {

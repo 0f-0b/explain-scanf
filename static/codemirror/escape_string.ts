@@ -36,24 +36,20 @@ class EscapeWidget extends WidgetType {
 
 class StringEscaper {
   static readonly #decorators = new Map(
-    Array.from(
-      stringEscapes.entries(),
-      ([ch, escape]) => [
-        ch,
-        Decoration.widget({ widget: new EscapeWidget(escape) }),
-      ],
-    ),
+    Array.from(stringEscapes, ([ch, escape]) => [
+      ch,
+      Decoration.widget({ widget: new EscapeWidget(escape) }),
+    ]),
   );
   readonly #decorator = new MatchDecorator({
     regexp: stringEscapeRE,
-    decoration([match]) {
+    decoration({ 0: match }) {
       const deco = StringEscaper.#decorators.get(match);
       if (!deco) {
         throw new Error(`Unexpected match '${match}'`);
       }
       return deco;
     },
-    boundary: /[^]/,
   });
   decorations: DecorationSet;
 

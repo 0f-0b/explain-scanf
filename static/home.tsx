@@ -261,8 +261,11 @@ export const Home: React.FC = () => {
         <code>
           <HlFunction>
             <ScanfLink />
-          </HlFunction>(<HlString>
-            "<CodeMirror
+          </HlFunction>
+          {"("}
+          <HlString>
+            "
+            <CodeMirror
               ref={formatView}
               className="format"
               initialConfig={() => ({
@@ -274,33 +277,33 @@ export const Home: React.FC = () => {
                   setFormat(update.state.doc.toString());
                 }
               }}
-            />"
+            />
+            "
           </HlString>
-          <span>
-            {args.map((arg, index, arr) => (
-              <Fragment key={index}>
-                , {arg
-                  ? (
-                    <>
-                      {arg.ref && <HlOperator>&amp;</HlOperator>}
-                      <HlVariable>{name(index, arr.length)}</HlVariable>
-                    </>
-                  )
-                  : <HlVariable>NULL</HlVariable>}
-              </Fragment>
-            ))}
-          </span>);{" "}
+          {args.map((arg, index, arr) => (
+            <Fragment key={index}>
+              {", "}
+              {arg
+                ? (
+                  <>
+                    {arg.ref && <HlOperator>&amp;</HlOperator>}
+                    <HlVariable>{name(index, arr.length)}</HlVariable>
+                  </>
+                )
+                : <HlVariable>NULL</HlVariable>}
+            </Fragment>
+          ))}
+          {"); "}
           <HlComment>
-            {"// => "}
-            <span>
-              {result === undefinedBehavior
+            {`// => ${
+              result === undefinedBehavior
                 ? "undefined behavior"
                 : result === unimplemented
                 ? "unimplemented"
                 : result.ret === -1
                 ? "EOF"
-                : result.ret}
-            </span>
+                : result.ret
+            }`}
           </HlComment>
         </code>
       </pre>
@@ -334,6 +337,12 @@ export const Home: React.FC = () => {
                   ],
                 }}
               />
+              {arg.comment === undefined || (
+                <>
+                  {" "}
+                  <HlComment>{`// ${arg.comment}`}</HlComment>
+                </>
+              )}
               {"\n"}
             </Fragment>
           ))}

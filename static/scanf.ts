@@ -159,6 +159,7 @@ export interface Argument {
   type: Layer[];
   initializer?: Expression;
   ref: boolean;
+  comment?: string;
 }
 
 export interface ParseResult {
@@ -417,6 +418,9 @@ function parse(
             value: result,
           };
         arg.ref = spec.malloc || size === 1;
+        if (spec.malloc && !spec.terminate) {
+          arg.comment = "but not null-terminated";
+        }
       }
       return length;
     }
@@ -460,7 +464,7 @@ export function explain(directive: ConversionDirective): string {
             ? ""
             : `${spec.negated ? "not " : ""}equal to ${
               spec.scanset.size === 1
-                ? escapeChar(spec.scanset[Symbol.iterator]().next().value)
+                ? escapeChar(spec.scanset.values().next().value!)
                 : `any of ${escapeString(Array.from(spec.scanset).join(""))}`
             } `
         }into ${spec.malloc ? "a newly-allocated" : "the"} ${

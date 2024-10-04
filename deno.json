@@ -1,39 +1,34 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@^0.10.2",
-    "@deno/graph": "jsr:@deno/graph@^0.80.1",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.20.0/mod.ts",
-    "@std/datetime": "jsr:@std/datetime@^0.224.3",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@0.12.0",
+    "@deno/graph": "jsr:@deno/graph@^0.83.0",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.20.1/mod.ts",
+    "@std/datetime": "jsr:@std/datetime@^0.225.0",
     "@std/encoding": "jsr:@std/encoding@^1.0.0",
-    "@std/fs": "jsr:@std/fs@1.0.0-rc.6",
-    "@std/http": "jsr:@std/http@1.0.0-rc.5",
+    "@std/fs": "jsr:@std/fs@^1.0.0",
+    "@std/http": "jsr:@std/http@^1.0.0",
     "@std/media-types": "jsr:@std/media-types@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",
-    "esbuild": "https://deno.land/x/esbuild@v0.23.0/mod.js",
-    "hast-util-to-html": "npm:hast-util-to-html@9.0.1",
+    "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js",
+    "hast-util-to-html": "npm:hast-util-to-html@9.0.3",
     "hastscript": "npm:hastscript@8.0.0",
-    "type-fest": "npm:type-fest@4.23.0",
-    "type-fest/": "npm:/type-fest@4.23.0/source/",
+    "type-fest": "npm:type-fest@^4.15.0",
+    "type-fest/": "npm:/type-fest@^4.15.0/source/",
     "zod": "https://deno.land/x/zod@v3.23.3/mod.ts"
   },
   "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.10.2/": {
-      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.80.1/types",
-      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.80.1"
+    "https://jsr.io/@deno/cache-dir/0.12.0/": {
+      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.83.0/types",
+      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.83.0"
     }
   },
-  "compilerOptions": {
-    "useUnknownInCatchVariables": true
-  },
   "exclude": [
+    "404.html",
+    "index.html",
+    "generated_import_map.json",
     "dist",
     "static"
   ],
-  "fmt": {
-    "exclude": [
-      "generated_import_map.json"
-    ]
-  },
   "lint": {
     "rules": {
       "include": [
@@ -42,7 +37,7 @@
     }
   },
   "tasks": {
-    "cache": "deno cache dump_kv.ts main.ts scripts/build.tsx",
-    "lint": "deno fmt --check && deno lint && deno check --all dump_kv.ts && deno check --all main.ts && deno check --all scripts/build.tsx"
+    "cache": "deno cache --allow-import=deno.land:443,jsr.io:443 dump_kv.ts main.ts scripts/build.tsx",
+    "lint": "deno fmt --check && deno lint && deno check --all dump_kv.ts && deno check --all --allow-import=deno.land:443,jsr.io:443 main.ts && deno check --all --allow-import=deno.land:443,jsr.io:443 scripts/build.tsx"
   }
 }

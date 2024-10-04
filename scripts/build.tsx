@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
+#!/usr/bin/env -S deno run -A
 
 /* @jsxImportSource hastscript */
 
