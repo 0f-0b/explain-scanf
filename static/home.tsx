@@ -12,7 +12,6 @@ import {
   simplifySelection,
   standardKeymap,
 } from "@codemirror/commands";
-import { indentUnit } from "@codemirror/language";
 import {
   Compartment,
   EditorState,
@@ -41,7 +40,6 @@ import { type Location, useLocation, useNavigate } from "react-router-dom";
 
 import type { Code } from "./api.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";
-import { escapeString } from "./codemirror/escape_string.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
 import { CodeMirror } from "./components/codemirror.tsx";
 import {
@@ -53,13 +51,9 @@ import {
 } from "./components/highlight.tsx";
 import { ScanfLink } from "./components/scanf_link.tsx";
 import { ShareButton } from "./components/share_button.tsx";
-import {
-  explain,
-  parseFormat,
-  sscanf,
-  undefinedBehavior,
-  unimplemented,
-} from "./scanf.ts";
+import { encodeUtf8ByteString, getUtf16Indices } from "./encoding.ts";
+import { explain, type FormatDirective, parseFormat, sscanf } from "./scanf.ts";
+import { unescapeString } from "./unescape.ts";
 import { useStorageState } from "./use_storage_state.ts";
 
 const colors = [
@@ -85,7 +79,19 @@ const highlight = new Compartment();
 const tooltip = new Compartment();
 const baseExtension: Extension = [
   EditorState.allowMultipleSelections.of(true),
-  indentUnit.of(" "),
+  EditorState.tabSize.of(8),
+  EditorState.lineSeparator.of("\n"),
+  EditorView.theme({
+    ".cm-specialChar": {
+      color: "white",
+      backgroundColor: "darkred",
+    },
+    ".cm-tooltip-section": {
+      fontSize: "15px",
+      whiteSpace: "pre-line",
+      padding: "2px",
+    },
+  }),
   keymap.of([
     ...standardKeymap.filter((binding) => binding.key !== "Enter"),
     ...historyKeymap,
@@ -109,53 +115,21 @@ const baseExtension: Extension = [
   ]),
   history(),
   drawSelection(),
+  highlightSpecialChars(),
 ];
 const formatExtension: Extension = [
-  EditorState.tabSize.of(1),
-  EditorState.lineSeparator.of("\0"),
-  EditorView.contentAttributes.of({
-    "aria-label": "Format",
-  }),
-  keymap.of([
-    {
-      key: "Enter",
-      run({ state, dispatch }) {
-        dispatch(state.update(
-          state.replaceSelection("\n"),
-          { scrollIntoView: true },
-        ));
-        return true;
-      },
-      shift({ state, dispatch }) {
-        dispatch(state.update(
-          state.replaceSelection("\r"),
-          { scrollIntoView: true },
-        ));
-        return true;
-      },
-    },
-  ]),
+  EditorView.theme({ ".cm-line": { padding: "0 1px" } }),
+  EditorView.contentAttributes.of({ "aria-label": "Format" }),
   highlight.of([]),
   tooltip.of([]),
-  escapeString(),
   enforceSingleLine(),
-  highlightSpecialChars({
-    specialChars:
-      // deno-lint-ignore no-control-regex
-      /[\0-\x08\x0e-\x1f\x7f-\x9f\xad\u061c\u200b\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g,
-  }),
   baseExtension,
 ];
 const inputExtension: Extension = [
-  EditorState.tabSize.of(8),
-  EditorState.lineSeparator.of("\n"),
-  EditorView.contentAttributes.of({
-    "aria-label": "Input",
-  }),
+  EditorView.contentAttributes.of({ "aria-label": "Input" }),
   highlight.of([]),
   lineNumbers(),
   highlightActiveLine(),
-  highlightSpecialChars(),
   baseExtension,
 ];
 
@@ -204,11 +178,35 @@ export const Home: React.FC = () => {
       navigate("/", { replace: true });
     }
   }, [location.state]);
-  const directives = useMemo(() => parseFormat(format), [format]);
+  const parseResult = useMemo(():
+    | { type: "success"; directives: readonly FormatDirective[] }
+    | { type: "invalid string literal" }
+    | { type: "undefined behavior" } => {
+    const unescapeResult = unescapeString(format);
+    if (!unescapeResult) {
+      return { type: "invalid string literal" };
+    }
+    const nulPos = unescapeResult.result.indexOf("\0");
+    if (nulPos !== -1) {
+      unescapeResult.result = unescapeResult.result.substring(0, nulPos);
+    }
+    const parseResult = parseFormat(unescapeResult.result);
+    if (parseResult.type !== "success") {
+      return parseResult;
+    }
+    for (const directive of parseResult.directives) {
+      if (directive.type === "conversion") {
+        directive.start = unescapeResult.indices[directive.start];
+        directive.end = unescapeResult.indices[directive.end];
+      }
+    }
+    return parseResult;
+  }, [format]);
   useLayoutEffect(() => {
-    const convs = directives === undefinedBehavior
-      ? []
-      : directives.filter((directive) => directive.type === "conversion");
+    const convs = parseResult.type === "success"
+      ? parseResult.directives
+        .filter((directive) => directive.type === "conversion")
+      : [];
     formatView.current!.dispatch({
       effects: [
         highlight.reconfigure(EditorView.decorations.of(Decoration.set(
@@ -233,16 +231,29 @@ export const Home: React.FC = () => {
         })),
       ],
     });
-  }, [directives]);
-  const result = useMemo(
-    () =>
-      directives === undefinedBehavior
-        ? undefinedBehavior
-        : sscanf(input, directives),
-    [input, directives],
-  );
+  }, [parseResult]);
+  const convertResult = useMemo(() => {
+    if (parseResult.type !== "success") {
+      return parseResult;
+    }
+    const convertResult = sscanf(
+      encodeUtf8ByteString(input),
+      parseResult.directives,
+    );
+    if (convertResult.type !== "success") {
+      return convertResult;
+    }
+    const indices = getUtf16Indices(input);
+    for (const match of convertResult.matches) {
+      match.start = indices[match.start];
+      match.end = indices[match.end];
+    }
+    return convertResult;
+  }, [input, parseResult]);
   useLayoutEffect(() => {
-    const matches = typeof result === "object" ? result.matches : [];
+    const matches = convertResult.type === "success"
+      ? convertResult.matches
+      : [];
     inputView.current!.dispatch({
       effects: [
         highlight.reconfigure(EditorView.decorations.of(Decoration.set(
@@ -252,8 +263,8 @@ export const Home: React.FC = () => {
         ))),
       ],
     });
-  }, [result]);
-  const args = typeof result === "object" ? result.args : [];
+  }, [convertResult]);
+  const args = convertResult.type === "success" ? convertResult.args : [];
   return (
     <div>
       <ShareButton code={{ format, input }} />
@@ -280,14 +291,14 @@ export const Home: React.FC = () => {
             />
             "
           </HlString>
-          {args.map((arg, index, arr) => (
+          {Array.from(args, (arg, index) => (
             <Fragment key={index}>
               {", "}
               {arg
                 ? (
                   <>
                     {arg.ref && <HlOperator>&amp;</HlOperator>}
-                    <HlVariable>{name(index, arr.length)}</HlVariable>
+                    <HlVariable>{name(index, args.length)}</HlVariable>
                   </>
                 )
                 : <HlVariable>NULL</HlVariable>}
@@ -295,15 +306,20 @@ export const Home: React.FC = () => {
           ))}
           {"); "}
           <HlComment>
-            {`// => ${
-              result === undefinedBehavior
-                ? "undefined behavior"
-                : result === unimplemented
-                ? "unimplemented"
-                : result.ret === -1
-                ? "EOF"
-                : result.ret
-            }`}
+            {`// => ${(() => {
+              switch (convertResult.type) {
+                case "success":
+                  return convertResult.returnValue === -1
+                    ? "EOF"
+                    : convertResult.returnValue;
+                case "invalid string literal":
+                  return "invalid string literal";
+                case "undefined behavior":
+                  return "undefined behavior";
+                case "unimplemented":
+                  return "unimplemented";
+              }
+            })()}`}
           </HlComment>
         </code>
       </pre>

@@ -23,16 +23,6 @@ pre {
 
 .format {
   display: inline-block;
-
-  .cm-line {
-    padding: 0 1px;
-  }
-}
-
-.cm-tooltip-section {
-  font-size: 15px;
-  white-space: pre-line;
-  padding: 2px;
 }
 
 .variables {

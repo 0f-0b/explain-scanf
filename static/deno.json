@@ -1,16 +1,17 @@
 {
   "imports": {
-    "@codemirror/commands": "npm:@codemirror/commands@6.6.2",
+    "@codemirror/commands": "npm:@codemirror/commands@6.7.1",
     "@codemirror/language": "npm:@codemirror/language@6.10.3",
     "@codemirror/state": "npm:@codemirror/state@6.4.1",
-    "@codemirror/view": "npm:@codemirror/view@6.34.1",
-    "@primer/octicons-react": "npm:@primer/octicons-react@19.11.0",
+    "@codemirror/view": "npm:@codemirror/view@6.34.2",
+    "@primer/octicons-react": "npm:@primer/octicons-react@19.12.0",
+    "@std/assert": "jsr:@std/assert@^1.0.0",
     "clsx": "npm:clsx@2.1.1",
     "floating-point-hex-parser": "./deps/floating_point_hex_parser.ts",
     "react": "./deps/react.ts",
     "react/jsx-runtime": "./deps/react/jsx_runtime.ts",
     "react-dom/client": "./deps/react_dom/client.ts",
-    "react-router-dom": "npm:react-router-dom@6.26.2",
+    "react-router-dom": "npm:react-router-dom@6.27.0",
     "use-latest": "./deps/use_latest.ts"
   },
   "nodeModulesDir": "auto",
@@ -22,7 +23,7 @@
     }
   },
   "tasks": {
-    "cache": "rm -rf node_modules && deno cache main.tsx sw.ts",
-    "lint": "deno fmt --check && deno lint && deno check --all main.tsx && deno check --all sw.ts"
+    "cache": "rm -rf node_modules && deno cache --allow-import=jsr.io:443 main.tsx sw.ts",
+    "lint": "deno fmt --check && deno lint && deno check --all --allow-import=jsr.io:443 main.tsx && deno check --all sw.ts"
   }
 }

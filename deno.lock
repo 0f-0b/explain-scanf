@@ -1,28 +1,28 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@deno/cache-dir@0.12.0": "0.12.0",
-    "jsr:@deno/graph@0.83": "0.83.0",
+    "jsr:@deno/cache-dir@0.13.2": "0.13.2",
+    "jsr:@deno/graph@0.84": "0.84.0",
     "jsr:@std/assert@0.223": "0.223.0",
     "jsr:@std/bytes@0.223": "0.223.0",
     "jsr:@std/datetime@0.225": "0.225.2",
     "jsr:@std/encoding@1": "1.0.5",
     "jsr:@std/fmt@0.223": "0.223.0",
     "jsr:@std/fs@0.223": "0.223.0",
-    "jsr:@std/fs@1": "1.0.4",
-    "jsr:@std/http@1": "1.0.7",
+    "jsr:@std/fs@1": "1.0.5",
+    "jsr:@std/http@1": "1.0.9",
     "jsr:@std/io@0.223": "0.223.0",
     "jsr:@std/media-types@1": "1.0.3",
     "jsr:@std/path@0.223": "0.223.0",
-    "jsr:@std/path@1": "1.0.6",
-    "jsr:@std/path@^1.0.6": "1.0.6",
+    "jsr:@std/path@1": "1.0.8",
+    "jsr:@std/path@^1.0.7": "1.0.8",
     "npm:hast-util-to-html@9.0.3": "9.0.3",
     "npm:hastscript@8.0.0": "8.0.0",
     "npm:type-fest@^4.15.0": "4.26.1"
   },
   "jsr": {
-    "@deno/cache-dir@0.12.0": {
-      "integrity": "6b6df8ad33678cdc4ebee5e1ce1bb168a60d353f5f1d58a57ebc08360dd60232",
+    "@deno/cache-dir@0.13.2": {
+      "integrity": "c22419dfe27ab85f345bee487aaaadba498b005cce3644e9d2528db035c5454d",
       "dependencies": [
         "jsr:@deno/graph",
         "jsr:@std/fmt",
@@ -31,8 +31,8 @@
         "jsr:@std/path@0.223"
       ]
     },
-    "@deno/graph@0.83.0": {
-      "integrity": "ca156c4e1328ff5db5ae45795b6d8ff759db593ca5fd0f32074a0f0158a251a2"
+    "@deno/graph@0.84.0": {
+      "integrity": "1734a61d504899d0ad1cf7c7724b203ef000942fbd3853a32769502defad87cd"
     },
     "@std/assert@0.223.0": {
       "integrity": "eb8d6d879d76e1cc431205bd346ed4d88dc051c6366365b1af47034b0670be24"
@@ -52,14 +52,14 @@
     "@std/fs@0.223.0": {
       "integrity": "3b4b0550b2c524cbaaa5a9170c90e96cbb7354e837ad1bdaf15fc9df1ae9c31c"
     },
-    "@std/fs@1.0.4": {
-      "integrity": "2907d32d8d1d9e540588fd5fe0ec21ee638134bd51df327ad4e443aaef07123c",
+    "@std/fs@1.0.5": {
+      "integrity": "41806ad6823d0b5f275f9849a2640d87e4ef67c51ee1b8fb02426f55e02fd44e",
       "dependencies": [
-        "jsr:@std/path@^1.0.6"
+        "jsr:@std/path@^1.0.7"
       ]
     },
-    "@std/http@1.0.7": {
-      "integrity": "9b904fc256678a5c9759f1a53a24a3fdcc59d83dc62099bb472683b6f819194c"
+    "@std/http@1.0.9": {
+      "integrity": "d409fc319a5e8d4a154e576c758752e9700282d74f31357a12fec6420f9ecb6c"
     },
     "@std/io@0.223.0": {
       "integrity": "2d8c3c2ab3a515619b90da2c6ff5ea7b75a94383259ef4d02116b228393f84f1",
@@ -77,8 +77,8 @@
         "jsr:@std/assert"
       ]
     },
-    "@std/path@1.0.6": {
-      "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     }
   },
   "npm": {
@@ -296,8 +296,8 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@deno/cache-dir@0.12.0",
-      "jsr:@deno/graph@0.83",
+      "jsr:@deno/cache-dir@0.13.2",
+      "jsr:@deno/graph@0.84",
       "jsr:@std/datetime@0.225",
       "jsr:@std/encoding@1",
       "jsr:@std/fs@1",
