@@ -4,4 +4,6 @@ import { toFetch } from "./handler.ts";
 import { getHandler } from "./server.ts";
 
 const kv = await Deno.openKv();
-export default { fetch: toFetch(getHandler(kv)) };
+export default {
+  fetch: toFetch(getHandler(kv)),
+} satisfies Deno.ServeDefaultExport;
