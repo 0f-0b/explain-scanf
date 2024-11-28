@@ -1,8 +1,8 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@0.13.2",
-    "@deno/graph": "jsr:@deno/graph@^0.84.0",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.20.1/mod.ts",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@0.14.0",
+    "@deno/graph": "jsr:@deno/graph@^0.86.0",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.21.0/mod.ts",
     "@std/datetime": "jsr:@std/datetime@^0.225.0",
     "@std/encoding": "jsr:@std/encoding@^1.0.0",
     "@std/fs": "jsr:@std/fs@^1.0.0",
@@ -17,16 +17,12 @@
     "zod": "https://deno.land/x/zod@v3.23.3/mod.ts"
   },
   "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.13.2/": {
-      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.84.0/types",
-      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.84.0"
+    "https://jsr.io/@deno/cache-dir/0.14.0/": {
+      "jsr:/@deno/graph@^0.86.0/types": "jsr:@deno/graph@^0.86.0/types",
+      "jsr:@deno/graph@^0.86.0": "jsr:@deno/graph@^0.86.0"
     }
   },
   "exclude": [
-    "404.html",
-    "index.html",
-    "generated_import_map.json",
-    "dist",
     "static"
   ],
   "lint": {

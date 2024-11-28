@@ -15,15 +15,10 @@ export type Handler<C = unknown> = (
 
 export function toFetch(handler: Handler): (req: Request) => Promise<Response> {
   return async (req) => {
-    const headersOnly = req.method === "HEAD";
-    if (headersOnly) {
+    if (req.method === "HEAD") {
       req = new Request(req, { method: "GET" });
     }
-    let res = await handler(req, null);
-    if (headersOnly) {
-      res = new Response(null, res);
-    }
-    return res;
+    return await handler(req, null);
   };
 }
 

@@ -36,7 +36,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { type Location, useLocation, useNavigate } from "react-router-dom";
+import { type Location, useLocation, useNavigate } from "react-router";
 
 import type { Code } from "./api.ts";
 import { enforceSingleLine } from "./codemirror/enforce_single_line.ts";

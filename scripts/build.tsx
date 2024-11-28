@@ -108,7 +108,7 @@ const [js, css] = await (async () => {
     const currentCacheKey = await createCacheKey(cacheablePaths);
     await build({
       bundle: true,
-      outfile: "dist/sw.js",
+      outfile: "sw.js",
       entryPoints: ["static/sw.ts"],
       plugins: [denoCachePlugin()],
       absWorkingDir: cwd,

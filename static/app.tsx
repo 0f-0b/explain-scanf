@@ -1,7 +1,7 @@
 /* @jsxImportSource react */
 
 import { lazy, type React, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 
 const Home = lazy(() => import("./home.tsx"));
 const Code = lazy(() => import("./code.tsx"));
