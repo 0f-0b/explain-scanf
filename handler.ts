@@ -83,18 +83,23 @@ export function route<C>(
 }
 
 export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
-  const methodMap = new Map<string, Handler<C>>();
-  for (const method in methods) {
-    methodMap.set(method, methods[method]);
-  }
+  const map = new Map(Object.entries(methods));
+  map.delete("HEAD");
+  const allow = (() => {
+    const list = Array.from(map.keys());
+    if (map.has("GET")) {
+      list.push("HEAD");
+    }
+    return list.sort().join(", ");
+  })();
   return (req, ctx) => {
-    const handler = methodMap.get(req.method) ?? fail(
+    const handler = map.get(req.method) ?? fail(
       new HttpError(
         `Method ${req.method} is not allowed for the URL`,
         "MethodNotAllowed",
         {
           headers: [
-            ["allow", Array.from(methodMap.keys()).join(", ")],
+            ["allow", allow],
           ],
         },
       ),
