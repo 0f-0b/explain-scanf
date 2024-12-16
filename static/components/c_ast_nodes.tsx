@@ -42,11 +42,11 @@ const ArrayNode: React.FC<React.PropsWithChildren<{ size: number }>> = ({
   </>
 );
 
-function uint(value: bigint): JSX.Element {
+function uint(value: bigint): React.ReactElement {
   return <HlNumeric>{value.toString()}</HlNumeric>;
 }
 
-function ufloat(value: FloatingConstant["value"]): JSX.Element {
+function ufloat(value: FloatingConstant["value"]): React.ReactElement {
   if (isNaN(value.magnitude)) {
     return value.payload === undefined
       ? <HlMacro>NAN</HlMacro>

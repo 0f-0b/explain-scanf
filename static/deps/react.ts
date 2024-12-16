@@ -1,4 +1,4 @@
-// @ts-types="npm:@types/react@18"
+// @ts-types="npm:@types/react@19"
 export {
   act,
   createContext,
@@ -11,6 +11,8 @@ export {
   startTransition,
   StrictMode,
   Suspense,
+  use,
+  useActionState,
   useCallback,
   useContext,
   useDebugValue,
@@ -21,9 +23,10 @@ export {
   useInsertionEffect,
   useLayoutEffect,
   useMemo,
+  useOptimistic,
   useReducer,
   useRef,
   useState,
   useSyncExternalStore,
   useTransition,
-} from "npm:react@18.3.1";
+} from "npm:react@19.0.0";

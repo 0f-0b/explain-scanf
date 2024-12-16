@@ -1,16 +1,16 @@
 {
   "imports": {
     "@codemirror/commands": "npm:@codemirror/commands@6.7.1",
-    "@codemirror/state": "npm:@codemirror/state@6.4.1",
-    "@codemirror/view": "npm:@codemirror/view@6.35.0",
-    "@primer/octicons-react": "npm:@primer/octicons-react@19.12.0",
+    "@codemirror/state": "npm:@codemirror/state@6.5.0",
+    "@codemirror/view": "npm:@codemirror/view@6.35.3",
+    "@primer/octicons-react": "npm:@primer/octicons-react@19.14.0",
     "@std/assert": "jsr:@std/assert@^1.0.0",
     "clsx": "npm:clsx@2.1.1",
     "floating-point-hex-parser": "./deps/floating_point_hex_parser.ts",
     "react": "./deps/react.ts",
     "react/jsx-runtime": "./deps/react/jsx_runtime.ts",
     "react-dom/client": "./deps/react_dom/client.ts",
-    "react-router": "npm:react-router@7.0.1",
+    "react-router": "npm:react-router@7.0.2",
     "use-latest": "./deps/use_latest.ts"
   },
   "nodeModulesDir": "auto",

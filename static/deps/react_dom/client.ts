@@ -1,2 +1,2 @@
-// @ts-types="npm:@types/react-dom@18/client"
-export * from "npm:react-dom@18.3.1/client";
+// @ts-types="npm:@types/react-dom@19/client"
+export * from "npm:react-dom@19.0.0/client";

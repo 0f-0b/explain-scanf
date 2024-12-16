@@ -158,7 +158,7 @@ await writeHtml(
       </head>
       <body style="text-align:center">
         <h1>404 Not Found</h1>
-        <hr />nginx/1.27.0
+        <hr />nginx/1.27.3
       </body>
     </html>
   </>,

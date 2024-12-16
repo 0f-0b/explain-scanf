@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@0.14.0",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@0.15.0",
     "@deno/graph": "jsr:@deno/graph@^0.86.0",
     "@deno/import-map": "https://deno.land/x/import_map@v0.21.0/mod.ts",
     "@std/datetime": "jsr:@std/datetime@^0.225.0",
@@ -10,14 +10,12 @@
     "@std/media-types": "jsr:@std/media-types@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",
     "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js",
-    "hast-util-to-html": "npm:hast-util-to-html@9.0.3",
+    "hast-util-to-html": "npm:hast-util-to-html@9.0.4",
     "hastscript": "npm:hastscript@8.0.0",
-    "type-fest": "npm:type-fest@^4.15.0",
-    "type-fest/": "npm:/type-fest@^4.15.0/source/",
-    "zod": "https://deno.land/x/zod@v3.23.3/mod.ts"
+    "zod": "./deps/zod.ts"
   },
   "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.14.0/": {
+    "https://jsr.io/@deno/cache-dir/0.15.0/": {
       "jsr:/@deno/graph@^0.86.0/types": "jsr:@deno/graph@^0.86.0/types",
       "jsr:@deno/graph@^0.86.0": "jsr:@deno/graph@^0.86.0"
     }

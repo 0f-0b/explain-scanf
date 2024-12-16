@@ -2,11 +2,8 @@ import { STATUS_CODE } from "@std/http/status";
 import { ZodError, type ZodType } from "zod";
 
 import { type Awaitable, settled } from "./async.ts";
-import { fail } from "./fail.ts";
-import { HttpError } from "./http_error.ts";
 
 export * from "@std/http/status";
-export * from "./http_error.ts";
 type Merge<T, U> = Omit<T, keyof U> & U;
 export type Handler<C = unknown> = (
   req: Request,
@@ -14,12 +11,7 @@ export type Handler<C = unknown> = (
 ) => Awaitable<Response>;
 
 export function toFetch(handler: Handler): (req: Request) => Promise<Response> {
-  return async (req) => {
-    if (req.method === "HEAD") {
-      req = new Request(req, { method: "GET" });
-    }
-    return await handler(req, null);
-  };
+  return async (req) => await handler(req, null);
 }
 
 export function logTime<C>(handler: Handler<C>): Handler<C> {
@@ -40,17 +32,27 @@ export function logTime<C>(handler: Handler<C>): Handler<C> {
   };
 }
 
-export function reportHttpErrors<C>(handler: Handler<C>): Handler<C> {
+export function supportedMethods<C>(
+  methods: object & Iterable<string>,
+  handler: Handler<C>,
+): Handler<C> {
+  const set = new Set(methods);
+  if (set.has("GET")) {
+    set.add("HEAD");
+  }
   return async (req, ctx) => {
-    try {
-      return await handler(req, ctx);
-    } catch (e) {
-      if (e instanceof HttpError) {
-        const { message, status, headers } = e;
-        return Response.json({ error: message }, { status, headers });
-      }
-      throw e;
+    if (!set.has(req.method)) {
+      return Response.json(
+        { error: `Method ${req.method} is not implemented` },
+        {
+          status: STATUS_CODE.NotImplemented,
+          headers: [
+            ["connection", "close"],
+          ],
+        },
+      );
     }
+    return await handler(req, ctx);
   };
 }
 
@@ -84,27 +86,19 @@ export function route<C>(
 
 export function methods<C>(methods: Record<string, Handler<C>>): Handler<C> {
   const map = new Map(Object.entries(methods));
-  map.delete("HEAD");
-  const allow = (() => {
-    const list = Array.from(map.keys());
-    if (map.has("GET")) {
-      list.push("HEAD");
-    }
-    return list.sort().join(", ");
-  })();
-  return (req, ctx) => {
-    const handler = map.get(req.method) ?? fail(
-      new HttpError(
-        `Method ${req.method} is not allowed for the URL`,
-        "MethodNotAllowed",
-        {
-          headers: [
-            ["allow", allow],
-          ],
-        },
-      ),
+  const get = map.get("GET");
+  if (get) {
+    map.set("HEAD", get);
+  }
+  const allow = Array.from(map.keys()).sort().join(", ");
+  return async (req, ctx) => {
+    const handler = map.get(req.method);
+    const res = handler ? await handler(req, ctx) : Response.json(
+      { error: `Method ${req.method} is not allowed for the URL` },
+      { status: STATUS_CODE.MethodNotAllowed },
     );
-    return handler(req, ctx);
+    res.headers.append("allow", allow);
+    return res;
   };
 }
 
@@ -118,12 +112,16 @@ export function parseBodyAsJson<T, C>(
       body = T.parse(await req.json());
     } catch (e) {
       if (e instanceof SyntaxError) {
-        throw new HttpError(e.message, "BadRequest");
+        return Response.json(
+          { error: e.message },
+          { status: STATUS_CODE.BadRequest },
+        );
       }
       if (e instanceof ZodError) {
-        return Response.json({ error: "Cannot parse body", issues: e.issues }, {
-          status: STATUS_CODE.BadRequest,
-        });
+        return Response.json(
+          { error: "Cannot parse body", issues: e.issues },
+          { status: STATUS_CODE.BadRequest },
+        );
       }
       throw e;
     }
