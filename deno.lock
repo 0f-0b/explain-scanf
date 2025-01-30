@@ -1,7 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@deno/cache-dir@0.16.0": "0.16.0",
+    "jsr:@deno/cache-dir@0.17.0": "0.17.0",
     "jsr:@deno/graph@0.87": "0.87.2",
     "jsr:@std/bytes@^1.0.4": "1.0.4",
     "jsr:@std/datetime@0.225": "0.225.3",
@@ -18,8 +18,8 @@
     "npm:hastscript@8.0.0": "8.0.0"
   },
   "jsr": {
-    "@deno/cache-dir@0.16.0": {
-      "integrity": "844e10e48749139331121ff172aea15fd1c687ec2efbfea782858e41cc4dd1fb",
+    "@deno/cache-dir@0.17.0": {
+      "integrity": "c3fca070e1727a30a67352fdbb994fc8125c19c536a536cee8aba741e91eb1de",
       "dependencies": [
         "jsr:@deno/graph",
         "jsr:@std/fmt",
@@ -278,7 +278,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@deno/cache-dir@0.16.0",
+      "jsr:@deno/cache-dir@0.17.0",
       "jsr:@deno/graph@0.87",
       "jsr:@std/datetime@0.225",
       "jsr:@std/encoding@1",
