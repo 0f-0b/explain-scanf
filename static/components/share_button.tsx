@@ -35,6 +35,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ code }) => {
   return (
     <>
       <button
+        type="button"
         className="share-button"
         onClick={() => setShared(code)}
       >
