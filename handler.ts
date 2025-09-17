@@ -1,5 +1,5 @@
 import { STATUS_CODE } from "@std/http/status";
-import { ZodError, type ZodType } from "zod";
+import { ZodError, type ZodType } from "@zod/zod";
 
 import { type Awaitable, settled } from "./async.ts";
 

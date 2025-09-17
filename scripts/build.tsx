@@ -1,7 +1,9 @@
 #!/usr/bin/env -S deno run -A
 
+/* @jsxRuntime automatic */
 /* @jsxImportSource hastscript */
 
+import { denoPlugin } from "@deno/esbuild-plugin";
 import { parseFromJson } from "@deno/import-map";
 import { encodeBase64Url } from "@std/encoding/base64url";
 import { emptyDir } from "@std/fs/empty-dir";
@@ -10,8 +12,6 @@ import { resolve } from "@std/path/resolve";
 import { toFileUrl } from "@std/path/to-file-url";
 import { build, stop } from "esbuild";
 import { toHtml } from "hast-util-to-html";
-
-import { denoCachePlugin } from "./esbuild_deno_cache_plugin.ts";
 
 let dev = false;
 for (const arg of Deno.args) {
@@ -80,18 +80,13 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin({
-        importMapURL: toFileUrl(resolve("static/deno.json")),
-        expandImportMap: true,
-      })],
+      plugins: [denoPlugin({ configPath: "static/deno.json" })],
       absWorkingDir: cwd,
       sourcemap: "linked",
       format: "esm",
-      target: "es2020",
-      supported: { "nesting": false },
+      target: "es2024",
       minify: !dev,
       charset: "utf8",
-      jsx: "automatic",
     });
     const cacheablePaths = ["/"];
     for (
@@ -110,11 +105,11 @@ const [js, css] = await (async () => {
       bundle: true,
       outfile: "sw.js",
       entryPoints: ["static/sw.ts"],
-      plugins: [denoCachePlugin()],
+      plugins: [denoPlugin({ configPath: "static/deno.json" })],
       absWorkingDir: cwd,
       sourcemap: "linked",
       format: "esm",
-      target: "es2020",
+      target: "es2024",
       minify: !dev,
       charset: "utf8",
       define: {
@@ -131,6 +126,7 @@ const [js, css] = await (async () => {
 })();
 await writeHtml(
   "index.html",
+  // @ts-expect-error workaround
   <>
     {{ type: "doctype" }}
     <html lang="en">
@@ -149,6 +145,7 @@ await writeHtml(
 );
 await writeHtml(
   "404.html",
+  // @ts-expect-error workaround
   <>
     {{ type: "doctype" }}
     <html lang="en">

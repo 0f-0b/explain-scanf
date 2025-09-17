@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import { lazy, type React, Suspense } from "react";

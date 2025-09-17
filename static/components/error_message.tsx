@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import { clsx } from "clsx";

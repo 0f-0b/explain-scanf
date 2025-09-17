@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import type { React } from "react";

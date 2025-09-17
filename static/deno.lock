@@ -1,28 +1,28 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
-    "jsr:@std/assert@1": "1.0.11",
-    "npm:@codemirror/commands@6.8.0": "6.8.0",
-    "npm:@codemirror/state@6.5.1": "6.5.1",
-    "npm:@codemirror/view@6.36.2": "6.36.2",
-    "npm:@primer/octicons-react@19.14.0": "19.14.0_react@19.0.0",
-    "npm:@types/react-dom@19": "19.0.3_@types+react@19.0.8",
-    "npm:@types/react@19": "19.0.8",
+    "jsr:@std/assert@1": "1.0.14",
+    "npm:@codemirror/commands@6.8.1": "6.8.1",
+    "npm:@codemirror/state@6.5.2": "6.5.2",
+    "npm:@codemirror/view@6.38.2": "6.38.2",
+    "npm:@primer/octicons-react@19.18.0": "19.18.0_react@19.1.1",
+    "npm:@types/react-dom@19": "19.1.9_@types+react@19.1.13",
+    "npm:@types/react@19": "19.1.13",
     "npm:@webassemblyjs/floating-point-hex-parser@1.14.1": "1.14.1",
     "npm:clsx@2.1.1": "2.1.1",
-    "npm:react-dom@19.0.0": "19.0.0_react@19.0.0",
-    "npm:react-router@7.1.4": "7.1.4_react@19.0.0",
-    "npm:react@19.0.0": "19.0.0",
-    "npm:use-latest@1.3.0": "1.3.0_react@19.0.0"
+    "npm:react-dom@19.1.1": "19.1.1_react@19.1.1",
+    "npm:react-router@7.9.1": "7.9.1_react@19.1.1_react-dom@19.1.1__react@19.1.1",
+    "npm:react@19.1.1": "19.1.1",
+    "npm:use-latest@1.3.0": "1.3.0_react@19.1.1"
   },
   "jsr": {
-    "@std/assert@1.0.11": {
-      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1"
+    "@std/assert@1.0.14": {
+      "integrity": "68d0d4a43b365abc927f45a9b85c639ea18a9fab96ad92281e493e4ed84abaa4"
     }
   },
   "npm": {
-    "@codemirror/commands@6.8.0": {
-      "integrity": "sha512-q8VPEFaEP4ikSlt6ZxjB3zW72+7osfAYW9i8Zu943uqbKuz6utc1+F170hyLUCUltXORjQXRyYQNfkckzA/bPQ==",
+    "@codemirror/commands@6.8.1": {
+      "integrity": "sha512-KlGVYufHMQzxbdQONiLyGQDUW0itrLZwq3CcY7xpv9ZLRHqzkBSoteocBHtMCoY7/Ci4xhzSrToIeLg7FxHuaw==",
       "dependencies": [
         "@codemirror/language",
         "@codemirror/state",
@@ -30,8 +30,8 @@
         "@lezer/common"
       ]
     },
-    "@codemirror/language@6.10.8": {
-      "integrity": "sha512-wcP8XPPhDH2vTqf181U8MbZnW+tDyPYy0UzVOa+oHORjyT+mhhom9vBd7dApJwoDz9Nb/a8kHjJIsuA/t8vNFw==",
+    "@codemirror/language@6.11.3": {
+      "integrity": "sha512-9HBM2XnwDj7fnu0551HkGdrUrrqmYq/WC5iv6nbY2WdicXdGbhR/gfbZOH73Aqj4351alY1+aoG9rCNfiwS1RA==",
       "dependencies": [
         "@codemirror/state",
         "@codemirror/view",
@@ -41,16 +41,17 @@
         "style-mod"
       ]
     },
-    "@codemirror/state@6.5.1": {
-      "integrity": "sha512-3rA9lcwciEB47ZevqvD8qgbzhM9qMb8vCcQCNmDfVRPQG4JT9mSb0Jg8H7YjKGGQcFnLN323fj9jdnG59Kx6bg==",
+    "@codemirror/state@6.5.2": {
+      "integrity": "sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==",
       "dependencies": [
         "@marijn/find-cluster-break"
       ]
     },
-    "@codemirror/view@6.36.2": {
-      "integrity": "sha512-DZ6ONbs8qdJK0fdN7AB82CgI6tYXf4HWk1wSVa0+9bhVznCuuvhQtX8bFBoy3dv8rZSQqUd8GvhVAcielcidrA==",
+    "@codemirror/view@6.38.2": {
+      "integrity": "sha512-bTWAJxL6EOFLPzTx+O5P5xAO3gTqpatQ2b/ARQ8itfU/v2LlpS3pH2fkL0A3E/Fx8Y2St2KES7ZEV0sHTsSW/A==",
       "dependencies": [
         "@codemirror/state",
+        "crelt",
         "style-mod",
         "w3c-keyname"
       ]
@@ -73,23 +74,20 @@
     "@marijn/find-cluster-break@1.0.2": {
       "integrity": "sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g=="
     },
-    "@primer/octicons-react@19.14.0_react@19.0.0": {
-      "integrity": "sha512-EKeavGV7s2HYac3ybb+6vfyqHGMUeG+OlZAus5ORfEjzXlorDAIjZ59fszVJj9DI6ArfFK/Cvg8V4JRfeUHjcw==",
+    "@primer/octicons-react@19.18.0_react@19.1.1": {
+      "integrity": "sha512-nLFlLmWfz3McbTiOUKVO+iwB15ALYQC9rHeP8K3qM1pyJ8svGaPjGR72BQSEM8ThyQUUodq/Re1n94tO5NNhzQ==",
       "dependencies": [
         "react"
       ]
     },
-    "@types/cookie@0.6.0": {
-      "integrity": "sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA=="
-    },
-    "@types/react-dom@19.0.3_@types+react@19.0.8": {
-      "integrity": "sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==",
+    "@types/react-dom@19.1.9_@types+react@19.1.13": {
+      "integrity": "sha512-qXRuZaOsAdXKFyOhRBg6Lqqc0yay13vN7KrIg4L7N4aaHN68ma9OK3NE1BoDFgFOTfM7zg+3/8+2n8rLUH3OKQ==",
       "dependencies": [
         "@types/react"
       ]
     },
-    "@types/react@19.0.8": {
-      "integrity": "sha512-9P/o1IGdfmQxrujGbIMDyYaaCykhLKc0NGCtYcECNUr9UAaDe4gwvV9bR6tvd5Br1SG0j+PBpbKr2UYY8CwqSw==",
+    "@types/react@19.1.13": {
+      "integrity": "sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==",
       "dependencies": [
         "csstype"
       ]
@@ -103,31 +101,36 @@
     "cookie@1.0.2": {
       "integrity": "sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA=="
     },
+    "crelt@1.0.6": {
+      "integrity": "sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g=="
+    },
     "csstype@3.1.3": {
       "integrity": "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw=="
     },
-    "react-dom@19.0.0_react@19.0.0": {
-      "integrity": "sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==",
+    "react-dom@19.1.1_react@19.1.1": {
+      "integrity": "sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==",
       "dependencies": [
         "react",
         "scheduler"
       ]
     },
-    "react-router@7.1.4_react@19.0.0": {
-      "integrity": "sha512-aJWVrKoLI0nIK1lfbTU3d5al1ZEUiwtSus/xjYL8K5sv2hyPesiOIojHM7QnaNLVtroOB1McZsWk37fMQVoc6A==",
+    "react-router@7.9.1_react@19.1.1_react-dom@19.1.1__react@19.1.1": {
+      "integrity": "sha512-pfAByjcTpX55mqSDGwGnY9vDCpxqBLASg0BMNAuMmpSGESo/TaOUG6BllhAtAkCGx8Rnohik/XtaqiYUJtgW2g==",
       "dependencies": [
-        "@types/cookie",
         "cookie",
         "react",
-        "set-cookie-parser",
-        "turbo-stream"
+        "react-dom",
+        "set-cookie-parser"
+      ],
+      "optionalPeers": [
+        "react-dom"
       ]
     },
-    "react@19.0.0": {
-      "integrity": "sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ=="
+    "react@19.1.1": {
+      "integrity": "sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ=="
     },
-    "scheduler@0.25.0": {
-      "integrity": "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="
+    "scheduler@0.26.0": {
+      "integrity": "sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA=="
     },
     "set-cookie-parser@2.7.1": {
       "integrity": "sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ=="
@@ -135,16 +138,13 @@
     "style-mod@4.1.2": {
       "integrity": "sha512-wnD1HyVqpJUI2+eKZ+eo1UwghftP6yuFheBqqe+bWCotBjC2K1YnteJILRMs3SM4V/0dLEW1SC27MWP5y+mwmw=="
     },
-    "turbo-stream@2.4.0": {
-      "integrity": "sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g=="
-    },
-    "use-isomorphic-layout-effect@1.2.0_react@19.0.0": {
-      "integrity": "sha512-q6ayo8DWoPZT0VdG4u3D3uxcgONP3Mevx2i2b0434cwWBoL+aelL1DzkXI6w3PhTZzUeR2kaVlZn70iCiseP6w==",
+    "use-isomorphic-layout-effect@1.2.1_react@19.1.1": {
+      "integrity": "sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==",
       "dependencies": [
         "react"
       ]
     },
-    "use-latest@1.3.0_react@19.0.0": {
+    "use-latest@1.3.0_react@19.1.1": {
       "integrity": "sha512-mhg3xdm9NaM8q+gLT8KryJPnRFOz1/5XPBhmDEVZK1webPzDjrPk7f/mbpeLqTgB9msytYWANxgALOCJKnLvcQ==",
       "dependencies": [
         "react",
@@ -158,12 +158,16 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
-      "npm:@codemirror/commands@6.8.0",
-      "npm:@codemirror/state@6.5.1",
-      "npm:@codemirror/view@6.36.2",
-      "npm:@primer/octicons-react@19.14.0",
+      "npm:@codemirror/commands@6.8.1",
+      "npm:@codemirror/state@6.5.2",
+      "npm:@codemirror/view@6.38.2",
+      "npm:@primer/octicons-react@19.18.0",
+      "npm:@types/react-dom@19",
+      "npm:@types/react@19",
       "npm:clsx@2.1.1",
-      "npm:react-router@7.1.4"
+      "npm:react-dom@19.1.1",
+      "npm:react-router@7.9.1",
+      "npm:react@19.1.1"
     ]
   }
 }

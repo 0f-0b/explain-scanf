@@ -1,5 +1,5 @@
 import { DAY } from "@std/datetime/constants";
-import { z } from "zod";
+import { z } from "@zod/zod";
 
 import { randomString } from "./random.ts";
 
@@ -13,7 +13,7 @@ export async function getCode(kv: Deno.Kv, id: string): Promise<Code | null> {
   if (!/^[a-z0-9]{8}$/.test(id)) {
     return null;
   }
-  const entry = await kv.get(["code", id]) as Deno.KvEntryMaybe<Code>;
+  const entry = await kv.get<Code>(["code", id]);
   if (entry.versionstamp !== null) {
     return entry.value;
   }

@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import { EditorState, type EditorStateConfig } from "@codemirror/state";

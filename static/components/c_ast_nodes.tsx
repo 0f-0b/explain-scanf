@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import { Fragment, type React } from "react";
