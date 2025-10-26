@@ -1,5 +1,3 @@
-/// <reference no-default-lib="true" />
-/// <reference lib="es2024" />
 /// <reference lib="webworker" />
 /// <reference lib="webworker.iterable" />
 

@@ -1,5 +1,7 @@
 export {
   act,
+  Activity,
+  captureOwnerStack,
   createContext,
   type default as React,
   forwardRef,
@@ -17,6 +19,7 @@ export {
   useDebugValue,
   useDeferredValue,
   useEffect,
+  useEffectEvent,
   useId,
   useImperativeHandle,
   useInsertionEffect,
@@ -28,4 +31,4 @@ export {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "npm:react@19.1.1";
+} from "npm:react@19.2.0";

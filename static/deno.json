@@ -1,19 +1,24 @@
 {
   "imports": {
-    "@codemirror/commands": "npm:@codemirror/commands@6.8.1",
+    "@codemirror/commands": "npm:@codemirror/commands@6.10.0",
     "@codemirror/state": "npm:@codemirror/state@6.5.2",
-    "@codemirror/view": "npm:@codemirror/view@6.38.2",
-    "@primer/octicons-react": "npm:@primer/octicons-react@19.18.0",
+    "@codemirror/view": "npm:@codemirror/view@6.38.6",
+    "@primer/octicons-react": "npm:@primer/octicons-react@19.19.0",
     "@std/assert": "jsr:@std/assert@^1.0.0",
     "@types/react": "npm:@types/react@19",
     "@types/react-dom": "npm:@types/react-dom@19",
     "clsx": "npm:clsx@2.1.1",
     "floating-point-hex-parser": "./deps/floating_point_hex_parser.ts",
     "react": "./deps/react.ts",
-    "react/": "npm:/react@19.1.1/",
-    "react-dom": "npm:react-dom@19.1.1",
-    "react-router": "npm:react-router@7.9.1",
+    "react/": "npm:/react@19.2.0/",
+    "react-dom": "npm:react-dom@19.2.0",
+    "react-router": "npm:react-router@7.9.4",
     "use-latest": "./deps/use_latest.ts"
+  },
+  "compilerOptions": {
+    "lib": [
+      "es2024"
+    ]
   },
   "lint": {
     "rules": {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type React, useEffect, useState } from "react";
 
 export function useFallibleEffect(
   effect: React.EffectCallback,

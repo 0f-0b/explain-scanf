@@ -1,5 +1,3 @@
-import type { React } from "./react.ts";
+import type { React } from "react";
 
-export default function useLatest<T>(
-  value: T,
-): Readonly<React.MutableRefObject<T>>;
+export default function useLatest<T>(value: T): Readonly<React.RefObject<T>>;

@@ -1,17 +1,17 @@
 {
   "imports": {
     "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.0",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.23.0/mod.ts",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.24.0/mod.ts",
     "@std/datetime": "jsr:@std/datetime@^0.225.0",
     "@std/encoding": "jsr:@std/encoding@^1.0.0",
     "@std/fs": "jsr:@std/fs@^1.0.0",
     "@std/http": "jsr:@std/http@^1.0.0",
     "@std/media-types": "jsr:@std/media-types@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",
-    "@zod/zod": "jsr:@zod/zod@4.1.9",
-    "esbuild": "npm:esbuild@0.25.10",
+    "esbuild": "npm:esbuild@0.25.11",
     "hast-util-to-html": "npm:hast-util-to-html@9.0.5",
-    "hastscript": "npm:hastscript@9.0.1"
+    "hastscript": "npm:hastscript@9.0.1",
+    "zod": "jsr:@zod/zod@4.1.12"
   },
   "exclude": [
     "static"
